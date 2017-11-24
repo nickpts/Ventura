@@ -1,8 +1,10 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace Ventura.Console
 {
+    using System;
+    using Console = System.Console;
+
     class Program
     {
         static void Main(string[] args)
@@ -14,10 +16,10 @@ namespace Ventura.Console
 
             foreach (var encryptedByte in gen.GenerateData(null, bytes))
             {
-                System.Console.WriteLine(encryptedByte);
+                Console.WriteLine(encryptedByte);
             }
 
-            System.Console.ReadKey();
+            Console.ReadKey();
         }
     }
 }
