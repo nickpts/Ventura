@@ -13,14 +13,17 @@ namespace Ventura
         private SymmetricAlgorithm cipher;
         private byte[] key;
         
-
         public Generator(CipherOption option)
         {
-            if (option == CipherOption.Aes)
+            switch (option)
             {
-                cipher = Aes.Create(); 
+                case CipherOption.Aes:
+                    cipher = Aes.Create();
+                    break;
+                default:
+                    cipher = TwofishManaged.Create();
+                    break;
             }
-            else cipher = TwofishManaged.Create();
 
             cipher.KeySize = BlockKeySize;
         }

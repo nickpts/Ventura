@@ -12,7 +12,11 @@ namespace Ventura.Console
             string test = "All your base are belong to us";
             var bytes = Encoding.ASCII.GetBytes(test);
 
-            System.Console.WriteLine(gen.GenerateData(null, bytes));
+            foreach (var encryptedByte in gen.GenerateData(null, bytes))
+            {
+                System.Console.WriteLine(encryptedByte);
+            }
+
             System.Console.ReadKey();
         }
     }
