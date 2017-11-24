@@ -1,11 +1,11 @@
-﻿using System.Text;
-
-namespace Ventura.Console
+﻿namespace Ventura.Console
 {
     using System;
+    using System.Text;
+
     using Console = System.Console;
 
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
         {

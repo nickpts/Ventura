@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Resources;
 using System.Security.Cryptography;
 
 using Medo.Security.Cryptography;
@@ -12,9 +13,12 @@ namespace Ventura
     {
         private SymmetricAlgorithm cipher;
         private byte[] key;
-        
+        private GeneratorState state = new GeneratorState();
+
         public Generator(CipherOption option)
         {
+            this.state.Counter = 0;
+
             switch (option)
             {
                 case CipherOption.Aes:
@@ -28,7 +32,7 @@ namespace Ventura
             cipher.KeySize = BlockKeySize;
         }
 
-        public byte[] GenerateData(GeneratorState state, byte[] input)
+        public byte[] GenerateData(byte[] input)
         {
             byte[] result = new byte[input.Length];
 
