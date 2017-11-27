@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <Reference Include="TwoFish">
-      <HintPath>..\third party\TwoFish.dll</HintPath>
+      <HintPath>..\..\third party\TwoFish.dll</HintPath>
     </Reference>
   </ItemGroup>
 
