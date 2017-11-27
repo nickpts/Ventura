@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ventura", "Ventura\Ventura.csproj", "{E91FB507-07EF-4A54-A3A0-E4BC8460C6D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ventura", "Ventura\Ventura.csproj", "{E91FB507-07EF-4A54-A3A0-E4BC8460C6D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ventura.Console", "Ventura.Console\Ventura.Console.csproj", "{2979273D-E394-4915-94B8-5F02EE587BF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ventura.Console", "Ventura.Console\Ventura.Console.csproj", "{2979273D-E394-4915-94B8-5F02EE587BF9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{37784CCE-21E0-4962-A50A-8284F7167A3F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C173B162-9AC3-4C76-8DB0-246910A5CAB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +28,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E91FB507-07EF-4A54-A3A0-E4BC8460C6D3} = {37784CCE-21E0-4962-A50A-8284F7167A3F}
+		{2979273D-E394-4915-94B8-5F02EE587BF9} = {37784CCE-21E0-4962-A50A-8284F7167A3F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {25B90593-A788-48D7-98D6-427F5B260938}

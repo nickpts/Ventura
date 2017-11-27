@@ -4,7 +4,7 @@ using System.Resources;
 using System.Security.Cryptography;
 
 using Medo.Security.Cryptography;
-
+using Ventura.Exceptions;
 using static Ventura.Constants;
 
 namespace Ventura
@@ -54,15 +54,13 @@ namespace Ventura
             }
             cipher.Dispose();
 
-            
-
             return result;
         }
 
         private string GenerateBlocks(GeneratorState state, int numberOfBlocks)
         {
             if (!state.Seeded)
-                throw new Exception("Generator not seeded!"); // turn this into custom exception
+                throw new GeneratorSeedException("Generator not seeded!");
 
             return string.Empty;
         }
