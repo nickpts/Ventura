@@ -9,12 +9,12 @@
     {
         static void Main(string[] args)
         {
-            var gen = new Generator(Constants.CipherOption.Aes);
+            var gen = new Generator(Constants.CipherOption.TwoFish);
 
             string test = "All your base are belong to us";
             var bytes = Encoding.ASCII.GetBytes(test);
 
-            foreach (var encryptedByte in gen.GenerateData(null, bytes))
+            foreach (var encryptedByte in gen.GenerateData(bytes))
             {
                 Console.WriteLine(encryptedByte);
             }
