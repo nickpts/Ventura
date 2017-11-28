@@ -11,7 +11,7 @@ using Medo.Security.Cryptography;
 
 namespace Ventura
 {
-    public sealed class Generator: IGenerator
+    public class Generator: IGenerator
     {
         private readonly SymmetricAlgorithm cipher;
         private readonly GeneratorState state;
@@ -45,7 +45,6 @@ namespace Ventura
         /// <returns></returns>
         public byte[] GenerateRandomData(byte[] input)
         {
-            //TODO: cannot process 2^20 worth of data or output 2^20 worth of encrypted data?? 
             if (!IsWithinAllowedSize(input))
                 throw new GeneratorOutputException("Cannot encrypt more than 1,048,576 bytes");
 
@@ -60,7 +59,6 @@ namespace Ventura
                 cryptoStream.Write(input, 0, input.Length);
                 Array.Copy(input, result, input.Length);
 
-
                 //after every request generate an extra 256 bits of pseudorandom data 
                 //and use that as the new key for the block cipher. 
             }
@@ -68,36 +66,7 @@ namespace Ventura
 
             return result;
         }
-
-        private string GenerateBlocks(int numberOfBlocks)
-        {
-            if (!state.Seeded)
-                throw new GeneratorSeedException("Generator not seeded!");
-
-            return string.Empty;
-        }
-
-        private double GetApproximateSize(byte[] input)
-        {
-            double size;
-            object o = new object();
-            using (Stream s = new MemoryStream())
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(s, o);
-                size = s.Length;
-            }
-
-            return size;
-        }
-
-        private bool IsWithinAllowedSize(byte[] input)
-        {
-            double allowedSize = Math.Pow(2, 20);
-
-            return GetApproximateSize(input) <= allowedSize;
-        }
-
+        
         public byte[] Reseed(byte[] key)
         {
             var algorithm = SHA256.Create();
@@ -109,5 +78,19 @@ namespace Ventura
 
             return null;
         }
+
+        #region Private implementation
+
+        protected string GenerateBlocks(int numberOfBlocks)
+        {
+            if (!state.Seeded)
+                throw new GeneratorSeedException("Generator not seeded!");
+
+            return string.Empty;
+        }
+
+        protected bool IsWithinAllowedSize(byte[] input) => input.Length <= Math.Pow(2, 20);
+
+        #endregion
     }
 }
