@@ -4,9 +4,10 @@ using System.Resources;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 
-using Medo.Security.Cryptography;
 using Ventura.Exceptions;
 using static Ventura.Constants;
+
+using Medo.Security.Cryptography;
 
 namespace Ventura
 {
@@ -46,7 +47,7 @@ namespace Ventura
         {
             //TODO: cannot process 2^20 worth of data or output 2^20 worth of encrypted data?? 
             if (!IsWithinAllowedSize(input))
-                throw new GeneratorOutputException("Cannot encrypt more than 1,048,576 worth of data");
+                throw new GeneratorOutputException("Cannot encrypt more than 1,048,576 bytes");
 
             byte[] result = new byte[input.Length];
 
@@ -68,7 +69,7 @@ namespace Ventura
             return result;
         }
 
-        private string GenerateBlocks(GeneratorState state, int numberOfBlocks)
+        private string GenerateBlocks(int numberOfBlocks)
         {
             if (!state.Seeded)
                 throw new GeneratorSeedException("Generator not seeded!");
@@ -97,7 +98,7 @@ namespace Ventura
             return GetApproximateSize(input) <= allowedSize;
         }
 
-        public byte[] Reseed(GeneratorState state, byte[] key)
+        public byte[] Reseed(byte[] key)
         {
             var algorithm = SHA256.Create();
             var hash = algorithm.ComputeHash(key);
