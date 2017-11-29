@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="4.19.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="TwoFish">
       <HintPath>..\..\third party\TwoFish.dll</HintPath>
     </Reference>

@@ -6,7 +6,7 @@ namespace Ventura
 {
     public static class Constants
     {
-        public enum CipherOption
+        public enum Cipher
         {
             Aes,
             TwoFish

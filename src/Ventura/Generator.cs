@@ -13,7 +13,7 @@ namespace Ventura
         private readonly SymmetricAlgorithm cipher;
         private readonly GeneratorState state;
 
-        public Generator(CipherOption option)
+        public Generator(Cipher option)
         {
             state = new GeneratorState
             {
@@ -23,7 +23,7 @@ namespace Ventura
 
             switch (option)
             {
-                case CipherOption.Aes:
+                case Cipher.Aes:
                     cipher = Aes.Create();
                     break;
                 default:

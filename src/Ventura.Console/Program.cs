@@ -14,7 +14,7 @@ namespace Ventura.Console
     {
         static void Main(string[] args)
         {
-            var gen = new Generator(Constants.CipherOption.Aes);
+            var gen = new Generator(Constants.Cipher.Aes);
 
             string test = "All your base are belong to us";
             var bytes = Encoding.ASCII.GetBytes(test);

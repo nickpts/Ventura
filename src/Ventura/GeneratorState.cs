@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ventura
 {
-    public class GeneratorState
+    internal class GeneratorState
     {
         public int Counter { get; internal set; }
         public byte[] Seed { get; internal set; }
