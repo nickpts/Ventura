@@ -45,7 +45,7 @@ namespace Ventura
             if (input.Length == 0)
                 throw new GeneratorInputException("cannot encrypt empty array");
 
-            if (!IsWithinAllowedSize(input))
+            if (input.Length > MaximumRequestSize)
                 throw new GeneratorInputException($"cannot encrypt array bigger than { MaximumRequestSize } bytes");
 
             byte[] result = new byte[input.Length];
@@ -85,8 +85,6 @@ namespace Ventura
 
             return string.Empty;
         }
-
-        protected bool IsWithinAllowedSize(byte[] input) => input.Length <= Math.Pow(2, 20);
 
         #endregion
     }
