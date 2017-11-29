@@ -19,30 +19,15 @@ namespace Ventura.Console
             string test = "All your base are belong to us";
             var bytes = Encoding.ASCII.GetBytes(test);
             
-            Console.WriteLine($"Input: { GetApproximateSize(bytes)}");
+            Console.WriteLine($"Unencrypted: {test}, size: { bytes.Length }");
+            var encryptedBytes = gen.GenerateRandomData(bytes);
 
-            //foreach (var encryptedByte in gen.GenerateRandomData(bytes))
-            //{
-            //    Console.WriteLine(encryptedByte);
-            //}
+            string encrypted = Encoding.ASCII.GetString(encryptedBytes);
+            Console.WriteLine($"Encrypted: { encrypted }, size { encrypted.Length }");
 
-            Console.WriteLine($"Output: { GetApproximateSize(gen.GenerateRandomData(bytes))}");
+            //string reconstituted = 
 
             Console.ReadKey();
-        }
-
-        private static double GetApproximateSize(byte[] input)
-        {
-            double size;
-            object o = new object();
-            using (Stream s = new MemoryStream())
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(s, o);
-                size = s.Length;
-            }
-
-            return size;
         }
     }
 }

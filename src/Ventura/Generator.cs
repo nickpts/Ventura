@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Resources;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 
 using Ventura.Exceptions;
@@ -30,11 +27,11 @@ namespace Ventura
                     cipher = Aes.Create();
                     break;
                 default:
-                    cipher = TwofishManaged.Create();
+                    cipher = new TwofishManaged();
                     break;
             }
 
-            cipher.KeySize = 256;
+            cipher.KeySize = BlockKeySize;
         }
 
         /// <summary>
@@ -45,23 +42,23 @@ namespace Ventura
         /// <returns></returns>
         public byte[] GenerateRandomData(byte[] input)
         {
+            if (input.Length == 0)
+                throw new GeneratorInputException("Cannot encrypt empty byte array");
+
             if (!IsWithinAllowedSize(input))
-                throw new GeneratorOutputException("Cannot encrypt more than 1,048,576 bytes");
+                throw new GeneratorInputException("Cannot encrypt more than 1,048,576 bytes");
 
             byte[] result = new byte[input.Length];
 
             using (cipher)
             using (var encryptor = cipher.CreateEncryptor())
-            using (var memStream = new MemoryStream())
-            using (var cryptoStream = new CryptoStream(memStream, encryptor, CryptoStreamMode.Write))
             {
-                // cryptoStream.Write(result, 0, 0);
-                cryptoStream.Write(input, 0, input.Length);
-                Array.Copy(input, result, input.Length);
+                result = encryptor.TransformFinalBlock(input, 0, input.Length);
 
                 //after every request generate an extra 256 bits of pseudorandom data 
                 //and use that as the new key for the block cipher. 
             }
+
             cipher.Dispose();
 
             return result;

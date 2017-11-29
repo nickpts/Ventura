@@ -6,7 +6,7 @@ using System.Text;
 namespace Ventura.Exceptions
 {
     [Serializable]
-    public class GeneratorOutputException : Exception
+    public class GeneratorInputException : Exception
     {
         //
         // For guidelines regarding the creation of new exception types, see
@@ -15,15 +15,15 @@ namespace Ventura.Exceptions
         //    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dncscol/html/csharp07192001.asp
         //
 
-        public GeneratorOutputException()
+        public GeneratorInputException()
         {
         }
 
-        public GeneratorOutputException(string message) : base(message)
+        public GeneratorInputException(string message) : base(message)
         {
         }
 
-        public GeneratorOutputException(string message, Exception inner) : base(message, inner)
+        public GeneratorInputException(string message, Exception inner) : base(message, inner)
         {
         }
     }
