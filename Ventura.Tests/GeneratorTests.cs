@@ -27,10 +27,10 @@ namespace Ventura.Tests
 
         [TestMethod]
         [ExpectedException(typeof(GeneratorInputException))]
-        public void GeneratorThrowsExceptionWhenInputArrayGreaterThanMaximuSize()
+        public void GeneratorThrowsExceptionWhenInputArrayGreaterThanMaximumSize()
         {
-            var testArray = new byte[10000000000000000];
-
+            var testArray = new byte[1550000];
+            var result = testGenerator.GenerateRandomData(testArray);
         }
     }
 }

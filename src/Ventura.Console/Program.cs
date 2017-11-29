@@ -24,9 +24,6 @@ namespace Ventura.Console
 
             string encrypted = Encoding.ASCII.GetString(encryptedBytes);
             Console.WriteLine($"Encrypted: { encrypted }, size { encrypted.Length }");
-
-            //string reconstituted = 
-
             Console.ReadKey();
         }
     }

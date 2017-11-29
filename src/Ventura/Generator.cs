@@ -43,10 +43,10 @@ namespace Ventura
         public byte[] GenerateRandomData(byte[] input)
         {
             if (input.Length == 0)
-                throw new GeneratorInputException("Cannot encrypt empty byte array");
+                throw new GeneratorInputException("cannot encrypt empty array");
 
             if (!IsWithinAllowedSize(input))
-                throw new GeneratorInputException("Cannot encrypt more than 1,048,576 bytes");
+                throw new GeneratorInputException($"cannot encrypt array bigger than { MaximumRequestSize } bytes");
 
             byte[] result = new byte[input.Length];
 

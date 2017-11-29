@@ -13,5 +13,6 @@ namespace Ventura
         }
 
         public static int BlockKeySize = 256;
+        public static double MaximumRequestSize = Math.Pow(2, 20);
     }
 }
