@@ -10,17 +10,28 @@ namespace Ventura
 {
     public class Generator: IGenerator
     {
-        private readonly SymmetricAlgorithm cipher;
-        private readonly GeneratorState state;
+        private SymmetricAlgorithm cipher;
+        private GeneratorState state;
 
         public Generator(Cipher option)
         {
+            InitializeGenerator();
+            InitializeCipher(option);
+        }
+
+        private void InitializeGenerator()
+        {
+            var guid = Guid.NewGuid();
+
             state = new GeneratorState
             {
                 Counter = 0,
-                Seed = new byte[] { }
+                Key = guid.ToByteArray()
             };
+        }
 
+        private void InitializeCipher(Cipher option)
+        {
             switch (option)
             {
                 case Cipher.Aes:
@@ -69,7 +80,7 @@ namespace Ventura
             var algorithm = SHA256.Create();
             var hash = algorithm.ComputeHash(key);
 
-            state.Seed = hash;
+            state.Key = hash;
             state.Counter++;
             state.Seeded = true;
 
