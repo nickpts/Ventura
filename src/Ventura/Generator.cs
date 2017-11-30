@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 
 using Ventura.Exceptions;
@@ -19,30 +20,14 @@ namespace Ventura
             InitializeCipher(option);
         }
 
-        private void InitializeGenerator()
+        public void Reseed(byte[] seed)
         {
-            var guid = Guid.NewGuid();
+            var combinedSeed = state.Key.Concat(seed).ToArray();
+            var hashedSeed = SHA256.Create().ComputeHash(combinedSeed);
 
-            state = new GeneratorState
-            {
-                Counter = 0,
-                Key = guid.ToByteArray()
-            };
-        }
-
-        private void InitializeCipher(Cipher option)
-        {
-            switch (option)
-            {
-                case Cipher.Aes:
-                    cipher = Aes.Create();
-                    break;
-                default:
-                    cipher = new TwofishManaged();
-                    break;
-            }
-
-            cipher.KeySize = BlockKeySize;
+            state.Key = hashedSeed;
+            state.Counter++;
+            state.Seeded = true;
         }
 
         /// <summary>
@@ -74,25 +59,49 @@ namespace Ventura
 
             return result;
         }
-        
-        public byte[] Reseed(byte[] key)
-        {
-            var algorithm = SHA256.Create();
-            var hash = algorithm.ComputeHash(key);
-
-            state.Key = hash;
-            state.Counter++;
-            state.Seeded = true;
-
-            return null;
-        }
 
         #region Private implementation
+
+        protected void InitializeGenerator()
+        {
+            var guid = Guid.NewGuid();
+
+            state = new GeneratorState
+            {
+                Counter = 0,
+                Key = guid.ToByteArray()
+            };
+        }
+
+        protected void InitializeCipher(Cipher option)
+        {
+            switch (option)
+            {
+                case Cipher.Aes:
+                    cipher = Aes.Create();
+                    break;
+                default:
+                    cipher = new TwofishManaged();
+                    break;
+            }
+
+            cipher.KeySize = BlockKeySize;
+        }
 
         protected string GenerateBlocks(int numberOfBlocks)
         {
             if (!state.Seeded)
                 throw new GeneratorSeedException("Generator not seeded!");
+
+            var result = new byte[(16 * 1024)];
+
+            using (cipher)
+            using (var encryptor = cipher.CreateEncryptor())
+            for (int i = 1; i < numberOfBlocks; i++)
+            {
+                
+            }
+            
 
             return string.Empty;
         }

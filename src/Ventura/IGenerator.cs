@@ -7,6 +7,6 @@ namespace Ventura
     public interface IGenerator
     {
         byte[] GenerateRandomData(byte[] input);
-        byte[] Reseed(byte[] seed);
+        void Reseed(byte[] seed);
     }
 }
