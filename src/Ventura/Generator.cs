@@ -85,6 +85,8 @@ namespace Ventura
                     break;
             }
 
+            cipher.Mode = CipherMode.ECB;
+            cipher.Padding = PaddingMode.None;
             cipher.KeySize = BlockKeySize;
         }
 
