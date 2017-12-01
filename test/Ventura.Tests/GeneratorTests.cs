@@ -3,18 +3,19 @@ using Ventura;
 using Ventura.Exceptions;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Ventura.Generator;
 
 namespace Ventura.Tests
 {
     [TestClass]
     public class GeneratorTests
     {
-        private Generator testGenerator;
+        private VenturaPrng testGenerator;
 
         [TestInitialize]
         public void Setup()
         {
-            testGenerator = new Generator(Constants.Cipher.Aes);
+            testGenerator = new VenturaPrng(Constants.Cipher.Aes);
         }
 
         [TestMethod]

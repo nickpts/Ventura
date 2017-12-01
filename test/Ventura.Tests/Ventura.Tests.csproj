@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Ventura\Ventura.csproj" />
+    <ProjectReference Include="..\..\src\Ventura\Ventura.csproj" />
   </ItemGroup>
 
 </Project>

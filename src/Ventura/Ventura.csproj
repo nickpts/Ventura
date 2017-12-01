@@ -9,10 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="TwoFish">
       <HintPath>..\..\third party\TwoFish.dll</HintPath>
     </Reference>

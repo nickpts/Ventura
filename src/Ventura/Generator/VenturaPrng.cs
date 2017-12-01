@@ -3,18 +3,19 @@ using System.Linq;
 using System.Security.Cryptography;
 
 using Ventura.Exceptions;
+using Ventura.Interfaces;
 using static Ventura.Constants;
 
 using Medo.Security.Cryptography;
 
-namespace Ventura
+namespace Ventura.Generator
 {
-    public class Generator: IGenerator
+    public class VenturaPrng: IGenerator
     {
         private SymmetricAlgorithm cipher;
-        private GeneratorState state;
+        private VenturaPrngState state;
 
-        public Generator(Cipher option)
+        public VenturaPrng(Cipher option)
         {
             InitializeGenerator();
             InitializeCipher(option);
@@ -46,17 +47,6 @@ namespace Ventura
 
             byte[] result = new byte[input.Length];
 
-            using (cipher)
-            using (var encryptor = cipher.CreateEncryptor())
-            {
-                result = encryptor.TransformFinalBlock(input, 0, input.Length);
-
-                //after every request generate an extra 256 bits of pseudorandom data 
-                //and use that as the new key for the block cipher. 
-            }
-
-            cipher.Dispose();
-
             return result;
         }
 
@@ -66,7 +56,7 @@ namespace Ventura
         {
             var guid = Guid.NewGuid();
 
-            state = new GeneratorState
+            state = new VenturaPrngState
             {
                 Counter = 0,
                 Key = guid.ToByteArray()
@@ -90,7 +80,7 @@ namespace Ventura
             cipher.KeySize = BlockKeySize;
         }
 
-        protected string GenerateBlocks(int numberOfBlocks)
+        protected byte[] GenerateBlocks(int numberOfBlocks)
         {
             if (!state.Seeded)
                 throw new GeneratorSeedException("Generator not seeded!");
@@ -103,9 +93,9 @@ namespace Ventura
             {
                 
             }
-            
 
-            return string.Empty;
+
+            return result;
         }
 
         #endregion
