@@ -35,8 +35,8 @@ namespace Ventura.Generator
         /// Will generate up to 2^20 worth of random data to reduce
         /// the statistical deviation from perfectly random outputs. 
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <param name="input">data to encrypt</param>
+        /// <returns>pseudorandomly encrypted data</returns>
         public byte[] GenerateRandomData(byte[] input)
         {
             if (input.Length == 0)
@@ -54,12 +54,10 @@ namespace Ventura.Generator
 
         protected void InitializeGenerator()
         {
-            var guid = Guid.NewGuid();
-
             state = new VenturaPrngState
             {
                 Counter = 0,
-                Key = guid.ToByteArray()
+                Key = Guid.NewGuid().ToByteArray()
             };
         }
 
@@ -83,7 +81,7 @@ namespace Ventura.Generator
         protected byte[] GenerateBlocks(int numberOfBlocks)
         {
             if (!state.Seeded)
-                throw new GeneratorSeedException("Generator not seeded!");
+                throw new GeneratorSeedException("Generator not seeded");
 
             var result = new byte[(16 * 1024)];
 

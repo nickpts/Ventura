@@ -12,7 +12,8 @@ namespace Ventura
             TwoFish
         }
 
-        public static int BlockKeySize = 256;
-        public static double MaximumRequestSize = Math.Pow(2, 20);
+        public const int BlockKeySize = 256;
+        public const double MaximumRequestSize = 1048576;
+
     }
 }
