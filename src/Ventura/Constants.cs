@@ -14,6 +14,6 @@ namespace Ventura
 
         public const int BlockKeySize = 256;
         public const double MaximumRequestSize = 1048576;
-
+        
     }
 }

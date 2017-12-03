@@ -33,5 +33,11 @@ namespace Ventura.Tests
             var testArray = new byte[1550000];
             var result = testGenerator.GenerateRandomData(testArray);
         }
+
+        [TestMethod]
+        public void CounterIsCorrectlyTransformedIntoByteArray()
+        {
+            // need to make assembly visible to etc. 
+        }
     }
 }

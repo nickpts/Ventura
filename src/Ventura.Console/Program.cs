@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+using Ventura.Generator;
+
 namespace Ventura.Console
 {
     using System;
@@ -14,7 +16,7 @@ namespace Ventura.Console
     {
         static void Main(string[] args)
         {
-            var gen = new Generator(Constants.Cipher.Aes);
+            var gen = new VenturaPrng(Constants.Cipher.Aes);
 
             string test = "All your base are belong to us";
             var bytes = Encoding.ASCII.GetBytes(test);

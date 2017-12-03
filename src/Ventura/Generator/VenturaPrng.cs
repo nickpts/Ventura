@@ -45,9 +45,10 @@ namespace Ventura.Generator
             if (input.Length > MaximumRequestSize)
                 throw new GeneratorInputException($"cannot encrypt array bigger than { MaximumRequestSize } bytes");
 
-            byte[] result = new byte[input.Length];
+            var smallestIntegral = (int)Math.Ceiling((double) (input.Length / 16));
+            var pseudorandom = GenerateBlocks(input, smallestIntegral);
 
-            return result;
+            return pseudorandom;
         }
 
         #region Private implementation
@@ -78,7 +79,7 @@ namespace Ventura.Generator
             cipher.KeySize = BlockKeySize;
         }
 
-        protected byte[] GenerateBlocks(int numberOfBlocks)
+        protected byte[] GenerateBlocks(byte[] sourceArray, int numberOfBlocks)
         {
             if (!state.Seeded)
                 throw new GeneratorSeedException("Generator not seeded");
@@ -87,9 +88,10 @@ namespace Ventura.Generator
 
             using (cipher)
             using (var encryptor = cipher.CreateEncryptor())
-            for (int i = 1; i < numberOfBlocks; i++)
+            for (int i = 0; i < numberOfBlocks; i++)
             {
-                
+                cipher.IV = state.TransformCounterToByteArray();
+                //var bytes = encryptor.TransformFinalBlock()
             }
 
 
