@@ -15,9 +15,9 @@ namespace Ventura.Generator
         private SymmetricAlgorithm cipher;
         private VenturaPrngState state;
 
-        public VenturaPrng(Cipher option)
+        public VenturaPrng(Cipher option, byte[] seed = null)
         {
-            InitializeGenerator();
+            InitializeGenerator(seed ?? Guid.NewGuid().ToByteArray());
             InitializeCipher(option);
         }
 
@@ -53,13 +53,15 @@ namespace Ventura.Generator
 
         #region Private implementation
 
-        protected void InitializeGenerator()
+        protected void InitializeGenerator(byte[] seed)
         {
             state = new VenturaPrngState
             {
                 Counter = 0,
-                Key = Guid.NewGuid().ToByteArray()
+                Key = new byte[32] // TODO: this is hardcoding
             };
+
+            Reseed(seed);
         }
 
         protected void InitializeCipher(Cipher option)
@@ -84,16 +86,19 @@ namespace Ventura.Generator
             if (!state.Seeded)
                 throw new GeneratorSeedException("Generator not seeded");
 
-            var result = new byte[(16 * 1024)];
+            var result = new byte[sourceArray.Length];
 
             using (cipher)
             using (var encryptor = cipher.CreateEncryptor())
             for (int i = 0; i < numberOfBlocks; i++)
             {
-                cipher.IV = state.TransformCounterToByteArray();
-                //var bytes = encryptor.TransformFinalBlock()
-            }
+                var plainText = state.TransformCounterToByteArray();
+                var pseudoRandomBytes = encryptor.TransformFinalBlock(plainText, 0, plainText.Length);
 
+                // this will not work properly but will overwrite byte array every time
+                Array.Copy(pseudoRandomBytes, result, pseudoRandomBytes.Length);
+                state.Counter++;
+            }
 
             return result;
         }
