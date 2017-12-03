@@ -17,7 +17,10 @@ namespace Ventura.Generator
 
         public VenturaPrng(Cipher option, byte[] seed = null)
         {
-            InitializeGenerator(seed ?? Guid.NewGuid().ToByteArray());
+            if (seed == null)
+                seed = Guid.NewGuid().ToByteArray();
+
+            InitializeGenerator(seed);
             InitializeCipher(option);
         }
 
@@ -45,8 +48,8 @@ namespace Ventura.Generator
             if (input.Length > MaximumRequestSize)
                 throw new GeneratorInputException($"cannot encrypt array bigger than { MaximumRequestSize } bytes");
 
-            var smallestIntegral = (int)Math.Ceiling((double) (input.Length / 16));
-            var pseudorandom = GenerateBlocks(input, smallestIntegral);
+            var roundedUpwards = (int)Math.Ceiling((double) input.Length / CipherBlockSize); 
+            var pseudorandom = GenerateBlocks(input, roundedUpwards);
 
             return pseudorandom;
         }
@@ -57,8 +60,7 @@ namespace Ventura.Generator
         {
             state = new VenturaPrngState
             {
-                Counter = 0,
-                Key = new byte[32] // TODO: this is hardcoding
+                Key = new byte[KeyBlockSize] 
             };
 
             Reseed(seed);
@@ -69,7 +71,7 @@ namespace Ventura.Generator
             switch (option)
             {
                 case Cipher.Aes:
-                    cipher = Aes.Create();
+                    cipher = Rijndael.Create();
                     break;
                 default:
                     cipher = new TwofishManaged();
@@ -78,7 +80,6 @@ namespace Ventura.Generator
 
             cipher.Mode = CipherMode.ECB;
             cipher.Padding = PaddingMode.None;
-            cipher.KeySize = BlockKeySize;
         }
 
         protected byte[] GenerateBlocks(byte[] sourceArray, int numberOfBlocks)
@@ -87,18 +88,27 @@ namespace Ventura.Generator
                 throw new GeneratorSeedException("Generator not seeded");
 
             var result = new byte[sourceArray.Length];
+            var tempArray = new byte[numberOfBlocks * CipherBlockSize]; 
+
+            int destArrayLenth = 0;
 
             using (cipher)
-            using (var encryptor = cipher.CreateEncryptor())
             for (int i = 0; i < numberOfBlocks; i++)
+            using (var encryptor = cipher.CreateEncryptor())
             {
                 var plainText = state.TransformCounterToByteArray();
-                var pseudoRandomBytes = encryptor.TransformFinalBlock(plainText, 0, plainText.Length);
+                cipher.IV = plainText;
 
-                // this will not work properly but will overwrite byte array every time
-                Array.Copy(pseudoRandomBytes, result, pseudoRandomBytes.Length);
+                var pseudoRandomBytes = encryptor.TransformFinalBlock(plainText, 0, plainText.Length);
+                
+                Array.Copy(pseudoRandomBytes, 0, tempArray, destArrayLenth, pseudoRandomBytes.Length);
+                destArrayLenth = pseudoRandomBytes.Length;
+
                 state.Counter++;
             }
+
+            Array.Resize(ref tempArray, sourceArray.Length);
+            Array.Copy(tempArray, result, tempArray.Length);
 
             return result;
         }

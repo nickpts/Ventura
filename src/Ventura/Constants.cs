@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ventura
 {
-    public static class Constants
+    public class Constants
     {
         public enum Cipher
         {
@@ -12,7 +12,8 @@ namespace Ventura
             TwoFish
         }
 
-        public const int BlockKeySize = 256;
+        public const int KeyBlockSize = 32; // 256 bits
+        public const int CipherBlockSize = 16; // 128 bits
         public const double MaximumRequestSize = 1048576;
         
     }
