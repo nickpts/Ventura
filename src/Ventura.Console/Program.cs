@@ -18,6 +18,7 @@ namespace Ventura.Console
         {
             var gen = new VenturaPrng(Constants.Cipher.Aes);
 
+
             string test = "All your base are belong to us";
             var bytes = Encoding.ASCII.GetBytes(test);
             

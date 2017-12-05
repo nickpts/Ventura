@@ -20,8 +20,8 @@ namespace Ventura.Generator
             if (seed == null)
                 seed = Guid.NewGuid().ToByteArray();
 
-            InitializeGenerator(seed);
             InitializeCipher(option);
+            InitializeGenerator(seed);
         }
 
         public void Reseed(byte[] seed)
@@ -32,6 +32,34 @@ namespace Ventura.Generator
             state.Key = hashedSeed;
             state.Counter++;
             state.Seeded = true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public byte[] GenerateBigArray(byte[] input)
+        {
+            if (input.Length == 0)
+                throw new GeneratorInputException("cannot encrypt empty array");
+
+            var result = new byte[input.Length];
+            var blocksToEncrypt = (int)Math.Ceiling((double)(input.Length / MaximumRequestSize));
+            var tempArray = new byte[blocksToEncrypt * MaximumRequestSize];
+            var block = new byte[MaximumRequestSize];
+            int temp = 0;
+
+            for (int i = 0; i < blocksToEncrypt; i++)
+            {
+                block = GenerateRandomData(input);
+                Array.Copy(block, 0, tempArray, temp, block.Length);
+            }
+
+            Array.Resize(ref tempArray, input.Length);
+            Array.Copy(tempArray, result, tempArray.Length);
+
+            return result;
         }
 
         /// <summary>
@@ -90,22 +118,23 @@ namespace Ventura.Generator
             var result = new byte[sourceArray.Length];
             var tempArray = new byte[numberOfBlocks * CipherBlockSize]; 
 
-            int destArrayLenth = 0;
+            int destArrayLength = 0;
 
+            //TODO: clean this up, also doesn't work for multiple requests
             using (cipher)
-            for (int i = 0; i < numberOfBlocks; i++)
-            using (var encryptor = cipher.CreateEncryptor())
-            {
-                var plainText = state.TransformCounterToByteArray();
-                cipher.IV = plainText;
+                for (int i = 0; i < numberOfBlocks; i++)
+                    using (var encryptor = cipher.CreateEncryptor())
+                    {
+                        var plainText = state.TransformCounterToByteArray();
+                        cipher.IV = plainText;
 
-                var pseudoRandomBytes = encryptor.TransformFinalBlock(plainText, 0, plainText.Length);
-                
-                Array.Copy(pseudoRandomBytes, 0, tempArray, destArrayLenth, pseudoRandomBytes.Length);
-                destArrayLenth = pseudoRandomBytes.Length;
+                        var pseudoRandomBytes = encryptor.TransformFinalBlock(plainText, 0, plainText.Length);
 
-                state.Counter++;
-            }
+                        Array.Copy(pseudoRandomBytes, 0, tempArray, destArrayLength, pseudoRandomBytes.Length);
+                        destArrayLength = pseudoRandomBytes.Length;
+
+                        state.Counter++;
+                    }
 
             Array.Resize(ref tempArray, sourceArray.Length);
             Array.Copy(tempArray, result, tempArray.Length);

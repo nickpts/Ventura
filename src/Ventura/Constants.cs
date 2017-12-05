@@ -14,7 +14,7 @@ namespace Ventura
 
         public const int KeyBlockSize = 32; // 256 bits
         public const int CipherBlockSize = 16; // 128 bits
-        public const double MaximumRequestSize = 1048576;
+        public const int MaximumRequestSize = 1048576;
         
     }
 }
