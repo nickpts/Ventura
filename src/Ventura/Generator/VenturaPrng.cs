@@ -15,6 +15,11 @@ namespace Ventura.Generator
         private SymmetricAlgorithm cipher;
         private VenturaPrngState state;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="option"></param>
+        /// <param name="seed"></param>
         public VenturaPrng(Cipher option, byte[] seed = null)
         {
             if (seed == null)
@@ -39,7 +44,7 @@ namespace Ventura.Generator
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public byte[] GenerateBigArray(byte[] input)
+        public byte[] GenerateRandomData(byte[] input)
         {
             if (input.Length == 0)
                 throw new GeneratorInputException("cannot encrypt empty array");
@@ -52,7 +57,7 @@ namespace Ventura.Generator
 
             for (int i = 0; i < blocksToEncrypt; i++)
             {
-                block = GenerateRandomData(input);
+                block = GenerateMaximumRequestSizeData(block);
                 Array.Copy(block, 0, tempArray, temp, block.Length);
             }
 
@@ -68,7 +73,7 @@ namespace Ventura.Generator
         /// </summary>
         /// <param name="input">data to encrypt</param>
         /// <returns>pseudorandomly encrypted data</returns>
-        public byte[] GenerateRandomData(byte[] input)
+        public byte[] GenerateMaximumRequestSizeData(byte[] input)
         {
             if (input.Length == 0)
                 throw new GeneratorInputException("cannot encrypt empty array");
@@ -77,7 +82,9 @@ namespace Ventura.Generator
                 throw new GeneratorInputException($"cannot encrypt array bigger than { MaximumRequestSize } bytes");
 
             var roundedUpwards = (int)Math.Ceiling((double) input.Length / CipherBlockSize); 
-            var pseudorandom = GenerateBlocks(input, roundedUpwards);
+            var pseudorandom = GenerateBlocks(roundedUpwards);
+
+            state.Key = GenerateBlocks(2);
 
             return pseudorandom;
         }
@@ -110,12 +117,13 @@ namespace Ventura.Generator
             cipher.Padding = PaddingMode.None;
         }
 
-        protected byte[] GenerateBlocks(byte[] sourceArray, int numberOfBlocks)
+        protected byte[] GenerateBlocks(int numberOfBlocks)
         {
             if (!state.Seeded)
                 throw new GeneratorSeedException("Generator not seeded");
 
-            var result = new byte[sourceArray.Length];
+            int maximumBlockSize = CipherBlockSize * 1024;
+            var result = new byte[maximumBlockSize];
             var tempArray = new byte[numberOfBlocks * CipherBlockSize]; 
 
             int destArrayLength = 0;
@@ -136,7 +144,7 @@ namespace Ventura.Generator
                         state.Counter++;
                     }
 
-            Array.Resize(ref tempArray, sourceArray.Length);
+            Array.Resize(ref tempArray, maximumBlockSize);
             Array.Copy(tempArray, result, tempArray.Length);
 
             return result;
