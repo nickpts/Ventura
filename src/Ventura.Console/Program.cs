@@ -26,7 +26,7 @@ namespace Ventura.Console
             var bytes = Encoding.ASCII.GetBytes(test);
             
             Console.WriteLine($"Unencrypted: {input}, size: { input.Length }");
-            var encryptedBytes = gen.GenerateRandomData(input);
+            var encryptedBytes = gen.GenerateData(input);
 
             //string encrypted = Encoding.ASCII.GetString(encryptedBytes);
             Console.WriteLine($"Encrypted: { encryptedBytes }, size { encryptedBytes.Length }");
