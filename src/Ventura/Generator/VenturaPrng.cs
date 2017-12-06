@@ -81,7 +81,7 @@ namespace Ventura.Generator
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public byte[] GenerateDataWithCipher(SymmetricAlgorithm cipher, byte[] input)
+        protected byte[] GenerateDataWithCipher(SymmetricAlgorithm cipher, byte[] input)
         {
             cipher.Key = state.Key;
             cipher.Mode = CipherMode.ECB;

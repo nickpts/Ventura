@@ -23,7 +23,7 @@ namespace Ventura.Tests
         public void GeneratorThrowsExceptionWhenInputArrayZero()
         {
             var testArray = new byte[] { };
-            var result = testGenerator.GenerateRandomData(testArray);
+            var result = testGenerator.GenerateData(testArray);
         }
 
         [TestMethod]
@@ -31,7 +31,7 @@ namespace Ventura.Tests
         public void GeneratorThrowsExceptionWhenInputArrayGreaterThanMaximumSize()
         {
             var testArray = new byte[1550000];
-            var result = testGenerator.GenerateRandomData(testArray);
+            var result = testGenerator.GenerateData(testArray);
         }
 
         [TestMethod]
