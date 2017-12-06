@@ -20,17 +20,17 @@ namespace Ventura.Console
             var gen = new VenturaPrng(Constants.Cipher.Aes);
 
             //Stream stream;
-            byte[] test = File.ReadAllBytes(@"C:\Users\Nick\Downloads\Programs\vlc-2.2.6-win32.exe");
+            //byte[] test = File.ReadAllBytes(@"C:\Users\Nick\Downloads\Programs\vlc-2.2.6-win32.exe");
            
-            //string test = "All your base are belong to us";
-            //var bytes = Encoding.ASCII.GetBytes(test);
+            string test = "All your base are belong to us";
+            var bytes = Encoding.ASCII.GetBytes(test);
             
             Console.WriteLine($"Unencrypted: {test}, size: { test.Length }");
-            var encryptedBytes = gen.GenerateData(test);
+            var encryptedBytes = gen.GenerateData(bytes);
 
             string encrypted = Encoding.ASCII.GetString(encryptedBytes);
             Console.WriteLine($"Encrypted: { encrypted.Count() }, size { encryptedBytes.Length }");
-            Console.WriteLine($"Arrays equal: { test.SequenceEqual(encryptedBytes) }");
+            Console.WriteLine($"Arrays equal: { bytes.SequenceEqual(encryptedBytes) }");
             Console.ReadKey();
         }
     }
