@@ -45,8 +45,7 @@ namespace Ventura.Generator
                 throw new GeneratorInputException("cannot encrypt empty array");
 
             var result = new byte[input.Length];
-            
-            //change this to a switch
+
             if (option == Cipher.Aes)
             {
                 using (var rijndael = Rijndael.Create())
@@ -84,23 +83,25 @@ namespace Ventura.Generator
         /// <returns></returns>
         public byte[] GenerateDataWithCipher(SymmetricAlgorithm cipher, byte[] input)
         {
-            var result = new byte[input.Length];
-            var blocksToEncrypt = (int)Math.Ceiling((double)(input.Length / MaximumRequestSize));
-            var tempArray = new byte[blocksToEncrypt * MaximumRequestSize];
-            var block = new byte[MaximumRequestSize];
-            int temp = 0;
-
             cipher.Key = state.Key;
             cipher.Mode = CipherMode.ECB;
             cipher.Padding = PaddingMode.None;
 
-            for (int i = 0; i < blocksToEncrypt; i++)
+            var result = new byte[input.Length];
+            var blocksToEncrypt = (int)Math.Ceiling((double)(input.Length / MaximumRequestSize)); // TODO: ugly hack
+            var tempArray = new byte[blocksToEncrypt * MaximumRequestSize];
+            var block = new byte[MaximumRequestSize];
+            int temp = 0;
+
+            do
             {
                 block = GenerateMaxRequestSizeData(cipher, block);
                 Array.Copy(block, 0, tempArray, temp, block.Length);
 
-                //TODO: need to do something with temp here
+                temp += block.Length;
+                blocksToEncrypt--;
             }
+            while (blocksToEncrypt > 0);
 
             Array.Resize(ref tempArray, input.Length);
             Array.Copy(tempArray, result, tempArray.Length);
@@ -114,7 +115,7 @@ namespace Ventura.Generator
         /// </summary>
         /// <param name="input">data to encrypt</param>
         /// <returns>pseudorandomly encrypted data</returns>
-        protected byte[] GenerateMaxRequestSizeData(SymmetricAlgorithm cipher, byte[] input)
+        public byte[] GenerateMaxRequestSizeData(SymmetricAlgorithm cipher, byte[] input)
         {
             if (input.Length == 0)
                 throw new GeneratorInputException("cannot encrypt empty array");
@@ -141,9 +142,7 @@ namespace Ventura.Generator
             if (!state.Seeded)
                 throw new GeneratorSeedException("Generator not seeded");
 
-            int maximumBlockSize = CipherBlockSize * 1024;
-            var result = new byte[maximumBlockSize];
-            var tempArray = new byte[numberOfBlocks * CipherBlockSize];
+            var result = new byte[numberOfBlocks * CipherBlockSize];
 
             int destArrayLength = 0;
 
@@ -155,14 +154,11 @@ namespace Ventura.Generator
 
                     var pseudoRandomBytes = encryptor.TransformFinalBlock(plainText, 0, plainText.Length);
 
-                    Array.Copy(pseudoRandomBytes, 0, tempArray, destArrayLength, pseudoRandomBytes.Length);
+                    Array.Copy(pseudoRandomBytes, 0, result, destArrayLength, pseudoRandomBytes.Length);
                     destArrayLength += pseudoRandomBytes.Length;
 
                     state.Counter++;
                 }
-
-            Array.Resize(ref tempArray, maximumBlockSize);
-            Array.Copy(tempArray, result, tempArray.Length);
 
             return result;
         }
