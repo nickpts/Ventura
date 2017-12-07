@@ -29,7 +29,7 @@ namespace Ventura.Console
             var encryptedBytes = gen.GenerateData(test);
 
             string encrypted = Encoding.ASCII.GetString(encryptedBytes);
-            Console.WriteLine($"Encrypted: { encrypted.Count() }, size { encryptedBytes.Length }");
+            Console.WriteLine($"Encrypted: { encryptedBytes }, size { encryptedBytes.Length }");
             Console.WriteLine($"Arrays equal: { test.SequenceEqual(encryptedBytes) }");
             Console.ReadKey();
         }
