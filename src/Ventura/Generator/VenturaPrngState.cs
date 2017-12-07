@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+
+using static Ventura.Constants;
 
 namespace Ventura.Generator
 {
@@ -16,7 +16,7 @@ namespace Ventura.Generator
         /// </summary>
         public byte[] TransformCounterToByteArray()
         {
-            var destArray = new byte[16];
+            var destArray = new byte[CipherBlockSize];
             var sourceArray = BitConverter.GetBytes(Counter);
 
             Array.Copy(sourceArray, destArray, sourceArray.Length);

@@ -1,9 +1,11 @@
 using System;
 using Ventura;
 using Ventura.Exceptions;
+using Ventura.Generator;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Ventura.Generator;
+
+using Moq;
 
 namespace Ventura.Tests
 {
@@ -38,6 +40,13 @@ namespace Ventura.Tests
         public void CounterIsCorrectlyTransformedIntoByteArray()
         {
             // need to make assembly visible to etc. 
+        }
+
+        [TestMethod]
+        public void InitializeGeneratorCallsReseed()
+        {
+            var result = testGenerator.GenerateData(new byte[1]);
+
         }
     }
 }

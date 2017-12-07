@@ -88,7 +88,7 @@ namespace Ventura.Generator
             cipher.Key = state.Key;
 
             var result = new byte[input.Length];
-            var blocksToEncrypt = (int)Math.Ceiling((double)(input.Length / MaximumRequestSize));
+            var blocksToEncrypt = (int)Math.Ceiling((double)(input.Length / MaximumRequestSize)); //can it not return 1 if greater than 0?
             blocksToEncrypt = (blocksToEncrypt == 0) ? 1 : blocksToEncrypt;
             var tempArray = new byte[blocksToEncrypt * MaximumRequestSize];
             var block = new byte[MaximumRequestSize];
