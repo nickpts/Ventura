@@ -10,14 +10,13 @@ namespace Ventura.Console
     using System.Text;
 
     using Ventura;
-
     using Console = System.Console;
 
     internal class Program  
     {
         static void Main(string[] args)
         {
-            var gen = new VenturaPrng(Constants.Cipher.Aes);
+            var gen = new VenturaPrng(Cipher.Aes);
 
             //Stream stream;
             //byte[] test = File.ReadAllBytes(@"C:\Users\Nick\Downloads\Programs\vlc-2.2.6-win32.exe");

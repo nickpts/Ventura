@@ -12,12 +12,13 @@ namespace Ventura.Tests
     [TestClass]
     public class GeneratorTests
     {
-        private VenturaPrng testGenerator;
+        private Generator.VenturaPrng testGenerator;
+        private Generator.VenturaPrng mockGenerator;
 
         [TestInitialize]
         public void Setup()
         {
-            testGenerator = new VenturaPrng(Constants.Cipher.Aes);
+            testGenerator = new Generator.VenturaPrng(Constants.Cipher.Aes);
         }
 
         [TestMethod]

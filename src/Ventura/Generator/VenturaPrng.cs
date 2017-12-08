@@ -8,6 +8,9 @@ using static Ventura.Constants;
 
 using Medo.Security.Cryptography;
 
+/// <summary>
+/// 
+/// </summary>
 namespace Ventura.Generator
 {
     public sealed class VenturaPrng : IGenerator
@@ -15,11 +18,6 @@ namespace Ventura.Generator
         private Cipher option;
         private VenturaPrngState state;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="option"></param>
-        /// <param name="seed"></param>2
         public VenturaPrng(Cipher option, byte[] seed = null)
         {
             if (seed == null)
@@ -88,15 +86,16 @@ namespace Ventura.Generator
             cipher.Key = state.Key;
 
             var result = new byte[input.Length];
-            var blocksToEncrypt = (int)Math.Ceiling((double)(input.Length / MaximumRequestSize)); //can it not return 1 if greater than 0?
-            blocksToEncrypt = (blocksToEncrypt == 0) ? 1 : blocksToEncrypt;
+            var blocksToEncrypt = (int)Math.Ceiling((double)(input.Length / MaximumRequestSize)); // can it not return 1 if greater than 0?
             var tempArray = new byte[blocksToEncrypt * MaximumRequestSize];
             var block = new byte[MaximumRequestSize];
             int temp = 0;
 
+            blocksToEncrypt = (blocksToEncrypt == 0) ? 1 : blocksToEncrypt; // not happy with this
+
             do
             {
-                block = GenerateMaxRequestSizeData(cipher, block);
+                block = GenerateDataPerStateKey(cipher, block);
                 Array.Copy(block, 0, tempArray, temp, block.Length);
 
                 temp += block.Length;
@@ -111,12 +110,12 @@ namespace Ventura.Generator
         }
 
         /// <summary>
-        /// Will generate up to 2^20 (1mb) worth of random data to reduce
-        /// the statistical deviation from perfectly random outputs. 
+        /// Will generate up to 2^20 (1mb) worth of random data before the key is changed
+        /// in order to reduce the statistical deviation from perfectly random outputs. 
         /// </summary>
         /// <param name="input">data to encrypt</param>
         /// <returns>pseudorandomly encrypted data</returns>
-        private byte[] GenerateMaxRequestSizeData(SymmetricAlgorithm cipher, byte[] input)
+        private byte[] GenerateDataPerStateKey(SymmetricAlgorithm cipher, byte[] input)
         {
             if (input.Length == 0)
                 throw new GeneratorInputException("cannot encrypt empty array");
@@ -134,10 +133,9 @@ namespace Ventura.Generator
         }
 
         /// <summary>
-        /// 
+        /// Fills each block with pseudorandom data and appends it to the result.
+        /// Data used for the transformation is the counter changed into a byte array. 
         /// </summary>
-        /// <param name="numberOfBlocks"></param>
-        /// <returns></returns>
         private byte[] GenerateBlocks(SymmetricAlgorithm cipher, int numberOfBlocks)
         {
             if (!state.Seeded)
@@ -151,8 +149,6 @@ namespace Ventura.Generator
                 using (var encryptor = cipher.CreateEncryptor())
                 {
                     var plainText = state.TransformCounterToByteArray();
-                    cipher.IV = plainText;
-
                     var pseudoRandomBytes = encryptor.TransformFinalBlock(plainText, 0, plainText.Length);
 
                     Array.Copy(pseudoRandomBytes, 0, result, destArrayLength, pseudoRandomBytes.Length);
