@@ -7,6 +7,7 @@ namespace Ventura
     public enum Cipher
     {
         Aes,
-        TwoFish
+        TwoFish,
+        BlowFish
     }
 }

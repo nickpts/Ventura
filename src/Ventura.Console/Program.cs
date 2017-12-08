@@ -16,7 +16,7 @@ namespace Ventura.Console
     {
         static void Main(string[] args)
         {
-            var gen = new VenturaPrng(Cipher.Aes);
+            var gen = new VenturaPrng(Cipher.BlowFish);
 
             //Stream stream;
             //byte[] test = File.ReadAllBytes(@"C:\Users\Nick\Downloads\Programs\vlc-2.2.6-win32.exe");
@@ -28,8 +28,8 @@ namespace Ventura.Console
             var encryptedBytes = gen.GenerateData(bytes);
 
             string encrypted = Encoding.ASCII.GetString(encryptedBytes);
-            Console.WriteLine($"Encrypted: { encryptedBytes }, size { encryptedBytes.Length }");
-            Console.WriteLine($"Arrays equal: { test.SequenceEqual(encryptedBytes) }");
+            Console.WriteLine($"Encrypted: { encrypted }, size { encryptedBytes.Length }");
+            Console.WriteLine($"Arrays equal: { bytes.SequenceEqual(encryptedBytes) }");
             Console.ReadKey();
         }
     }

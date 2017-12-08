@@ -7,6 +7,7 @@ using Ventura.Interfaces;
 using static Ventura.Constants;
 
 using Medo.Security.Cryptography;
+using BlowFishCS;
 
 /// <summary>
 /// 
@@ -48,15 +49,20 @@ namespace Ventura.Generator
             {
                 using (var rijndael = Rijndael.Create())
                 {
-                    result = GenerateDataWithCipher(rijndael, input);
+                    result = GenerateDataWithSymmetricAlgorithm(rijndael, input);
                 }
             }
             else if (option == Cipher.TwoFish)
             {
                 using (var twoFish = new TwofishManaged())
                 {
-                    result = GenerateDataWithCipher(twoFish, input);
+                    result = GenerateDataWithSymmetricAlgorithm(twoFish, input);
                 }
+            }
+            else if (option == Cipher.BlowFish)
+            {
+
+                result = GenerateDataWithBlowFish(input);
             }
 
             return result;
@@ -79,7 +85,7 @@ namespace Ventura.Generator
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private byte[] GenerateDataWithCipher(SymmetricAlgorithm cipher, byte[] input)
+        private byte[] GenerateDataWithSymmetricAlgorithm(SymmetricAlgorithm cipher, byte[] input)
         {
             cipher.Mode = CipherMode.ECB;
             cipher.Padding = PaddingMode.None;
@@ -105,6 +111,75 @@ namespace Ventura.Generator
 
             Array.Resize(ref tempArray, input.Length);
             Array.Copy(tempArray, result, tempArray.Length);
+
+            return result;
+        }
+
+        private byte[] GenerateDataWithBlowFish(byte[] input)
+        {
+            var result = new byte[input.Length];
+            var blocksToEncrypt = (int)Math.Ceiling((double)(input.Length / MaximumRequestSize)); // can it not return 1 if greater than 0?
+            var tempArray = new byte[blocksToEncrypt * MaximumRequestSize];
+            var block = new byte[MaximumRequestSize];
+            int temp = 0;
+
+            blocksToEncrypt = (blocksToEncrypt == 0) ? 1 : blocksToEncrypt; // not happy with this
+
+            do
+            {
+                block = GenerateDataPerStateKey(block);
+                Array.Copy(block, 0, tempArray, temp, block.Length);
+
+                temp += block.Length;
+                blocksToEncrypt--;
+            }
+            while (blocksToEncrypt > 0);
+
+            Array.Resize(ref tempArray, input.Length);
+            Array.Copy(tempArray, result, tempArray.Length);
+
+            return result;
+        }
+
+        private byte[] GenerateDataPerStateKey(byte[] input)
+        {
+            if (input.Length == 0)
+                throw new GeneratorInputException("cannot encrypt empty array");
+
+            if (input.Length > MaximumRequestSize)
+                throw new GeneratorInputException($"cannot generate array bigger than { MaximumRequestSize } bytes");
+
+            var roundedUpwards = (int)Math.Ceiling((double)input.Length / CipherBlockSize);
+            var pseudorandom = GenerateBlocks(roundedUpwards);
+
+            // TODO: add a test to check this is called, check if array needs to be resized?
+            state.Key = GenerateBlocks(2);
+
+            return pseudorandom;
+        }
+
+        private byte[] GenerateBlocks(int numberOfBlocks)
+        {
+            if (!state.Seeded)
+                throw new GeneratorSeedException("Generator not seeded");
+
+            var result = new byte[numberOfBlocks * CipherBlockSize];
+
+            int destArrayLength = 0;
+
+            for (int i = 0; i < numberOfBlocks; i++)
+            {
+                var plainText = state.TransformCounterToByteArray();
+                var cipher = new BlowFish(state.Key);
+                cipher.SetRandomIV();
+
+                var pseudoRandomBytes = cipher.Encrypt_CBC(plainText);
+
+                Array.Copy(pseudoRandomBytes, 0, result, destArrayLength, pseudoRandomBytes.Length);
+                destArrayLength += pseudoRandomBytes.Length;
+
+                state.Counter++;
+            }
 
             return result;
         }
