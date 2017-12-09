@@ -11,15 +11,9 @@ namespace Ventura.Generator
 {
     public sealed class SymmetricAlgorithmPrng : VenturaPrng, IGenerator
     {
-        public SymmetricAlgorithmPrng(byte[] seed = null) :
-            base(Cipher.Aes, seed)
+        public SymmetricAlgorithmPrng(byte[] seed = null) : base(Cipher.Aes, seed)
         {
 
-        }
-
-        public override byte[] GenerateData(byte[] input)
-        {
-            return base.GenerateData(input);
         }
 
         /// <summary>

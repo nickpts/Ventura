@@ -9,9 +9,6 @@ using static Ventura.Constants;
 using Medo.Security.Cryptography;
 using BlowFishCS;
 
-/// <summary>
-/// 
-/// </summary>
 namespace Ventura.Generator
 {
     public abstract class VenturaPrng

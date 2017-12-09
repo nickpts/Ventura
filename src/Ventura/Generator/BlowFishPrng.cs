@@ -12,15 +12,8 @@ namespace Ventura.Generator
 {
     public sealed class BlowFishPrng: VenturaPrng, IGenerator
     {
-        public BlowFishPrng(byte[] seed = null)
-            :base(Cipher.BlowFish, seed)
+        public BlowFishPrng(byte[] seed = null) : base(Cipher.BlowFish, seed)
         {
-
-        }
-
-        public override byte[] GenerateData(byte[] input)
-        {
-            return base.GenerateData(input);
         }
 
         protected override byte[] GenerateBlocks(int numberOfBlocks)
