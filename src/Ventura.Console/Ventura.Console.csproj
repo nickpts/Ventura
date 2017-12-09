@@ -10,6 +10,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="BlowFish">
+      <HintPath>..\..\third party\BlowFish.dll</HintPath>
+    </Reference>
     <Reference Include="TwoFish">
       <HintPath>..\..\third party\TwoFish.dll</HintPath>
     </Reference>

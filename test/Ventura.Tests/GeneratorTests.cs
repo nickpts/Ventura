@@ -18,7 +18,7 @@ namespace Ventura.Tests
         [TestInitialize]
         public void Setup()
         {
-            testGenerator = new Generator.VenturaPrng(Constants.Cipher.Aes);
+            testGenerator = new Generator.VenturaPrng(Cipher.Aes);
         }
 
         [TestMethod]
