@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C173B162
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ventura", "src\Ventura\Ventura.csproj", "{55A490EF-A122-4EBE-9D43-345CD9120C32}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ventura.Console", "src\Ventura.Console\Ventura.Console.csproj", "{D21186B3-F8B2-4F8B-827A-7B3871C54A18}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ventura.Tests", "test\Ventura.Tests\Ventura.Tests.csproj", "{4A13D18D-F400-487E-BF5A-0353EF96A26D}"
 EndProject
 Global
@@ -23,10 +21,6 @@ Global
 		{55A490EF-A122-4EBE-9D43-345CD9120C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55A490EF-A122-4EBE-9D43-345CD9120C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55A490EF-A122-4EBE-9D43-345CD9120C32}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D21186B3-F8B2-4F8B-827A-7B3871C54A18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D21186B3-F8B2-4F8B-827A-7B3871C54A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D21186B3-F8B2-4F8B-827A-7B3871C54A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D21186B3-F8B2-4F8B-827A-7B3871C54A18}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4A13D18D-F400-487E-BF5A-0353EF96A26D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4A13D18D-F400-487E-BF5A-0353EF96A26D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A13D18D-F400-487E-BF5A-0353EF96A26D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -37,7 +31,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{55A490EF-A122-4EBE-9D43-345CD9120C32} = {37784CCE-21E0-4962-A50A-8284F7167A3F}
-		{D21186B3-F8B2-4F8B-827A-7B3871C54A18} = {37784CCE-21E0-4962-A50A-8284F7167A3F}
 		{4A13D18D-F400-487E-BF5A-0353EF96A26D} = {C173B162-9AC3-4C76-8DB0-246910A5CAB1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

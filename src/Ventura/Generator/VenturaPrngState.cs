@@ -4,16 +4,12 @@ using static Ventura.Constants;
 
 namespace Ventura.Generator
 {
-    internal class VenturaPrngState
+    internal struct VenturaPrngState
     {
         public int Counter { get; internal set; }
         public byte[] Key { get; internal set; }
         public bool Seeded { get; internal set; }
 
-        /// <summary>
-        /// Transforms the counter to a byte array. 
-        /// Intended to be used on
-        /// </summary>
         public byte[] TransformCounterToByteArray()
         {
             var destArray = new byte[CipherBlockSize];

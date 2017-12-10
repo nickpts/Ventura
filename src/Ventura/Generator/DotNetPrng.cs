@@ -9,11 +9,10 @@ using Ventura.Interfaces;
 
 namespace Ventura.Generator
 {
-    public sealed class SymmetricAlgorithmPrng : VenturaPrng, IGenerator
+    public sealed class DotNetPrng: VenturaPrng, IGenerator
     {
-        public SymmetricAlgorithmPrng(byte[] seed = null) : base(Cipher.Aes, seed)
+        public DotNetPrng(byte[] seed = null) : base(Cipher.Aes, seed)
         {
-
         }
 
         /// <summary>
@@ -27,7 +26,7 @@ namespace Ventura.Generator
 
             using (var cipher = new RijndaelManaged())
             {
-                cipher.Mode = CipherMode.ECB;
+                cipher.Mode = CipherMode.CBC;
                 cipher.Padding = PaddingMode.None;
                 cipher.Key = state.Key;
 

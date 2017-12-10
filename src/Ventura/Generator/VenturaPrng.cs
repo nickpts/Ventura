@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Runtime.CompilerServices;
 
 using Ventura.Exceptions;
 using Ventura.Interfaces;
 using static Ventura.Constants;
 
-using Medo.Security.Cryptography;
-using BlowFishCS;
-
+[assembly: InternalsVisibleTo("Ventura.Tests")]
 namespace Ventura.Generator
 {
     public abstract class VenturaPrng
@@ -16,7 +15,7 @@ namespace Ventura.Generator
         protected Cipher option;
         internal VenturaPrngState state;
 
-        public VenturaPrng(Cipher option, byte[] seed = null)
+        protected VenturaPrng(Cipher option = Cipher.Aes, byte[] seed = null)
         {
             if (seed == null)
                 seed = Guid.NewGuid().ToByteArray();
@@ -42,6 +41,9 @@ namespace Ventura.Generator
         /// <returns></returns>
         public virtual byte[] GenerateData(byte[] input)
         {
+            if (input.Length == 0)
+                throw new GeneratorInputException("cannot encrypt empty array");
+
             var result = new byte[input.Length];
             var blocksToEncrypt = (int)Math.Ceiling((double)(input.Length / MaximumRequestSize)); // can it not return 1 if greater than 0?
             var block = new byte[MaximumRequestSize];
@@ -84,13 +86,10 @@ namespace Ventura.Generator
         /// </summary>
         /// <param name="input">data to encrypt</param>
         /// <returns>pseudorandomly encrypted data</returns>
-        protected byte[] GenerateDataPerStateKey(byte[] input)
+        protected virtual byte[] GenerateDataPerStateKey(byte[] input)
         {
-            if (input.Length == 0)
-                throw new GeneratorInputException("cannot encrypt empty array");
-
             if (input.Length > MaximumRequestSize)
-                throw new GeneratorInputException($"cannot generate array bigger than { MaximumRequestSize } bytes");
+                throw new GeneratorInputException($"cannot generate array bigger than { MaximumRequestSize } bytes for state key");
 
             var roundedUpwards = (int)Math.Ceiling((double)input.Length / CipherBlockSize);
             var pseudorandom = GenerateBlocks(roundedUpwards);
