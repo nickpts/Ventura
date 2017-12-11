@@ -7,13 +7,12 @@ using Ventura.Exceptions;
 using Ventura.Interfaces;
 using static Ventura.Constants;
 
-[assembly: InternalsVisibleTo("Ventura.Tests")]
 namespace Ventura.Generator
 {
     public abstract class VenturaPrng
     {
         protected Cipher option;
-        internal VenturaPrngState state;
+        protected VenturaPrngState state;
 
         protected VenturaPrng(Cipher option = Cipher.Aes, byte[] seed = null)
         {
@@ -21,7 +20,7 @@ namespace Ventura.Generator
                 seed = Guid.NewGuid().ToByteArray();
 
             this.option = option;
-            InitializeGenerator(seed);
+            InitialiseGenerator(seed);
         }
 
         public void Reseed(byte[] seed)
@@ -70,7 +69,7 @@ namespace Ventura.Generator
 
         #region Private implementation
 
-        private void InitializeGenerator(byte[] seed)
+        protected virtual void InitialiseGenerator(byte[] seed)
         {
             state = new VenturaPrngState
             {
@@ -81,7 +80,7 @@ namespace Ventura.Generator
         }
 
         /// <summary>
-        /// Generates up to 2^20 (1mb) worth of random data before the key is changed
+        /// Generates up to 2^20 (1mb) worth of random data and then changes the key
         /// in order to reduce the statistical deviation from perfectly random outputs. 
         /// </summary>
         /// <param name="input">data to encrypt</param>

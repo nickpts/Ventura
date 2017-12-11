@@ -26,7 +26,7 @@ namespace Ventura.Generator
 
             using (var cipher = new RijndaelManaged())
             {
-                cipher.Mode = CipherMode.CBC;
+                cipher.Mode = CipherMode.ECB;
                 cipher.Padding = PaddingMode.None;
                 cipher.Key = state.Key;
 
@@ -48,6 +48,11 @@ namespace Ventura.Generator
 
                 return result;
             }
+        }
+
+        public void UpdateKey()
+        {
+            throw new NotImplementedException();
         }
     }
 }

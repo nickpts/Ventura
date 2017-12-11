@@ -8,5 +8,6 @@ namespace Ventura.Interfaces
     {
         byte[] GenerateData(byte[] input);
         void Reseed(byte[] seed);
+        void UpdateKey();
     }
 }

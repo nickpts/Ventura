@@ -4,7 +4,7 @@ using static Ventura.Constants;
 
 namespace Ventura.Generator
 {
-    internal struct VenturaPrngState
+    public struct VenturaPrngState
     {
         public int Counter { get; internal set; }
         public byte[] Key { get; internal set; }
