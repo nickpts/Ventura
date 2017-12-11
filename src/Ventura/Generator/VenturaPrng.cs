@@ -2,18 +2,21 @@
 using System.Linq;
 using System.Security.Cryptography;
 using System.Runtime.CompilerServices;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Engines;
-using Org.BouncyCastle.Crypto.Parameters;
+
 using Ventura.Exceptions;
 using Ventura.Interfaces;
 using static Ventura.Constants;
 
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Parameters;
+
 namespace Ventura.Generator
 {
-    public class VenturaPrng
+    public class VenturaPrng: IGenerator
     {
         protected Cipher option;
+        protected IBlockCipher cipher;
         protected VenturaPrngState state;
 
         public VenturaPrng(Cipher option = Cipher.Aes, byte[] seed = null)
@@ -23,6 +26,7 @@ namespace Ventura.Generator
 
             this.option = option;
             InitialiseGenerator(seed);
+            InitialiseCipher();
         }
 
         public void Reseed(byte[] seed)
@@ -37,11 +41,11 @@ namespace Ventura.Generator
 
         public void UpdateKey()
         {
-            throw new NotImplementedException();
+            state.Key = GenerateBlocks(2);
         }
 
         /// <summary>
-        /// Breaks down a byte array to 1mb blocks and encrypts each one separately
+        /// Breaks down a byte array to maximum request size blocks and encrypts each one separately
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -76,6 +80,7 @@ namespace Ventura.Generator
 
         #region Private implementation
 
+
         protected virtual void InitialiseGenerator(byte[] seed)
         {
             state = new VenturaPrngState
@@ -84,6 +89,25 @@ namespace Ventura.Generator
             };
 
             Reseed(seed);
+        }
+
+        protected void InitialiseCipher()
+        {
+            switch (option)
+            {
+                case Cipher.Aes:
+                    cipher = new AesEngine();
+                    break;
+                case Cipher.TwoFish:
+                    cipher = new TwofishEngine();
+                    break;
+                case Cipher.BlowFish:
+                    cipher= new BlowfishEngine();
+                    break;
+                case Cipher.Serpent:
+                    cipher = new SerpentEngine();
+                    break;
+            }
         }
 
         /// <summary>
@@ -100,8 +124,7 @@ namespace Ventura.Generator
             var roundedUpwards = (int)Math.Ceiling((double)input.Length / CipherBlockSize);
             var pseudorandom = GenerateBlocks(roundedUpwards);
 
-            // TODO: add a test to check this is called, check if array needs to be resized?
-            state.Key = GenerateBlocks(2);
+            UpdateKey();
 
             return pseudorandom;
         }
@@ -118,13 +141,13 @@ namespace Ventura.Generator
             var result = new byte[numberOfBlocks * CipherBlockSize];
             int destArrayLength = 0;
 
-            var cipher = new BufferedBlockCipher(new AesEngine());
-            cipher.Init(true, new KeyParameter(state.Key));
+            var encryptor = new BufferedBlockCipher(cipher);
+            encryptor.Init(true, new KeyParameter(state.Key));
 
             for (int i = 0; i < numberOfBlocks; i++)
             {
                 var plainText = state.TransformCounterToByteArray();
-                cipher.ProcessBytes(plainText, 0, plainText.Length, result, destArrayLength);
+                encryptor.ProcessBytes(plainText, 0, plainText.Length, result, destArrayLength);
 
                 destArrayLength += plainText.Length;
                 state.Counter++;
@@ -132,8 +155,6 @@ namespace Ventura.Generator
 
             return result;
         }
-
-        
 
         #endregion
     }

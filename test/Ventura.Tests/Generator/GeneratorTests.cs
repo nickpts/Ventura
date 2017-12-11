@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
-using FluentAssertions;
-using Ventura;
+
 using Ventura.Exceptions;
 using Ventura.Generator;
 
@@ -10,18 +9,22 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
 using Org.BouncyCastle.Asn1.Crmf;
+using FluentAssertions;
+using Ventura.Interfaces;
 
 namespace Ventura.Tests.Generator
 {
     [TestClass]
     public class GeneratorTests
     {
-        private VenturaPrng generator;
+        private VenturaPrng concreteGenerator;
+        private Mock<IGenerator> mockGenerator;
 
         [TestInitialize]
         public void Setup()
         {
-            generator = new VenturaPrng();
+            concreteGenerator = new VenturaPrng();
+            mockGenerator = new Mock<IGenerator>();
         }
 
         [TestMethod]
@@ -29,7 +32,7 @@ namespace Ventura.Tests.Generator
         public void Generator_ThrowsException_When_InputArray_Zero()
         {
             var testArray = new byte[] { };
-            var result = generator.GenerateData(testArray);
+            var result = concreteGenerator.GenerateData(testArray);
         }
 
         [TestMethod]
@@ -66,22 +69,25 @@ namespace Ventura.Tests.Generator
         //[TestMethod]
         //public void Initialize_GeneratorCalls_Reseed()
         //{
-        //    var result = aesGenerator.GenerateData(new byte[1]);
-
+        //    mockGenerator.Setup(m => m.GenerateData(It.IsAny<byte[]>()));
+        //    mockGenerator.Verify(m => m.Reseed(It.IsAny<byte[]>()));
         //}
 
-        //[TestMethod]
-        //public void Generator_Changes_StateKey_After_Request()
-        //{
-        //    var testArray = new byte[10];
-        //    var testGenerator = new TestGenerator();
-        //    var initialKey = testGenerator.ReturnStateKey();
-        //    testGenerator.GenerateDatePerStateKey(testArray);
+        [TestMethod]
+        public void Generator_Changes_StateKey_After_Request()
+        {
+            //var testArray = new byte[10];
+            //var testGenerator = new TestGenerator();
+            //var initialKey = testGenerator.ReturnStateKey();
+            //testGenerator.GenerateDatePerStateKey(testArray);
 
-        //    var updatedKey = testGenerator.ReturnStateKey();
+            //var updatedKey = testGenerator.ReturnStateKey();
 
-        //    Assert.AreNotEqual(initialKey, updatedKey);
-        //}
+            //Assert.AreNotEqual(initialKey, updatedKey);
+
+            mockGenerator.Setup(m => m.GenerateData(It.IsAny<byte[]>()));
+            mockGenerator.Verify(m => m.UpdateKey());
+        }
 
         [TestMethod]
         public void Generator_Returns_EncryptedData()
@@ -89,7 +95,7 @@ namespace Ventura.Tests.Generator
             var testString = "All your base are belong to us";
             var inputBytes = Encoding.ASCII.GetBytes(testString);
 
-            var result = generator.GenerateData(inputBytes);
+            var result = concreteGenerator.GenerateData(inputBytes);
             var outputString = Encoding.ASCII.GetString(result);
 
             outputString.Should().NotBeSameAs(testString);
@@ -101,7 +107,7 @@ namespace Ventura.Tests.Generator
             var testString = "All your base are belong to us";
             var inputBytes = Encoding.ASCII.GetBytes(testString);
 
-            var result = generator.GenerateData(inputBytes);
+            var result = concreteGenerator.GenerateData(inputBytes);
 
             Assert.IsFalse(inputBytes.SequenceEqual(result));
         }
