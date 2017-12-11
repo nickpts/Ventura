@@ -8,6 +8,7 @@ namespace Ventura
     {
         Aes,
         TwoFish,
-        BlowFish
+        BlowFish,
+        Serpent
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using FluentAssertions;
 using Ventura;
 using Ventura.Exceptions;
 using Ventura.Generator;
@@ -15,12 +16,12 @@ namespace Ventura.Tests.Generator
     [TestClass]
     public class GeneratorTests
     {
-        private DotNetPrng aesGenerator;
+        private VenturaPrng generator;
 
         [TestInitialize]
         public void Setup()
         {
-            aesGenerator = new DotNetPrng();
+            generator = new VenturaPrng();
         }
 
         [TestMethod]
@@ -28,7 +29,7 @@ namespace Ventura.Tests.Generator
         public void Generator_ThrowsException_When_InputArray_Zero()
         {
             var testArray = new byte[] { };
-            var result = aesGenerator.GenerateData(testArray);
+            var result = generator.GenerateData(testArray);
         }
 
         [TestMethod]
@@ -36,15 +37,6 @@ namespace Ventura.Tests.Generator
         public void Generator_ThrowsException_When_InputArray_GreaterThan_MaximumSize()
         {
             var testArray = new byte[1550000];
-            var testGenerator = new TestGenerator();
-            var result = testGenerator.GenerateDatePerStateKey(testArray);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Generator_ThrowsNotImplmented_On_GenerateBlocks()
-        {
-            var testArray = new byte[10];
             var testGenerator = new TestGenerator();
             var result = testGenerator.GenerateDatePerStateKey(testArray);
         }
@@ -97,10 +89,10 @@ namespace Ventura.Tests.Generator
             var testString = "All your base are belong to us";
             var inputBytes = Encoding.ASCII.GetBytes(testString);
 
-            var result = aesGenerator.GenerateData(inputBytes);
+            var result = generator.GenerateData(inputBytes);
             var outputString = Encoding.ASCII.GetString(result);
 
-            Assert.IsFalse(inputBytes.Equals(outputString));
+            outputString.Should().NotBeSameAs(testString);
         }
 
         [TestMethod]
@@ -109,7 +101,7 @@ namespace Ventura.Tests.Generator
             var testString = "All your base are belong to us";
             var inputBytes = Encoding.ASCII.GetBytes(testString);
 
-            var result = aesGenerator.GenerateData(inputBytes);
+            var result = generator.GenerateData(inputBytes);
 
             Assert.IsFalse(inputBytes.SequenceEqual(result));
         }
@@ -118,16 +110,28 @@ namespace Ventura.Tests.Generator
         public void Generator_WithSameSeed_ReturnsSameData()
         {
             var seed = new byte[1];
-            var generator = new DotNetPrng(seed);
+            var generator = new VenturaPrng(Cipher.Aes, seed);
 
             var input = new byte[1024];
 
             var firstOutput = generator.GenerateData(input);
 
-            var otherGenerator = new DotNetPrng(seed);
+            var otherGenerator = new VenturaPrng(Cipher.Aes, seed);
             var secondOutput = otherGenerator.GenerateData(input);
 
             Assert.IsTrue(firstOutput.SequenceEqual(secondOutput));
+        }
+
+        [TestMethod]
+        public void BcGenerator_ReturnsData()
+        {
+            var testString = "All your base are belong to us dear friend, noone knows but you";
+            var inputBytes = Encoding.ASCII.GetBytes(testString);
+
+            var gen = new VenturaPrng(Cipher.Serpent);
+            var result = gen.GenerateData(inputBytes);
+
+            Assert.IsFalse(inputBytes.SequenceEqual(result));
         }
     }
 

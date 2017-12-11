@@ -2,19 +2,21 @@
 using System.Linq;
 using System.Security.Cryptography;
 using System.Runtime.CompilerServices;
-
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Parameters;
 using Ventura.Exceptions;
 using Ventura.Interfaces;
 using static Ventura.Constants;
 
 namespace Ventura.Generator
 {
-    public abstract class VenturaPrng
+    public class VenturaPrng
     {
         protected Cipher option;
         protected VenturaPrngState state;
 
-        protected VenturaPrng(Cipher option = Cipher.Aes, byte[] seed = null)
+        public VenturaPrng(Cipher option = Cipher.Aes, byte[] seed = null)
         {
             if (seed == null)
                 seed = Guid.NewGuid().ToByteArray();
@@ -31,6 +33,11 @@ namespace Ventura.Generator
             state.Key = hashedSeed;
             state.Counter++;
             state.Seeded = true;
+        }
+
+        public void UpdateKey()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -99,10 +106,34 @@ namespace Ventura.Generator
             return pseudorandom;
         }
 
+        /// <summary>
+        /// Fills each block with pseudorandom data and appends it to the result.
+        /// Data used for the transformation is the counter changed into a byte array. 
+        /// </summary>
         protected virtual byte[] GenerateBlocks(int numberOfBlocks)
         {
-            throw new NotImplementedException();
+            if (!state.Seeded)
+                throw new GeneratorSeedException("Generator not seeded");
+
+            var result = new byte[numberOfBlocks * CipherBlockSize];
+            int destArrayLength = 0;
+
+            var cipher = new BufferedBlockCipher(new AesEngine());
+            cipher.Init(true, new KeyParameter(state.Key));
+
+            for (int i = 0; i < numberOfBlocks; i++)
+            {
+                var plainText = state.TransformCounterToByteArray();
+                cipher.ProcessBytes(plainText, 0, plainText.Length, result, destArrayLength);
+
+                destArrayLength += plainText.Length;
+                state.Counter++;
+            }
+
+            return result;
         }
+
+        
 
         #endregion
     }
