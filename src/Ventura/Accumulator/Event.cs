@@ -22,9 +22,8 @@ namespace Ventura.Accumulator
         public byte[] GetConcatenatedEntropicData()
         {
             var result = new List<byte>();
-            result.Add();
+            //result.Add();
             return null;
         }
-    }
     }
 }
