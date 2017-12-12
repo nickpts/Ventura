@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Ventura.Interfaces;
 
 namespace Ventura.Accumulator
 {
@@ -10,5 +12,14 @@ namespace Ventura.Accumulator
     /// </summary>
     public class VenturaAccumulator
     {
+        public VenturaAccumulator()
+        {
+            
+        }
+
+        public void ConcatenateEvents(List<IEvent> events)
+        {
+            
+        }
     }
 }

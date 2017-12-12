@@ -16,13 +16,11 @@ namespace Ventura.Tests.Generator
     public class GeneratorTests
     {
         private VenturaPrng concreteGenerator;
-        private Mock<VenturaPrng> mockGenerator;
 
         [TestInitialize]
         public void Setup()
         {
             concreteGenerator = new VenturaPrng();
-            mockGenerator = new Mock<VenturaPrng>();
         }
 
         [TestMethod]
@@ -53,6 +51,13 @@ namespace Ventura.Tests.Generator
         }
 
         [TestMethod]
+        public void Generator_IsSeeded_UponInitialisation()
+        {
+            var testGenerator = new TestGenerator();
+            testGenerator.IsSeeded().Should().Be(true);
+        }
+
+        [TestMethod]
         public void Counter_IsIncremented_AfterReseed()
         {
             var testGenerator = new TestGenerator();
@@ -62,13 +67,6 @@ namespace Ventura.Tests.Generator
 
             var counter = BitConverter.ToInt32(blockArray, 0);
             Assert.AreEqual(counter, 2);
-        }
-
-        [TestMethod]
-        public void Generator_IsSeeded_UponInitialisation()
-        {
-            var testGenerator = new TestGenerator();
-            testGenerator.IsSeeded().Should().Be(true);
         }
 
         [TestMethod]
@@ -124,15 +122,9 @@ namespace Ventura.Tests.Generator
         }
 
         [TestMethod]
-        public void BcGenerator_ReturnsData()
+        public void UniformRandomDistributionTest()
         {
-            var testString = "All your base are belong to us dear friend, noone knows but you";
-            var inputBytes = Encoding.ASCII.GetBytes(testString);
-
-            var gen = new VenturaPrng(Cipher.Serpent);
-            var result = gen.GenerateData(inputBytes);
-
-            Assert.IsFalse(inputBytes.SequenceEqual(result));
+            
         }
     }
 

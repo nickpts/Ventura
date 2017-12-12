@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Runtime.CompilerServices;
 
 using Ventura.Exceptions;
 using Ventura.Interfaces;
@@ -13,6 +12,11 @@ using Org.BouncyCastle.Crypto.Parameters;
 
 namespace Ventura.Generator
 {
+    /// <summary>
+    /// Converts a fixed sized state to arbitrarily long, pseudorandom outputs. 
+    /// Cipher implementation is provided by BouncyCastle, currently available ciphers are
+    /// Aes, Twofish, Blowfish, Serpent
+    /// </summary>
     public class VenturaPrng: IGenerator
     {
         protected Cipher option;
@@ -25,6 +29,7 @@ namespace Ventura.Generator
                 seed = Guid.NewGuid().ToByteArray();
 
             this.option = option;
+
             InitialiseGenerator(seed);
             InitialiseCipher();
         }
@@ -38,12 +43,7 @@ namespace Ventura.Generator
             state.Counter++;
             state.Seeded = true;
         }
-
-        public virtual void UpdateKey()
-        {
-            state.Key = GenerateBlocks(2);
-        }
-
+        
         /// <summary>
         /// Breaks down a byte array to maximum request size blocks and encrypts each one separately
         /// </summary>
@@ -124,7 +124,7 @@ namespace Ventura.Generator
             var roundedUpwards = (int)Math.Ceiling((double)input.Length / CipherBlockSize);
             var pseudorandom = GenerateBlocks(roundedUpwards);
 
-            UpdateKey();
+            state.Key = GenerateBlocks(2);
 
             return pseudorandom;
         }
