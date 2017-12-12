@@ -39,7 +39,7 @@ namespace Ventura.Generator
             state.Seeded = true;
         }
 
-        public void UpdateKey()
+        public virtual void UpdateKey()
         {
             state.Key = GenerateBlocks(2);
         }

@@ -8,9 +8,7 @@ using Ventura.Generator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
-using Org.BouncyCastle.Asn1.Crmf;
 using FluentAssertions;
-using Ventura.Interfaces;
 
 namespace Ventura.Tests.Generator
 {
@@ -18,13 +16,13 @@ namespace Ventura.Tests.Generator
     public class GeneratorTests
     {
         private VenturaPrng concreteGenerator;
-        private Mock<IGenerator> mockGenerator;
+        private Mock<VenturaPrng> mockGenerator;
 
         [TestInitialize]
         public void Setup()
         {
             concreteGenerator = new VenturaPrng();
-            mockGenerator = new Mock<IGenerator>();
+            mockGenerator = new Mock<VenturaPrng>();
         }
 
         [TestMethod]
@@ -66,27 +64,24 @@ namespace Ventura.Tests.Generator
             Assert.AreEqual(counter, 2);
         }
 
-        //[TestMethod]
-        //public void Initialize_GeneratorCalls_Reseed()
-        //{
-        //    mockGenerator.Setup(m => m.GenerateData(It.IsAny<byte[]>()));
-        //    mockGenerator.Verify(m => m.Reseed(It.IsAny<byte[]>()));
-        //}
+        [TestMethod]
+        public void Generator_IsSeeded_UponInitialisation()
+        {
+            var testGenerator = new TestGenerator();
+            testGenerator.IsSeeded().Should().Be(true);
+        }
 
         [TestMethod]
         public void Generator_Changes_StateKey_After_Request()
         {
-            //var testArray = new byte[10];
-            //var testGenerator = new TestGenerator();
-            //var initialKey = testGenerator.ReturnStateKey();
-            //testGenerator.GenerateDatePerStateKey(testArray);
+            var testArray = new byte[10];
+            var testGenerator = new TestGenerator();
+            var initialKey = testGenerator.ReturnStateKey();
+            testGenerator.GenerateDatePerStateKey(testArray);
 
-            //var updatedKey = testGenerator.ReturnStateKey();
+            var updatedKey = testGenerator.ReturnStateKey();
 
-            //Assert.AreNotEqual(initialKey, updatedKey);
-
-            mockGenerator.Setup(m => m.GenerateData(It.IsAny<byte[]>()));
-            mockGenerator.Verify(m => m.UpdateKey());
+            Assert.AreNotEqual(initialKey, updatedKey);
         }
 
         [TestMethod]
@@ -156,6 +151,11 @@ namespace Ventura.Tests.Generator
         public byte[] ReturnStateKey()
         {
             return state.Key;
+        }
+
+        public bool IsSeeded()
+        {
+            return state.Seeded;
         }
     }
 }
