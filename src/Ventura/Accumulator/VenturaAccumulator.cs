@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using Ventura.Interfaces;
+using static Ventura.Constants;
 
 namespace Ventura.Accumulator
 {
@@ -13,17 +15,17 @@ namespace Ventura.Accumulator
     public class VenturaAccumulator: IAccumulator
     {
         private IEnumerable<IEntropyExtractor> entropyExtractors;
-        private List<Pool> pools;
+        private List<Pool> pools = new List<Pool>();
 
         public VenturaAccumulator(IEnumerable<IEntropyExtractor> entropyExtractors)
         {
             this.entropyExtractors = entropyExtractors;
-            pools = new List<Pool>();
+            InitalisePools();
         }
 
         public void InitalisePools()
         {
-            for (int i = 0; i < 32; i++)
+            for (int i = 0; i < MaximumNumberOfPools; i++)
             {
                 var pool = new Pool(i);
                 pools.Add(pool);
