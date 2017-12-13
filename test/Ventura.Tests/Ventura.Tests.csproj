@@ -19,4 +19,8 @@
     <ProjectReference Include="..\..\src\Ventura\Ventura.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Accumulator\" />
+  </ItemGroup>
+
 </Project>

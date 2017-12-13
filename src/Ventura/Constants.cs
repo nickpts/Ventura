@@ -11,5 +11,7 @@ namespace Ventura
         public const int MaximumRequestSize = 1048576;
         public const int NumberOfPools = 32;
         public const int MaximumNumberOfEvents = 255;
+        public const int MaximumNumberOfPools = 32;
+        
     }
 }
