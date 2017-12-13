@@ -20,10 +20,23 @@ namespace Ventura.Accumulator
         public VenturaAccumulator(IEnumerable<IEntropyExtractor> entropyExtractors)
         {
             this.entropyExtractors = entropyExtractors;
-            InitalisePools();
+
+            InitialisePools();
         }
 
-        public void InitalisePools()
+        public void Collect()
+        {
+            
+        }
+
+        public void Distribute()
+        {
+            
+        }
+
+        #region Private implementation
+
+        private void InitialisePools()
         {
             for (int i = 0; i < MaximumNumberOfPools; i++)
             {
@@ -32,9 +45,6 @@ namespace Ventura.Accumulator
             }
         }
 
-        public void InitialiseExtractors()
-        {
-            
-        }
+        #endregion
     }
 }

@@ -27,10 +27,5 @@ namespace Ventura.Accumulator.EntropySources
         {
             return new byte[28]; // stub, will fill in later
         }
-
-        public void EmitEvent()
-        {
-            
-        }
     }
 }
