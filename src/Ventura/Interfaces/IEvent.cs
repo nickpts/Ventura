@@ -6,7 +6,5 @@ namespace Ventura.Interfaces
 {
     public interface IEvent
     {
-        byte[] GetConcatenatedEntropicData();
-
     }
 }

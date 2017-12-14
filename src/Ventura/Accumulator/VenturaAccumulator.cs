@@ -20,18 +20,27 @@ namespace Ventura.Accumulator
         public VenturaAccumulator(IEnumerable<IEntropyExtractor> entropyExtractors)
         {
             this.entropyExtractors = entropyExtractors;
-
-            InitialisePools();
         }
 
         public void Collect()
         {
-            
+            InitialisePools();
+            StartExtractors();
+            Distribute();
+        }
+
+        private void StartExtractors()
+        {
+            foreach (var extractor in entropyExtractors) { extractor.Start(); }
         }
 
         public void Distribute()
         {
-            
+            var events = entropyExtractors.SelectMany(c => c.Events);
+            foreach (var pool in pools)
+            {
+               
+            }
         }
 
         #region Private implementation

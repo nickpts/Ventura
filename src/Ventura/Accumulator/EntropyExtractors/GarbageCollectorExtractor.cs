@@ -4,12 +4,12 @@ using System.Text;
 using Org.BouncyCastle.Utilities.Collections;
 using Ventura.Interfaces;
 
-namespace Ventura.Accumulator.EntropySources
+namespace Ventura.Accumulator.EntropyExtractors
 {
     public class GarbageCollectorExtractor : IEntropyExtractor
     {
         private int sourceNumber;
-        public List<IEvent> events;
+        private List<IEvent> events = new List<IEvent>();
 
         /// <summary>
         /// 
@@ -18,10 +18,25 @@ namespace Ventura.Accumulator.EntropySources
         public GarbageCollectorExtractor(int sourceNumber)
         {
             this.sourceNumber = sourceNumber;
-            events = new List<IEvent>();
+        }
+
+        public IEnumerable<IEvent> Events
+        {
+            get
+            {
+                if (events.Count == 0)
+                    throw new ArgumentException("No events produced yet!");
+                
+                return events;
+            }
         }
 
         public string SourceName { get; } = ".NET CLR Garbage Collector";
+
+        public void Start()
+        {
+            events.Add(new Event(sourceNumber, ExtractEntropicData()));
+        }
 
         public byte[] ExtractEntropicData()
         {

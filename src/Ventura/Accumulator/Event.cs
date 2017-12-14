@@ -9,29 +9,25 @@ namespace Ventura.Accumulator
 {
     public class Event: IEvent
     {
-        private int sourceNumber;
-        private byte[] entropicData;
+        private readonly int sourceNumber;
 
-        public Event(int sourceNumber, byte[] entropicData)
+        public Event(int sourceNumber, byte[] data)
         {
             this.sourceNumber = sourceNumber;
-            this.entropicData = entropicData;
+            EntropicData = GetConcatenatedEntropicData(data);
         }
 
-        private byte[] GetEntropicData()
-        {
-            return new byte[] { };
-        }
+        public byte[] EntropicData { get; }
 
-        public byte[] GetConcatenatedEntropicData()
+        private byte[] GetConcatenatedEntropicData(byte[] sourceData)
         {
-            var result = new List<byte>();
+            var result = new List<byte>(); // this will almost always be of a fixed size...
             byte sourceNumberByte = BitConverter.GetBytes(this.sourceNumber).First();
-            byte dataLength = BitConverter.GetBytes(entropicData.Length).First();
+            byte dataLength = BitConverter.GetBytes(sourceData.Length).First();
 
             result.Add(sourceNumberByte);
             result.Add(dataLength);
-            result.AddRange(entropicData);
+            result.AddRange(sourceData);
 
             return result.ToArray();
         }
