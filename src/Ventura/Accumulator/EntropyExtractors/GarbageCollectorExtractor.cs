@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Org.BouncyCastle.Utilities.Collections;
+using System.Threading.Tasks;
+
 using Ventura.Interfaces;
 
 namespace Ventura.Accumulator.EntropyExtractors
@@ -11,6 +12,8 @@ namespace Ventura.Accumulator.EntropyExtractors
         private int sourceNumber;
         private List<IEvent> events = new List<IEvent>();
 
+        public event Event.EntropyAvailabilityHander EntropyAvailable;
+
         /// <summary>
         /// 
         /// </summary>
@@ -18,6 +21,7 @@ namespace Ventura.Accumulator.EntropyExtractors
         public GarbageCollectorExtractor(int sourceNumber)
         {
             this.sourceNumber = sourceNumber;
+            this.EntropyAvailable += new Event.EntropyAvailabilityHander();
         }
 
         public IEnumerable<IEvent> Events
@@ -35,12 +39,14 @@ namespace Ventura.Accumulator.EntropyExtractors
 
         public void Start()
         {
-            events.Add(new Event(sourceNumber, ExtractEntropicData()));
+            IEvent massiveEvent = new Event(sourceNumber, ExtractEntropicData));
+            
         }
 
-        public byte[] ExtractEntropicData()
+        public Task<byte[]> ExtractEntropicData()
         {
-            return new byte[28]; // stub, will fill in later
+            var bytes = new byte[1] {0};
+            return Task.Run(() => { return bytes; }); // stub, will fill in later
         }
     }
 }

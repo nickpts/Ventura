@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Ventura.Interfaces
 {
+    
+
     public interface IEvent
     {
+        
     }
 }
