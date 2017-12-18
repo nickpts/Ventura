@@ -9,11 +9,8 @@ namespace Ventura.Accumulator
         private int poolNumber;
         private byte[] hashBuffer;
 
-        public Pool(int poolNumber)
-        {
-            this.poolNumber = poolNumber;
-        }
-
+        public Pool(int poolNumber) => this.poolNumber = poolNumber;
+        
         public byte[] Hash { get; set; }
 
         public void ProcessEvent()

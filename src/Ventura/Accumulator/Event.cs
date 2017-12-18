@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Org.BouncyCastle.Crypto.Paddings;
 using Ventura.Interfaces;
 
@@ -11,12 +12,12 @@ namespace Ventura.Accumulator
     public class Event: IEvent
     {
         private readonly int sourceNumber;
-        private readonly Func<byte[]> extractorLogic;
+        private readonly Task<byte[]> extractorLogic;
 
         public delegate byte[] EntropyAvailabilityHander();
         public event EntropyAvailabilityHander EntropyAvailable;
 
-        public Event(int sourceNumber, Func<byte[]> extractorLogic)
+        public Event(int sourceNumber, Task<byte[]> extractorLogic)
         {
             this.sourceNumber = sourceNumber;
             this.extractorLogic = extractorLogic;
@@ -24,11 +25,11 @@ namespace Ventura.Accumulator
 
         public byte[] Trigger()
         {
-            byte[] data;
+            byte[] data = null;
 
             try
             {
-                data = extractorLogic.Invoke();
+                //data = extractorLogic.Invoke();
             }
             catch (Exception ex)
             {

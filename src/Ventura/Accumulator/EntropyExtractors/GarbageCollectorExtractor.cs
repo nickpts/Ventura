@@ -21,7 +21,7 @@ namespace Ventura.Accumulator.EntropyExtractors
         public GarbageCollectorExtractor(int sourceNumber)
         {
             this.sourceNumber = sourceNumber;
-            this.EntropyAvailable += new Event.EntropyAvailabilityHander();
+            //this.EntropyAvailable += new Event.EntropyAvailabilityHander();
         }
 
         public IEnumerable<IEvent> Events
@@ -39,14 +39,14 @@ namespace Ventura.Accumulator.EntropyExtractors
 
         public void Start()
         {
-            IEvent massiveEvent = new Event(sourceNumber, ExtractEntropicData));
+            //IEvent massiveEvent = new Event(sourceNumber, ExtractEntropicData));
             
         }
 
         public Task<byte[]> ExtractEntropicData()
         {
             var bytes = new byte[1] {0};
-            return Task.Run(() => { return bytes; }); // stub, will fill in later
+            return Task.Run( () =>  bytes); // stub, will fill in later
         }
     }
 }

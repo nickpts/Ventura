@@ -28,7 +28,7 @@ namespace Ventura.Tests.Generator
         public void Generator_ThrowsException_When_InputArray_Zero()
         {
             var testArray = new byte[] { };
-            var result = concreteGenerator.GenerateData(testArray);
+            concreteGenerator.GenerateData(testArray);
         }
 
         [TestMethod]
@@ -37,7 +37,7 @@ namespace Ventura.Tests.Generator
         {
             var testArray = new byte[1550000];
             var testGenerator = new TestGenerator();
-            var result = testGenerator.GenerateDatePerStateKey(testArray);
+            testGenerator.GenerateDatePerStateKey(testArray);
         }
 
         [TestMethod]
@@ -45,9 +45,9 @@ namespace Ventura.Tests.Generator
         {
             var testGenerator = new TestGenerator();
             var blockArray = testGenerator.TransformCounterToByteArray();
-
             var counter = BitConverter.ToInt32(blockArray, 0);
-            Assert.AreEqual(counter, 1);
+
+            counter.Should().Be(1);
         }
 
         [TestMethod]
@@ -64,9 +64,9 @@ namespace Ventura.Tests.Generator
             testGenerator.Reseed(new byte[] { });
 
             var blockArray = testGenerator.TransformCounterToByteArray();
-
             var counter = BitConverter.ToInt32(blockArray, 0);
-            Assert.AreEqual(counter, 2);
+
+            counter.Should().Be(2);
         }
 
         [TestMethod]
@@ -76,10 +76,9 @@ namespace Ventura.Tests.Generator
             var testGenerator = new TestGenerator();
             var initialKey = testGenerator.ReturnStateKey();
             testGenerator.GenerateDatePerStateKey(testArray);
-
             var updatedKey = testGenerator.ReturnStateKey();
 
-            Assert.AreNotEqual(initialKey, updatedKey);
+            initialKey.Should().NotBeEquivalentTo(updatedKey);
         }
 
         [TestMethod]
