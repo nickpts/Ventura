@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Ventura.Interfaces
 {
-    public interface IEvent
+    public interface IEventEmitter
     {
         void Execute(Task<byte[]> extractionLogic);
     }

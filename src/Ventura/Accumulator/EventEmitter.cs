@@ -10,20 +10,18 @@ using Ventura.Interfaces;
 
 namespace Ventura.Accumulator
 {
-    public class Event: IEvent
+    public class EventEmitter : IEventEmitter
     {
         private readonly int sourceNumber;
         private readonly Func<byte[]> extractorLogic;
 
-        public delegate void EntropyAvailabilityHander(IEvent successfulExtraction);
-        public event EntropyAvailabilityHander EntropyAvailable;
+        public delegate void EntropyAvailabilityHander(Event successfulExtraction);
+        public event EntropyAvailabilityHander OnEntropyAvailable;
 
-        public Event(int sourceNumber)
+        public EventEmitter(int sourceNumber)
         {
-            this.sourceNumber = sourceNumber;
+            this.sourceNumber = sourceNumber;   
         }
-
-        public byte[] EntropicData { get; protected set; }
 
         public void Execute(Task<byte[]> extractionLogic)
         {
@@ -46,7 +44,15 @@ namespace Ventura.Accumulator
             result.Add(dataLength);
             result.AddRange(data);
 
-            EntropicData = result.ToArray();
+            var @event = new Event { Data = result.ToArray() };
+
+            OnEntropyAvailable?.Invoke(@event);
         }
     }
+
+    public class Event
+    {
+        public byte[] Data { get; internal set; }
+    }
 }
+

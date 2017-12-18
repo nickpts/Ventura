@@ -7,6 +7,6 @@ namespace Ventura.Interfaces
     public interface IEntropyExtractor
     {
         void Start();
-        IEnumerable<IEvent> Events { get; }
+        IEnumerable<IEventEmitter> Events { get; }
     }
 }
