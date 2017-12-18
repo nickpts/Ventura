@@ -15,7 +15,7 @@ namespace Ventura.Accumulator
     public class VenturaAccumulator: IAccumulator
     {
         private IEnumerable<IEntropyExtractor> entropyExtractors;
-        private List<Pool> pools = new List<Pool>();
+        private readonly List<Pool> pools = new List<Pool>();
 
         public VenturaAccumulator(IEnumerable<IEntropyExtractor> entropyExtractors)
         {
@@ -29,20 +29,6 @@ namespace Ventura.Accumulator
             Distribute();
         }
 
-        private void StartExtractors()
-        {
-            foreach (var extractor in entropyExtractors) { extractor.Start(); }
-        }
-
-        public void Distribute()
-        {
-            var events = entropyExtractors.SelectMany(c => c.Events);
-            foreach (var pool in pools)
-            {
-               
-            }
-        }
-
         #region Private implementation
 
         private void InitialisePools()
@@ -51,6 +37,20 @@ namespace Ventura.Accumulator
             {
                 var pool = new Pool(i);
                 pools.Add(pool);
+            }
+        }
+
+        private void StartExtractors()
+        {
+            foreach (var extractor in entropyExtractors) { extractor.Start(); }
+        }
+
+        private void Distribute()
+        {
+            var events = entropyExtractors.SelectMany(c => c.Events);
+            foreach (var pool in pools)
+            {
+
             }
         }
 

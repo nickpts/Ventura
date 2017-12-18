@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Org.BouncyCastle.Crypto.Paddings;
+using Ventura.Exceptions;
 using Ventura.Interfaces;
 
 namespace Ventura.Accumulator
@@ -11,24 +13,24 @@ namespace Ventura.Accumulator
     public class Event: IEvent
     {
         private readonly int sourceNumber;
-        private readonly Func<byte[]> extractorLogic;
 
-        public delegate byte[] EntropyAvailabilityHander();
+        public delegate void EntropyAvailabilityHander(IEvent successfulExtraction);
         public event EntropyAvailabilityHander EntropyAvailable;
 
-        public Event(int sourceNumber, Func<byte[]> extractorLogic)
+        public Event(int sourceNumber)
         {
             this.sourceNumber = sourceNumber;
-            this.extractorLogic = extractorLogic;
         }
 
-        public byte[] Trigger()
+        public byte[] EntropicData { get; protected set; }
+
+        public void Execute(Task<byte[]> extractionLogic)
         {
             byte[] data;
 
             try
             {
-                data = extractorLogic.Invoke();
+                data = extractionLogic.Result;
             }
             catch (Exception ex)
             {
@@ -43,15 +45,7 @@ namespace Ventura.Accumulator
             result.Add(dataLength);
             result.AddRange(data);
 
-            return result.ToArray();
-        }
-    }
-
-    internal class EntropyEventFailedException : Exception
-    {
-        public EntropyEventFailedException(string message, Exception innerException)
-            : base(message, innerException)
-        {
+            EntropicData = result.ToArray();
         }
     }
 }
