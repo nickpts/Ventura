@@ -55,12 +55,12 @@ namespace Ventura.Generator
                 throw new GeneratorInputException("cannot encrypt empty array");
 
             var result = new byte[input.Length];
-            var blocksToEncrypt = (int)Math.Ceiling((double)(input.Length / MaximumRequestSize)); // can it not return 1 if greater than 0?
-            var block = new byte[MaximumRequestSize];
+            var blocksToEncrypt = (int)Math.Ceiling((double)(input.Length / MaximumRequestSizeForStateKey)); // can it not return 1 if greater than 0?
+            var block = new byte[MaximumRequestSizeForStateKey];
             int temp = 0;
 
             blocksToEncrypt = (blocksToEncrypt == 0) ? 1 : blocksToEncrypt; // not happy with this
-            var tempArray = new byte[blocksToEncrypt * MaximumRequestSize];
+            var tempArray = new byte[blocksToEncrypt * MaximumRequestSizeForStateKey];
 
             do
             {
@@ -118,8 +118,8 @@ namespace Ventura.Generator
         /// <returns>pseudorandomly encrypted data</returns>
         protected virtual byte[] GenerateDataPerStateKey(byte[] input)
         {
-            if (input.Length > MaximumRequestSize)
-                throw new GeneratorInputException($"cannot generate array bigger than { MaximumRequestSize } bytes for state key");
+            if (input.Length > MaximumRequestSizeForStateKey)
+                throw new GeneratorInputException($"cannot generate array bigger than { MaximumRequestSizeForStateKey } bytes for state key");
 
             var roundedUpwards = (int)Math.Ceiling((double)input.Length / CipherBlockSize);
             var pseudorandom = GenerateBlocks(roundedUpwards);
