@@ -6,7 +6,7 @@ using Ventura.Interfaces;
 
 namespace Ventura.Accumulator.EntropyExtractors
 {
-    public abstract class EntropyExtractorBase
+    public abstract class EntropyExtractorBase: IDisposable
     {
         private readonly EventEmitter eventEmitter;
         private readonly List<Event> events = new List<Event>();
@@ -28,7 +28,7 @@ namespace Ventura.Accumulator.EntropyExtractors
             get
             {
                 if (events.Count == 0)
-                    throw new ArgumentException("No events produced yet!");
+                    throw new Exception("No events produced yet!");
 
                 return events;
             }
@@ -39,5 +39,7 @@ namespace Ventura.Accumulator.EntropyExtractors
         public virtual Task<byte[]> ExtractEntropicData() => throw new NotImplementedException("");
 
         private void OnEntropyAvailable_Append(Event successfulExtraction) => events.Add(successfulExtraction);
+
+        public void Dispose() => eventEmitter.OnEntropyAvailable -= OnEntropyAvailable_Append;
     }
 }

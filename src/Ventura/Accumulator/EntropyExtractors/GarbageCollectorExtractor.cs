@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 
 using Ventura.Interfaces;
@@ -23,9 +20,9 @@ namespace Ventura.Accumulator.EntropyExtractors
         public override Task<byte[]> ExtractEntropicData()
         {
             var bytes = new byte[1] { 0 };
-            Func<byte[]> GetBytes = () => bytes; // return a maximum of 28 bytes;
+            Func<byte[]> extraction = () => bytes; // return a maximum of 28 bytes;
 
-            return Task.Run(GetBytes); // need to specify options here
+            return Task.Run(extraction); // need to specify options here
         }
     }
 }
