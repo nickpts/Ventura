@@ -4,48 +4,38 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Org.BouncyCastle.Crypto.Paddings;
+
 using Ventura.Exceptions;
 using Ventura.Interfaces;
+
+using static Ventura.Constants;
 
 namespace Ventura.Accumulator
 {
     public class EventEmitter : IEventEmitter
     {
         private readonly int sourceNumber;
-        private readonly Func<byte[]> extractorLogic;
 
         public delegate void EntropyAvailabilityHander(Event successfulExtraction);
         public event EntropyAvailabilityHander OnEntropyAvailable;
 
-        public EventEmitter(int sourceNumber)
-        {
-            this.sourceNumber = sourceNumber;   
-        }
-
+        public EventEmitter(int sourceNumber) => this.sourceNumber = sourceNumber;   
+        
         public void Execute(Task<byte[]> extractionLogic)
         {
-            byte[] data = null;
-
-            try
-            {
-                data = extractionLogic.Result;
-            }
-            catch (Exception ex)
-            {
-                throw new EntropyEventFailedException("message", ex.InnerException);
-            }
-
-            var result = new List<byte>(); // this will almost always be of a fixed size...
-            byte sourceNumberByte = BitConverter.GetBytes(this.sourceNumber).First();
+            byte[] data = extractionLogic.Result;
+            
+            var result = new byte[MaximumEventSize]; 
+            byte sourceNumberByte = BitConverter.GetBytes(sourceNumber).First();
             byte dataLength = BitConverter.GetBytes(data.Length).First();
 
-            result.Add(sourceNumberByte);
-            result.Add(dataLength);
-            result.AddRange(data);
+            result.Append(sourceNumberByte);
+            result.Append(dataLength);
 
-            var @event = new Event { Data = result.ToArray() };
+            Array.Copy(data, 0, result, 4, data.Length);
+            Array.Clear(data, 0, data.Length);
 
+            var @event = new Event { Data = result };
             OnEntropyAvailable?.Invoke(@event);
         }
     }
@@ -53,6 +43,7 @@ namespace Ventura.Accumulator
     public class Event
     {
         public byte[] Data { get; internal set; }
+        public bool ExtractionSuccessful { get; internal set; }
+        public EntropyEventFailedException Exception { get; internal set; }
     }
 }
-

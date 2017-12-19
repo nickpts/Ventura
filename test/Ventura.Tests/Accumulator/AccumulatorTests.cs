@@ -21,9 +21,9 @@ namespace Ventura.Tests.Accumulator
         public void Setup()
         {
             IEntropyExtractor firstExtractor = new GarbageCollectorExtractor(0);
-            IEntropyExtractor secondExtractor = new GarbageCollectorExtractor(1);
+            //IEntropyExtractor secondExtractor = new GarbageCollectorExtractor(1);
 
-            accumulator = new VenturaAccumulator(new List<IEntropyExtractor> { firstExtractor, secondExtractor });
+            accumulator = new VenturaAccumulator(new List<IEntropyExtractor> { firstExtractor });
         }
 
         [TestMethod]
