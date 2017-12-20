@@ -17,7 +17,7 @@ namespace Ventura.Generator
     /// Cipher implementation is provided by BouncyCastle, currently available ciphers are
     /// Aes, Twofish, Blowfish, Serpent
     /// </summary>
-    public class VenturaPrng: IGenerator
+    internal class VenturaPrng: IGenerator
     {
         protected Cipher option;
         protected IBlockCipher cipher;
@@ -125,6 +125,7 @@ namespace Ventura.Generator
             var roundedUpwards = (int)Math.Ceiling((double)input.Length / CipherBlockSize);
             var pseudorandom = GenerateBlocks(roundedUpwards);
 
+            Array.Clear(state.Key, 0, state.Key.Length);
             state.Key = GenerateBlocks(2);
 
             return pseudorandom;

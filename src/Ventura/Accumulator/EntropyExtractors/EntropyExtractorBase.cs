@@ -40,7 +40,7 @@ namespace Ventura.Accumulator.EntropyExtractors
 
         public virtual void Start() => eventEmitter.Execute(ExtractEntropicData());
 
-        public virtual Task<byte[]> ExtractEntropicData() => throw new NotImplementedException("");
+        protected virtual Task<byte[]> ExtractEntropicData() => throw new NotImplementedException("");
 
         private void OnEntropyAvailable_Append(Event extraction) => events.Add(extraction);
 

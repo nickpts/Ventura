@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-using Ventura.Exceptions;
 using Ventura.Interfaces;
 
 using static Ventura.Constants;
 
 namespace Ventura.Accumulator
 {
-    public class EventEmitter : IEventEmitter
+    internal class EventEmitter : IEventEmitter
     {
         private readonly int sourceNumber;
 
@@ -34,10 +30,10 @@ namespace Ventura.Accumulator
                 byte sourceNumberByte = BitConverter.GetBytes(sourceNumber).First();
                 byte dataLength = BitConverter.GetBytes(data.Length).First();
 
-                result.Append(sourceNumberByte);
-                result.Append(dataLength);
+                result[0] = sourceNumberByte;
+                result[1] = dataLength;
 
-                Array.Copy(data, 0, result, 4, data.Length);
+                Array.Copy(data, 0, result, 2, data.Length);
                 Array.Clear(data, 0, data.Length);
 
                 var @event = new Event {Data = result, ExtractionSuccessful = true};
@@ -46,10 +42,9 @@ namespace Ventura.Accumulator
             catch (AggregateException aex)
             {
                 //flatten, handle appropriately
-                var @event = new Event { };
-
+                aex.Flatten();
+                var @event = new Event { Exception = aex };
                 OnFailedExtraction?.Invoke(@event);
-                Console.WriteLine("test");
             }
         }
     }
@@ -58,6 +53,6 @@ namespace Ventura.Accumulator
     {
         public byte[] Data { get; internal set; }
         public bool ExtractionSuccessful { get; internal set; }
-        public EntropyEventFailedException Exception { get; internal set; }
+        public AggregateException Exception { get; internal set; }
     }
 }

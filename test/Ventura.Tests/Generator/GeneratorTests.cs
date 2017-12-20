@@ -127,7 +127,7 @@ namespace Ventura.Tests.Generator
         }
     }
 
-    public class TestGenerator : VenturaPrng
+    internal class TestGenerator : VenturaPrng
     {
         public byte[] GenerateDatePerStateKey(byte[] input)
         {

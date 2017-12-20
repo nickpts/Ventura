@@ -17,9 +17,9 @@ namespace Ventura.Accumulator.EntropyExtractors
 
         public override string SourceName { get; protected set; } = ".NET CLR Garbage Collector";
 
-        public override Task<byte[]> ExtractEntropicData()
+        protected override Task<byte[]> ExtractEntropicData()
         {
-            var bytes = new byte[1] { 0 };
+            var bytes = new byte[30];
             Func<byte[]> extraction = () => bytes; // return a maximum of 28 bytes;
 
             return Task.Run(extraction); // need to specify options here

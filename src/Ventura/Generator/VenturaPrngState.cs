@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 using static Ventura.Constants;
 
+[assembly: InternalsVisibleTo("Ventura.Tests")]
 namespace Ventura.Generator
 {
-    public struct VenturaPrngState
+    internal class VenturaPrngState
     {
         public int Counter { get; internal set; }
         public byte[] Key { get; internal set; }
