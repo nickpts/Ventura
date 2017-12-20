@@ -19,24 +19,38 @@ namespace Ventura.Accumulator
         public delegate void EntropyAvailabilityHander(Event successfulExtraction);
         public event EntropyAvailabilityHander OnEntropyAvailable;
 
+        public delegate void EventFailureHandler(Event failedExtraction);
+        public event EventFailureHandler OnFailedExtraction;
+
         public EventEmitter(int sourceNumber) => this.sourceNumber = sourceNumber;   
         
         public void Execute(Task<byte[]> extractionLogic)
         {
-            byte[] data = extractionLogic.Result;
-            
-            var result = new byte[MaximumEventSize]; 
-            byte sourceNumberByte = BitConverter.GetBytes(sourceNumber).First();
-            byte dataLength = BitConverter.GetBytes(data.Length).First();
+            try
+            {
+                byte[] data = extractionLogic.Result;
 
-            result.Append(sourceNumberByte);
-            result.Append(dataLength);
+                var result = new byte[MaximumEventSize];
+                byte sourceNumberByte = BitConverter.GetBytes(sourceNumber).First();
+                byte dataLength = BitConverter.GetBytes(data.Length).First();
 
-            Array.Copy(data, 0, result, 4, data.Length);
-            Array.Clear(data, 0, data.Length);
+                result.Append(sourceNumberByte);
+                result.Append(dataLength);
 
-            var @event = new Event { Data = result };
-            OnEntropyAvailable?.Invoke(@event);
+                Array.Copy(data, 0, result, 4, data.Length);
+                Array.Clear(data, 0, data.Length);
+
+                var @event = new Event {Data = result, ExtractionSuccessful = true};
+                OnEntropyAvailable?.Invoke(@event);
+            }
+            catch (AggregateException aex)
+            {
+                //flatten, handle appropriately
+                var @event = new Event { };
+
+                OnFailedExtraction?.Invoke(@event);
+                Console.WriteLine("test");
+            }
         }
     }
 

@@ -10,6 +10,7 @@ namespace Ventura.Accumulator.EntropyExtractors
     {
         private readonly EventEmitter eventEmitter;
         private readonly List<Event> events = new List<Event>();
+        private readonly List<Event> failedEvents = new List<Event>();
 
         /// <summary>
         /// 
@@ -19,6 +20,7 @@ namespace Ventura.Accumulator.EntropyExtractors
         {
             eventEmitter = new EventEmitter(sourceNumber);
             eventEmitter.OnEntropyAvailable += OnEntropyAvailable_Append;
+            eventEmitter.OnFailedExtraction += EventEmitter_OnFailedExtraction;
         }
 
         public virtual string SourceName { get; protected set; }
@@ -34,12 +36,20 @@ namespace Ventura.Accumulator.EntropyExtractors
             }
         }
 
+        internal virtual IEnumerable<Event> FailedEvents => failedEvents; 
+
         public virtual void Start() => eventEmitter.Execute(ExtractEntropicData());
 
         public virtual Task<byte[]> ExtractEntropicData() => throw new NotImplementedException("");
 
-        private void OnEntropyAvailable_Append(Event successfulExtraction) => events.Add(successfulExtraction);
+        private void OnEntropyAvailable_Append(Event extraction) => events.Add(extraction);
 
-        public void Dispose() => eventEmitter.OnEntropyAvailable -= OnEntropyAvailable_Append;
+        private void EventEmitter_OnFailedExtraction(Event extraction) => failedEvents.Add(extraction);
+
+        public void Dispose()
+        {
+            eventEmitter.OnEntropyAvailable -= OnEntropyAvailable_Append;
+            eventEmitter.OnFailedExtraction -= EventEmitter_OnFailedExtraction;
+        }
     }
 }

@@ -74,6 +74,7 @@ namespace Ventura.Generator
 
             Array.Resize(ref tempArray, input.Length);
             Array.Copy(tempArray, result, tempArray.Length);
+            Array.Clear(tempArray, 0, tempArray.Length);
 
             return result;
         }
