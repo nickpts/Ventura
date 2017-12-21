@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Interfaces;
 
@@ -19,27 +21,68 @@ namespace Ventura.Tests.Accumulator
         }
 
         [TestMethod]
-        public void SampleTest()
+        public void EntropyExtractor_Appends_Failed_Event_During_Extraction()
         {
-            using (var extractor = new TestEntropyExtractor(1))
+            Func<byte[]> failure = () => throw new Exception("test");
+
+            using (var extractor = new TestEntropyExtractor(1, failure))
             {
                 extractor.Start();
+                extractor.FailedEvents.Should().HaveCount(1);
             }
         }
-}
+
+        [TestMethod]
+        public void EntropyExtractor_Appended_FailedEvent_ContainsAggregate_Exception()
+        {
+            Func<byte[]> failure = () => throw new Exception("test");
+
+            using (var extractor = new TestEntropyExtractor(1, failure))
+            {
+                extractor.Start();
+                extractor.FailedEvents.First().ExtractionSuccessful.Should().BeFalse();
+                extractor.FailedEvents.First().Exception.Should().NotBeNull();
+            }
+        }
+
+        [TestMethod]
+        public void EntropyExtractor_SuccessfulExtraction_ContainsEvent()
+        {
+            Func<byte[]> success = () => new byte[30];
+
+            using (var extractor = new TestEntropyExtractor(1, success))
+            {
+                extractor.Start();
+                extractor.Events.Should().HaveCount(1);
+            }
+        }
+
+        [TestMethod]
+        public void EntropyExtractor_SuccessfulExtraction_FlagSetTrue_Exception_Null()
+        {
+            Func<byte[]> success = () => new byte[30];
+
+            using (var extractor = new TestEntropyExtractor(1, success))
+            {
+                extractor.Start();
+                extractor.Events.First().ExtractionSuccessful.Should().BeTrue();
+                extractor.Events.First().Exception.Should().BeNull();
+            }
+        }
+    }
 
     public class TestEntropyExtractor : EntropyExtractorBase, IEntropyExtractor
     {
-        public TestEntropyExtractor(int sourceNumber) : base(sourceNumber)
+        private Func<byte[]> extractionLogic;
+
+        public TestEntropyExtractor(int sourceNumber, Func<byte[]> extractionLogic) : base(sourceNumber)
         {
+            this.extractionLogic = extractionLogic;
         }
 
         protected override Task<byte[]> ExtractEntropicData()
         {
-            var bytes = new byte[30];
-            Func<byte[]> extraction = () => bytes; // return a maximum of 28 bytes;
-
-            return Task.Run(extraction); // need to specify options here
+            return Task.Run(extractionLogic);
         }
     }
 }

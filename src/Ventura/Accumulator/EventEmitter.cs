@@ -16,7 +16,7 @@ namespace Ventura.Accumulator
         public event EntropyAvailabilityHander OnEntropyAvailable;
 
         public delegate void EventFailureHandler(Event failedExtraction);
-        public event EventFailureHandler OnFailedExtraction;
+        public event EventFailureHandler OnFailedEvent;
 
         public EventEmitter(int sourceNumber) => this.sourceNumber = sourceNumber;   
         
@@ -44,7 +44,7 @@ namespace Ventura.Accumulator
                 //flatten, handle appropriately
                 aex.Flatten();
                 var @event = new Event { Exception = aex };
-                OnFailedExtraction?.Invoke(@event);
+                OnFailedEvent?.Invoke(@event);
             }
         }
     }
