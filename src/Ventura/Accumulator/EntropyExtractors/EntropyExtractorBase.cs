@@ -8,24 +8,24 @@ namespace Ventura.Accumulator.EntropyExtractors
 {
     public abstract class EntropyExtractorBase: IDisposable
     {
-        private readonly EventEmitter eventEmitter;
-        private readonly List<Event> events = new List<Event>();
-        private readonly List<Event> failedEvents = new List<Event>();
+        protected readonly IEventEmitter eventEmitter;
+        private readonly List<IEvent> events = new List<IEvent>();
+        private readonly List<IEvent> failedEvents = new List<IEvent>();
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="sourceNumber"></param>
-        protected EntropyExtractorBase(int sourceNumber)
+        protected EntropyExtractorBase(IEventEmitter eventEmitter)
         {
-            eventEmitter = new EventEmitter(sourceNumber);
+            this.eventEmitter = eventEmitter;
             eventEmitter.OnEntropyAvailable += OnEntropyAvailable_Append;
             eventEmitter.OnFailedEvent += OnFailedEvent_Append;
         }
 
         public virtual string SourceName { get; protected set; }
 
-        public virtual IEnumerable<Event> Events
+        internal virtual IEnumerable<IEvent> Events
         {
             get
             {
@@ -36,15 +36,15 @@ namespace Ventura.Accumulator.EntropyExtractors
             }
         }
 
-        public virtual IEnumerable<Event> FailedEvents => failedEvents; 
+        internal virtual IEnumerable<IEvent> FailedEvents => failedEvents; 
 
         public virtual void Start() => eventEmitter.Execute(ExtractEntropicData());
 
         protected virtual Task<byte[]> ExtractEntropicData() => throw new NotImplementedException("");
 
-        private void OnEntropyAvailable_Append(Event extraction) => events.Add(extraction);
+        private void OnEntropyAvailable_Append(IEvent extraction) => events.Add(extraction as Event);
 
-        private void OnFailedEvent_Append(Event extraction) => failedEvents.Add(extraction);
+        private void OnFailedEvent_Append(IEvent extraction) => failedEvents.Add(extraction as Event);
 
         public void Dispose()
         {

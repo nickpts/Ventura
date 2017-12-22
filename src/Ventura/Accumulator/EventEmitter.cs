@@ -8,15 +8,11 @@ using static Ventura.Constants;
 
 namespace Ventura.Accumulator
 {
-    internal class EventEmitter : IEventEmitter
+    public class EventEmitter : IEventEmitter
     {
-        private readonly int sourceNumber;
-
-        public delegate void EntropyAvailabilityHander(Event successfulExtraction);
         public event EntropyAvailabilityHander OnEntropyAvailable;
-
-        public delegate void EventFailureHandler(Event failedExtraction);
         public event EventFailureHandler OnFailedEvent;
+        private readonly int sourceNumber;
 
         public EventEmitter(int sourceNumber) => this.sourceNumber = sourceNumber;   
         
@@ -49,10 +45,10 @@ namespace Ventura.Accumulator
         }
     }
 
-    public class Event
+    internal class Event: IEvent 
     {
-        public byte[] Data { get; internal set; }
-        public bool ExtractionSuccessful { get; internal set; }
-        public AggregateException Exception { get; internal set; }
+        public byte[] Data { get;  set; }
+        public bool ExtractionSuccessful { get; set; }
+        public AggregateException Exception { get; set; }
     }
 }
