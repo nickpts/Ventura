@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Ventura.Interfaces;
@@ -12,7 +11,7 @@ namespace Ventura.Accumulator.EntropyExtractors
         /// 
         /// </summary>
         /// <param name="sourceNumber"></param>
-        public GarbageCollectorExtractor(IEventEmitter emitter) : base(emitter)
+        public GarbageCollectorExtractor(int sourceNumber) : base(sourceNumber)
         {
         }
 

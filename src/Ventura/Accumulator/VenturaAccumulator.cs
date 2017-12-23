@@ -29,7 +29,7 @@ namespace Ventura.Accumulator
 
         #region Private implementation
 
-        private void InitialisePools() 
+        private void InitialisePools()
         {
             for (int i = 0; i < MaximumNumberOfPools; i++)
             {
