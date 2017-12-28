@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using static Ventura.Constants;
 
 [assembly: InternalsVisibleTo("Ventura.Tests")]
+[assembly: InternalsVisibleTo("Ventura.Tests.Visualisation")]
 namespace Ventura.Generator
 {
     internal class VenturaPrngState
