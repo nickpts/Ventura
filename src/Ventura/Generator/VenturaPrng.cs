@@ -58,9 +58,8 @@ namespace Ventura.Generator
             var blocksToEncrypt = (int)Math.Ceiling((double)(input.Length / MaximumRequestSizeForStateKey)); // can it not return 1 if greater than 0?
             int temp = 0;
 
-            byte[] block = null;
             blocksToEncrypt = (blocksToEncrypt == 0) ? 1 : blocksToEncrypt; // not happy with this
-            block = blocksToEncrypt > 1 ? new byte[MaximumRequestSizeForStateKey] : new byte[input.Length];
+            byte[] block = blocksToEncrypt > 1 ? new byte[MaximumRequestSizeForStateKey] : new byte[input.Length];
             var tempArray = new byte[blocksToEncrypt * MaximumRequestSizeForStateKey];
 
             do
