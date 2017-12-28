@@ -22,14 +22,19 @@ namespace Ventura.Tests.Visualisation
             string name = Console.ReadLine();
 
             var watch = Stopwatch.StartNew();
-            DrawImage(height, width, name);
+            string path = $@"{Directory.GetCurrentDirectory()}\{name}.png";
+            DrawImage(height, width, path);
 
             Console.WriteLine($"Operation took { watch.ElapsedMilliseconds / 1000 } seconds");
             Console.WriteLine("Press any key to open file, ESC to exit");
-            Console.ReadLine();
+            var key = Console.ReadKey().Key;
 
-            string path = $@"{ Directory.GetCurrentDirectory() }\{ name }.png";
-            Process.Start(path);
+            if (key == ConsoleKey.Escape)
+            {
+                return;
+            }
+            else Process.Start(path);
+            
         }
 
         private static void DrawImage(int height, int width, string path)
