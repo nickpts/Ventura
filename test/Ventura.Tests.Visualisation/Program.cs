@@ -34,12 +34,15 @@ namespace Ventura.Tests.Visualisation
                 return;
             }
             else Process.Start(path);
-            
+
         }
 
         private static void DrawImage(int height, int width, string path)
         {
             var prng = new VenturaPrng();
+            int index = height * width;
+            var bytes = prng.GenerateData(new byte[index]);
+            Color colour;
 
             using (Bitmap map = new Bitmap(width, height))
             {
@@ -47,14 +50,17 @@ namespace Ventura.Tests.Visualisation
                 {
                     for (int j = 0; j < map.Height; j++)
                     {
-                        int rn = (int)prng.GenerateData(new byte[1])[0];
 
-                        var colour = Color.FromArgb(rn, rn, rn);
+                        int rn = (int)bytes[index - 1];
+
+                        colour = Color.FromArgb(rn, rn, rn);
                         map.SetPixel(i, j, colour);
-                        
-                        map.Save(path, ImageFormat.Png);
+
+                        index--;
                     }
                 }
+
+                map.Save(path, ImageFormat.Png);
             }
         }
     }
