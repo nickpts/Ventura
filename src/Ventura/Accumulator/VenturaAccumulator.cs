@@ -12,7 +12,7 @@ namespace Ventura.Accumulator
     /// Collects real random data from various sources
     /// and uses it to reseed the generator
     /// </summary>
-    public class VenturaAccumulator: IAccumulator
+    internal class VenturaAccumulator: IAccumulator
     {
         private readonly IEnumerable<IEntropyExtractor> entropyExtractors;
         private readonly List<Pool> pools = new List<Pool>();
@@ -40,15 +40,19 @@ namespace Ventura.Accumulator
 
         private void StartExtractors()
         {
-            foreach (var extractor in entropyExtractors) { extractor.Start(); }
+            foreach (var extractor in entropyExtractors)
+            {
+                extractor.Start();
+            }
         }
 
         private void Distribute()
         {
             var events = entropyExtractors.SelectMany(c => c.Events).Where(c => c.ExtractionSuccessful);
+
             foreach (var pool in pools)
             {
-
+                pool.Process(events);
             }
         }
 
