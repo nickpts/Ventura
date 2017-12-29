@@ -45,9 +45,9 @@ namespace Ventura.Generator
         }
         
         /// <summary>
-        /// Breaks down a byte array to maximum request size blocks and encrypts each one separately
+        /// Breaks down a byte array to maximum request size blocks with a final block consisting 
+        /// of the remainder. Each block is transformed with a different state key.
         /// </summary>
-        /// <param name="input"></param>
         /// <returns></returns>
         public virtual byte[] GenerateData(byte[] input)
         {
