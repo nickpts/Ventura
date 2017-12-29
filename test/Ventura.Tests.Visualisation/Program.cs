@@ -12,18 +12,18 @@ namespace Ventura.Tests.Visualisation
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Enter width:");
+            Console.Write("Enter width:");
             int width = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Enter height:");
+            Console.Write("Enter height:");
             int height = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Enter filename:");
+            Console.Write("Enter filename:");
             string name = Console.ReadLine();
 
             var watch = Stopwatch.StartNew();
             string path = $@"{Directory.GetCurrentDirectory()}\{name}.png";
-            DrawImage(height, width, path);
+            DrawImage(width, height, path);
 
             Console.WriteLine($"Operation took { watch.ElapsedMilliseconds / 1000 } seconds");
             Console.WriteLine("Press any key to open file, ESC to exit");
@@ -37,12 +37,13 @@ namespace Ventura.Tests.Visualisation
 
         }
 
-        private static void DrawImage(int height, int width, string path)
+        private static void DrawImage(int width, int height, string path)
         {
             var prng = new VenturaPrng();
-            int index = height * width;
+            int index = width * height;
             var bytes = prng.GenerateData(new byte[index]);
             Color colour;
+            int temp = 0;
 
             using (Bitmap map = new Bitmap(width, height))
             {
@@ -50,12 +51,11 @@ namespace Ventura.Tests.Visualisation
                 {
                     for (int j = 0; j < map.Height; j++)
                     {
-                        int rn = bytes[index - 1];
-
+                        int rn = bytes[temp];
                         colour = Color.FromArgb(rn, rn, rn);
                         map.SetPixel(i, j, colour);
 
-                        index--;
+                        temp++;
                     }
                 }
 

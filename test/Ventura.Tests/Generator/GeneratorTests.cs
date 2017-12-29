@@ -35,7 +35,7 @@ namespace Ventura.Tests.Generator
         [ExpectedException(typeof(GeneratorInputException))]
         public void Generator_ThrowsException_When_InputArray_GreaterThan_MaximumSize()
         {
-            var testArray = new byte[1550000];
+            var testArray = new byte[15500000];
             var testGenerator = new TestGenerator();
             testGenerator.GenerateDatePerStateKey(testArray);
         }

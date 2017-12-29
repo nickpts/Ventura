@@ -54,27 +54,27 @@ namespace Ventura.Generator
             if (input.Length == 0)
                 throw new GeneratorInputException("cannot encrypt empty array");
 
-            var result = new byte[input.Length];
-            var blocksToEncrypt = (int)Math.Ceiling((double)input.Length / MaximumRequestSizeForStateKey); // can it not return 1 if greater than 0?
-            int temp = 0;
+            if (input.Length <= MaximumRequestSizeForStateKey)
+                return GenerateDataPerStateKey(input);
 
-            blocksToEncrypt = (blocksToEncrypt == 0) ? 1 : blocksToEncrypt; // not happy with this
-            byte[] block = blocksToEncrypt > 1 ? new byte[MaximumRequestSizeForStateKey] : new byte[input.Length];
-            var tempArray = new byte[blocksToEncrypt * MaximumRequestSizeForStateKey];
+            var result = new byte[input.Length];
+            var blocksToEncrypt = (int)Math.Ceiling((double)input.Length / MaximumRequestSizeForStateKey);
+            var block = new byte[MaximumRequestSizeForStateKey];
+            var finalBlock = new byte[input.Length % MaximumRequestSizeForStateKey];
+            int temp = 0;
 
             do
             {
                 block = GenerateDataPerStateKey(block);
-                Array.Copy(block, 0, tempArray, temp, block.Length);
+                Array.Copy(block, 0, result, temp, block.Length);
 
                 temp += block.Length;
                 blocksToEncrypt--;
             }
-            while (blocksToEncrypt > 0);
+            while (blocksToEncrypt > 1);
 
-            Array.Resize(ref tempArray, input.Length);
-            Array.Copy(tempArray, result, tempArray.Length);
-            Array.Clear(tempArray, 0, tempArray.Length);
+            finalBlock = GenerateDataPerStateKey(finalBlock);
+            Array.Copy(finalBlock, 0, result, temp, finalBlock.Length);
 
             return result;
         }
