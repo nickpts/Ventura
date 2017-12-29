@@ -55,7 +55,7 @@ namespace Ventura.Generator
                 throw new GeneratorInputException("cannot encrypt empty array");
 
             var result = new byte[input.Length];
-            var blocksToEncrypt = (int)Math.Ceiling((double)(input.Length / MaximumRequestSizeForStateKey)); // can it not return 1 if greater than 0?
+            var blocksToEncrypt = (int)Math.Ceiling((double)input.Length / MaximumRequestSizeForStateKey); // can it not return 1 if greater than 0?
             int temp = 0;
 
             blocksToEncrypt = (blocksToEncrypt == 0) ? 1 : blocksToEncrypt; // not happy with this

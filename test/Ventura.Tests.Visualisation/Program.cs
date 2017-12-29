@@ -50,8 +50,7 @@ namespace Ventura.Tests.Visualisation
                 {
                     for (int j = 0; j < map.Height; j++)
                     {
-
-                        int rn = (int)bytes[index - 1];
+                        int rn = bytes[index - 1];
 
                         colour = Color.FromArgb(rn, rn, rn);
                         map.SetPixel(i, j, colour);
