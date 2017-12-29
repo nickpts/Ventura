@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3CC09A81-A12D-40AB-8A0C-338F40F668D8}</ProjectGuid>
+    <ProjectGuid>{A69C5402-3678-446E-ABC0-C8BAC617F61D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Ventura.Tests.Visualisation</RootNamespace>
     <AssemblyName>Ventura.Tests.Visualisation</AssemblyName>
@@ -38,12 +38,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />

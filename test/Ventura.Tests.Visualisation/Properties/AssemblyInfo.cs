@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Ventura.Tests.Visualiser")]
+[assembly: AssemblyTitle("Ventura.Tests.Visualisation")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Ventura.Tests.Visualiser")]
+[assembly: AssemblyProduct("Ventura.Tests.Visualisation")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3cc09a81-a12d-40ab-8a0c-338f40f668d8")]
+[assembly: Guid("a69c5402-3678-446e-abc0-c8bac617f61d")]
 
 // Version information for an assembly consists of the following four values:
 //

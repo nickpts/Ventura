@@ -1,58 +1,66 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using Ventura;
 using Ventura.Generator;
 
-namespace Ventura.Tests.Visualiser
+namespace Ventura.Tests.Visualisation
 {
-    public class Program
+    class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
+            Console.WriteLine("Enter width:");
+            int width = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter height:");
+            int height = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter filename:");
+            string name = Console.ReadLine();
+
             var watch = Stopwatch.StartNew();
+            string path = $@"{Directory.GetCurrentDirectory()}\{name}.png";
+            DrawImage(height, width, path);
 
-            GenerateImage();
+            Console.WriteLine($"Operation took { watch.ElapsedMilliseconds / 1000 } seconds");
+            Console.WriteLine("Press any key to open file, ESC to exit");
+            var key = Console.ReadKey().Key;
 
-            Console.WriteLine($"Finished writing image in {watch.ElapsedMilliseconds / 1000 } seconds");
-            Console.ReadLine();
+            if (key == ConsoleKey.Escape)
+            {
+                return;
+            }
+            else Process.Start(path);
+
         }
 
-        //@""
-        public static void GenerateImage()
+        private static void DrawImage(int height, int width, string path)
         {
-            var gen = new VenturaPrng();
+            var prng = new VenturaPrng();
+            int index = height * width;
+            var bytes = prng.GenerateData(new byte[index]);
+            Color colour;
 
-            using (Bitmap b = new Bitmap(3840, 2160))
+            using (Bitmap map = new Bitmap(width, height))
             {
-                for (int i = 0; i < b.Width; i++)
+                for (int i = 0; i < map.Width; i++)
                 {
-                    for (int j = 0; j < b.Height; j++)
+                    for (int j = 0; j < map.Height; j++)
                     {
-                        var pix = b.GetPixel(i, j);
-                        var colour = new Color();
+                        int rn = bytes[index - 1];
 
-                        var rgb = gen.GenerateData(new byte[1]).First();
-                        int rgbInt = Convert.ToInt32(rgb);
+                        colour = Color.FromArgb(rn, rn, rn);
+                        map.SetPixel(i, j, colour);
 
-                        colour = Color.FromArgb(rgbInt, rgbInt, rgbInt);
-                        b.SetPixel(i, j, colour);
+                        index--;
                     }
                 }
 
-                b.Save($@"{ Directory.GetCurrentDirectory() }\test.png", ImageFormat.Png);
+                map.Save(path, ImageFormat.Png);
             }
         }
     }
 }
-
-
