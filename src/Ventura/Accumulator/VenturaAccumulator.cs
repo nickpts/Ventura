@@ -15,7 +15,7 @@ namespace Ventura.Accumulator
     internal class VenturaAccumulator: IAccumulator
     {
         private readonly IEnumerable<IEntropyExtractor> entropyExtractors;
-        private readonly List<Pool> pools = new List<Pool>();
+        private readonly List<EntropyPool> pools = new List<EntropyPool>();
 
         public VenturaAccumulator(IEnumerable<IEntropyExtractor> entropyExtractors) =>
             this.entropyExtractors = entropyExtractors;
@@ -33,7 +33,7 @@ namespace Ventura.Accumulator
         {
             for (int i = 0; i < MaximumNumberOfPools; i++)
             {
-                var pool = new Pool(i);
+                var pool = new EntropyPool(i);
                 pools.Add(pool);
             }
         }
@@ -52,7 +52,8 @@ namespace Ventura.Accumulator
 
             foreach (var pool in pools)
             {
-                pool.Process(events);
+                
+
             }
         }
 

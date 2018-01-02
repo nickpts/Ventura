@@ -6,16 +6,18 @@ using System.Text;
 
 namespace Ventura.Accumulator
 {
-    public class Pool
+    public class EntropyPool
     {
         private int poolNumber;
         private readonly List<byte> hash = new List<byte>();
 
-        public Pool(int poolNumber) => this.poolNumber = poolNumber;
-        
-        public void Process(IEnumerable<Event> events)
+        public EntropyPool(int poolNumber) => this.poolNumber = poolNumber;
+
+        public void AddEventData(int sourceNumber, byte[] data)
         {
-            var data = events.SelectMany(e => e.Data).ToArray();
+            if (sourceNumber < 0 || sourceNumber > 255) throw new ArgumentException($"{ nameof(sourceNumber) } must be between 0 and 255");
+            if (data.Length > 32) throw new ArgumentException($"{ nameof(data.Length) } cannot be more than 32 bytes");
+
             var hashedData = SHA256.Create().ComputeHash(data);
             hash.AddRange(hashedData);
         }
