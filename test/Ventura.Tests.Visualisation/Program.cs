@@ -1,16 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-
+using Ventura.Accumulator;
+using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Generator;
+using Ventura.Interfaces;
 
 namespace Ventura.Tests.Visualisation
 {
     class Program
     {
         private static void Main(string[] args)
+        {
+            //VisualiseRandomness();
+            TestMethod();
+        }
+
+        private static void TestMethod()
+        {
+            var acc = new VenturaAccumulator(
+                new List<IEntropyExtractor>() { new GarbageCollectorExtractor(0) });
+
+            acc.Collect();
+        }
+
+        private static void VisualiseRandomness()
         {
             Console.Write("Enter width:");
             int width = Convert.ToInt32(Console.ReadLine());
@@ -34,7 +51,6 @@ namespace Ventura.Tests.Visualisation
                 return;
             }
             else Process.Start(path);
-
         }
 
         private static void DrawImage(int width, int height, string path)

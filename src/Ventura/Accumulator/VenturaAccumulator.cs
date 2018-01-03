@@ -17,8 +17,13 @@ namespace Ventura.Accumulator
         private readonly IEnumerable<IEntropyExtractor> entropyExtractors;
         private readonly List<EntropyPool> pools = new List<EntropyPool>();
 
-        public VenturaAccumulator(IEnumerable<IEntropyExtractor> entropyExtractors) =>
+        public VenturaAccumulator(IEnumerable<IEntropyExtractor> entropyExtractors)
+        {
+            if (entropyExtractors.Count() > MaximumNumberOfSources)
+                throw new ArgumentException($"Cannot use more than {MaximumNumberOfSources} sources");
+                    
             this.entropyExtractors = entropyExtractors;
+        }
         
         public void Collect()
         {
@@ -52,7 +57,10 @@ namespace Ventura.Accumulator
 
             foreach (var pool in pools)
             {
-                
+                foreach (var @event in events)
+                {
+                    //pool.AddEventData(=);
+                }
 
             }
         }

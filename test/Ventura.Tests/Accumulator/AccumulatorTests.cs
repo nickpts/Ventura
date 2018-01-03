@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -27,9 +28,13 @@ namespace Ventura.Tests.Accumulator
         }
 
         [TestMethod]
-        public void RunAccumulator()
+        [ExpectedException(typeof(ArgumentException))]
+        public void Accumulator_ThrowsException_If_Passed_More_Than_MaxAmount_Of_Sources()
         {
-            accumulator.Collect();
+            var extractors = new IEntropyExtractor[256];
+            var extractorList = extractors.ToList();
+
+            var accumulator = new VenturaAccumulator(extractorList);
         }
     }
 }
