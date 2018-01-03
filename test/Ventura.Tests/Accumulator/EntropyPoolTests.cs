@@ -13,7 +13,7 @@ using Ventura.Interfaces;
 namespace Ventura.Tests.Accumulator
 {
     [TestClass]
-    public class PoolTests
+    public class EntropyPoolTests
     {
         private EntropyPool testPool = new EntropyPool(0);
 
