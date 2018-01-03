@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Net;
+using System.Web.Script.Serialization;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Generator;
@@ -21,6 +23,16 @@ namespace Ventura.Tests.Visualisation
 
         private static void TestMethod()
         {
+            using (WebClient wc = new WebClient())
+            {
+                var serialiser = new JavaScriptSerializer();
+                var jsonResponse = wc.DownloadString("https://qrng.anu.edu.au/API/jsonI.php?length=30&type=uint8");
+
+                
+                var dynObject = serialiser.Deserialize<dynamic>(jsonResponse);
+                byte[] data = dynObject["data"];
+            }
+
             var acc = new VenturaAccumulator(
                 new List<IEntropyExtractor>() { new GarbageCollectorExtractor(0) });
 
