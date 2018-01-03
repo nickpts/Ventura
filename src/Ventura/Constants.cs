@@ -26,7 +26,15 @@ namespace Ventura
         /// <summary>
         /// Maximum anount of entropy data in bytes
         /// </summary>
-        public const int MaximumEventSize = 32; 
+        public const int MaximumEventSize = 32;
+
+        /// <summary>
+        /// The spec suggests a minimum of 128 bits of entropic data
+        //  is needed for an attacker to lose track of the generator state.
+        /// We set it to ten times (160 bytes) which means each pool should hold
+        /// a minimum of five events before a reseed is triggered.
+        /// </summary>
+        public const int MinimumPoolSize = 1280;
 
         public const int MaximumNumberOfSources = 255;
         public const int MaximumNumberOfPools = 32;

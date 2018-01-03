@@ -4,6 +4,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
+using static Ventura.Constants;
+
 namespace Ventura.Accumulator
 {
     public class EntropyPool
@@ -15,13 +17,14 @@ namespace Ventura.Accumulator
 
         public void AddEventData(int sourceNumber, byte[] data)
         {
-            if (sourceNumber < 0 || sourceNumber > 255) throw new ArgumentException($"{ nameof(sourceNumber) } must be between 0 and 255");
-            if (data.Length > 32) throw new ArgumentException($"{ nameof(data.Length) } cannot be more than 32 bytes");
+            if (sourceNumber < 0 || sourceNumber > MaximumNumberOfSources) throw new ArgumentException($"{ nameof(sourceNumber) } must be between 0 and { MaximumNumberOfSources }");
+            if (data.Length > MaximumEventSize) throw new ArgumentException($"{ nameof(data.Length) } cannot be more than { MaximumEventSize } bytes");
 
             var hashedData = SHA256.Create().ComputeHash(data);
             hash.AddRange(hashedData);
         }
 
         public byte[] HashedData => hash.ToArray();
+        public bool HasEnoughEntropy => HashedData.Length >= MinimumPoolSize;
     }
 }

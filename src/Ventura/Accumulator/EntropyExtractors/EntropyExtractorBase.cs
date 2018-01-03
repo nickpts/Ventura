@@ -18,6 +18,7 @@ namespace Ventura.Accumulator.EntropyExtractors
         /// <param name="sourceNumber"></param>
         protected EntropyExtractorBase(int sourceNumber)
         {
+            SourceNumber = sourceNumber;
             eventEmitter = new EventEmitter(sourceNumber);
             eventEmitter.OnEntropyAvailable += OnEntropyAvailable_Append;
             eventEmitter.OnFailedEvent += OnFailedEvent_Append;
@@ -36,11 +37,13 @@ namespace Ventura.Accumulator.EntropyExtractors
             }
         }
 
+        public int SourceNumber { get; }
+
         public virtual IEnumerable<Event> FailedEvents => failedEvents; 
 
         public virtual void Start() => eventEmitter.Execute(ExtractEntropicData());
 
-        protected virtual Task<byte[]> ExtractEntropicData() => throw new NotImplementedException("");
+        protected abstract Task<byte[]> ExtractEntropicData();
 
         private void OnEntropyAvailable_Append(Event extraction) => events.Add(extraction);
 

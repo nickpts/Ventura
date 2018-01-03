@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using Ventura.Interfaces;
 using static Ventura.Constants;
@@ -53,15 +52,14 @@ namespace Ventura.Accumulator
 
         private void Distribute()
         {
-            var events = entropyExtractors.SelectMany(c => c.Events).Where(c => c.ExtractionSuccessful);
-
             foreach (var pool in pools)
             {
-                foreach (var @event in events)
+                foreach (var extractor in entropyExtractors)
                 {
-                    //pool.AddEventData(=);
+                    pool.AddEventData(
+                        extractor.SourceNumber,
+                        extractor.Events.Where(e => e.ExtractionSuccessful).SelectMany(e => e.Data).ToArray());
                 }
-
             }
         }
 

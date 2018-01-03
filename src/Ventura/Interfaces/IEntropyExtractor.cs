@@ -9,5 +9,6 @@ namespace Ventura.Interfaces
     {
         void Start();
         IEnumerable<Event> Events { get; }
+        int SourceNumber { get; }
     }
 }
