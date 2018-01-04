@@ -4,8 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Net;
-using System.Web.Script.Serialization;
+
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Generator;
@@ -24,7 +23,11 @@ namespace Ventura.Tests.Visualisation
         private static void TestMethod()
         {
             var acc = new VenturaAccumulator(
-                new List<IEntropyExtractor>() { new GarbageCollectorExtractor(0) });
+                new List<IEntropyExtractor>()
+                {
+                    new GarbageCollectorExtractor(0),
+                    new RemoteQuantumRngExtractor(1)
+                });
 
             acc.Collect();
         }
