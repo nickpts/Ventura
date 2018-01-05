@@ -7,7 +7,7 @@ using static Ventura.Constants;
 [assembly: InternalsVisibleTo("Ventura.Tests.Visualisation")]
 namespace Ventura.Generator
 {
-    internal class VenturaPrngState
+    internal class GeneratorState
     {
         public int Counter { get; internal set; }
         public byte[] Key { get; internal set; }

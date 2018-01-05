@@ -15,12 +15,12 @@ namespace Ventura.Tests.Generator
     [TestClass]
     public class GeneratorTests
     {
-        private VenturaPrng concreteGenerator;
+        private VenturaGenerator concreteGenerator;
 
         [TestInitialize]
         public void Setup()
         {
-            concreteGenerator = new VenturaPrng();
+            concreteGenerator = new VenturaGenerator();
         }
 
         [TestMethod]
@@ -108,13 +108,13 @@ namespace Ventura.Tests.Generator
         public void Generator_WithSameSeed_ReturnsSameData()
         {
             var seed = new byte[1];
-            var generator = new VenturaPrng(Cipher.Aes, seed);
+            var generator = new VenturaGenerator(Cipher.Aes, seed);
 
             var input = new byte[1024];
 
             var firstOutput = generator.GenerateData(input);
 
-            var otherGenerator = new VenturaPrng(Cipher.Aes, seed);
+            var otherGenerator = new VenturaGenerator(Cipher.Aes, seed);
             var secondOutput = otherGenerator.GenerateData(input);
 
             Assert.IsTrue(firstOutput.SequenceEqual(secondOutput));
@@ -127,7 +127,7 @@ namespace Ventura.Tests.Generator
         }
     }
 
-    internal class TestGenerator : VenturaPrng
+    internal class TestGenerator : VenturaGenerator
     {
         public byte[] GenerateDatePerStateKey(byte[] input)
         {

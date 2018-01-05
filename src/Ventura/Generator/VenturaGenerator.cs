@@ -17,13 +17,13 @@ namespace Ventura.Generator
     /// Cipher implementation is provided by BouncyCastle, currently available ciphers are
     /// Aes, Twofish, Blowfish, Serpent
     /// </summary>
-    internal class VenturaPrng: IGenerator
+    internal class VenturaGenerator: IGenerator
     {
         protected Cipher option;
         protected IBlockCipher cipher;
-        protected VenturaPrngState state;
+        protected GeneratorState state;
 
-        public VenturaPrng(Cipher option = Cipher.Aes, byte[] seed = null)
+        public VenturaGenerator(Cipher option = Cipher.Aes, byte[] seed = null)
         {
             if (seed == null)
                 seed = Guid.NewGuid().ToByteArray();
@@ -84,7 +84,7 @@ namespace Ventura.Generator
 
         protected virtual void InitialiseGenerator(byte[] seed)
         {
-            state = new VenturaPrngState
+            state = new GeneratorState
             {
                 Key = new byte[KeyBlockSize]
             };

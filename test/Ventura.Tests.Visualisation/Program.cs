@@ -60,7 +60,7 @@ namespace Ventura.Tests.Visualisation
 
         private static void DrawImage(int width, int height, string path)
         {
-            var prng = new VenturaPrng();
+            var prng = new VenturaGenerator();
             int index = width * height;
             var bytes = prng.GenerateData(new byte[index]);
             Color colour;
