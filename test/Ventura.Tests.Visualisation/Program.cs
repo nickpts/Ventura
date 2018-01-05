@@ -18,6 +18,15 @@ namespace Ventura.Tests.Visualisation
         {
             //VisualiseRandomness();
             TestMethod();
+
+            var settings = new PRNGVenturaServiceSettings
+            {
+                Cipher = Cipher.Aes,
+                Sources = ReseedEntropySources.Full,
+                Output = Output.Int32
+            };
+
+            var prng = new PRNGVenturaService(settings);
         }
 
         private static void TestMethod()

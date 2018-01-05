@@ -4,11 +4,7 @@ using System.Text;
 
 namespace Ventura
 {
-    public enum Cipher
+    class PRNGVenturaServiceFactory
     {
-        Aes,
-        TwoFish,
-        BlowFish,
-        Serpent
     }
 }

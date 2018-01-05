@@ -23,15 +23,18 @@ namespace Ventura.Accumulator
                     
             this.entropyExtractors = entropyExtractors;
         }
-        
-        public void Collect()
+
+        public void InitializePools()
         {
             for (int i = 0; i < MaximumNumberOfPools; i++)
             {
                 var pool = new EntropyPool(i);
                 pools.Add(pool);
             }
+        }
 
+        public void Collect()
+        {
             foreach (var pool in pools)
             {
                 foreach (var extractor in entropyExtractors)

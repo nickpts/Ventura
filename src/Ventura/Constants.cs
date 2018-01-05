@@ -4,6 +4,36 @@ using System.Text;
 
 namespace Ventura
 {
+    /// <summary>
+    /// Indicates type of entropy sources used to 
+    /// reseed the generator. 
+    /// Local: only sources from the local system used
+    /// Remote: only remote sources (e.g RemoteQUantumRngExtractor) used
+    /// Full: both types used
+    /// </summary>
+    public enum ReseedEntropySources
+    {
+        Local,
+        Remote,
+        Full = Local | Remote
+    }
+
+    public enum Cipher
+    {
+        Aes,
+        TwoFish,
+        BlowFish,
+        Serpent
+    }
+
+    public enum Output
+    {
+        Byte,
+        Int32,
+        String,
+        Hex
+    }
+
     public class Constants
     {
         /// <summary>
