@@ -19,6 +19,8 @@ namespace Ventura
         {
             this.accumulator = accumulator;
             this.generator = generator;
+
+            InitialisePRNG();
         }
 
         public void InitialisePRNG()

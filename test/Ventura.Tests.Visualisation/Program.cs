@@ -16,29 +16,13 @@ namespace Ventura.Tests.Visualisation
     {
         private static void Main(string[] args)
         {
-            //VisualiseRandomness();
-            TestMethod();
-
-            var settings = new PRNGVenturaServiceSettings
-            {
-                Cipher = Cipher.Aes,
-                Sources = ReseedEntropySources.Full,
-                Output = Output.Int32
-            };
-
-            var prng = new PrngIprngVenturaService(settings);
+            VisualiseRandomness();
+            //TestMethod();
         }
 
         private static void TestMethod()
         {
-            var acc = new VenturaAccumulator(
-                new List<IEntropyExtractor>()
-                {
-                    new GarbageCollectorExtractor(0),
-                    new RemoteQuantumRngExtractor(1)
-                });
-
-            acc.Collect();
+            var prng = PRNGVenturaServiceFactory.CreatePrng();
         }
 
         private static void VisualiseRandomness()
