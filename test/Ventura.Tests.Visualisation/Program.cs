@@ -26,7 +26,7 @@ namespace Ventura.Tests.Visualisation
                 Output = Output.Int32
             };
 
-            var prng = new PRNGVenturaService(settings);
+            var prng = new PrngIprngVenturaService(settings);
         }
 
         private static void TestMethod()

@@ -15,7 +15,7 @@ namespace Ventura
     {
         Local,
         Remote,
-        Full = Local | Remote
+        Full 
     }
 
     public enum Cipher
@@ -24,14 +24,6 @@ namespace Ventura
         TwoFish,
         BlowFish,
         Serpent
-    }
-
-    public enum Output
-    {
-        Byte,
-        Int32,
-        String,
-        Hex
     }
 
     public class Constants

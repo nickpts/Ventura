@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ventura.Interfaces
 {
-    public interface IVenturaService
+    public interface IPRNGVenturaService
     {
         void InitialisePRNG();
         byte[] GetRandomData();

@@ -8,25 +8,22 @@ using Ventura.Interfaces;
 
 namespace Ventura
 {
-    internal class PRNGVenturaService : IVenturaService
+    internal class PRNGVenturaService : IPRNGVenturaService
     {
-        private readonly PRNGVenturaServiceSettings settings;
-        private readonly VenturaAccumulator accumulator;
-        private readonly VenturaGenerator generator;
+        private readonly IAccumulator accumulator;
+        private readonly IGenerator generator;
 
-        private int ReSeedCounter = 0;
+        private int ReseedCounter = 0;
 
-        public PRNGVenturaService(PRNGVenturaServiceSettings settings,
-            VenturaAccumulator accumulator,
-            VenturaGenerator generator)
+        public PRNGVenturaService(IAccumulator accumulator, IGenerator generator)
         {
-            this.settings = settings;
+            this.accumulator = accumulator;
+            this.generator = generator;
         }
 
         public void InitialisePRNG()
         {
-            accumulator.Collect();
-            generator = new VenturaGenerator();
+            //generator = new VenturaGenerator();
         }
 
         public byte[] GetRandomData()
