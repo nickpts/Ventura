@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 
 using Ventura.Interfaces;
@@ -28,19 +29,19 @@ namespace Ventura.Accumulator.EntropyExtractors
             {
                 using (WebClient wc = new WebClient())
                 {
+                    // {"type":"uint8","length":30,"data":[73,25,61,41,83,159,7,119,13,23,228,167,1,145,105,237,25,18,114,148,221,109,154,123,227,70,201,210,127,227],"success":true}
+
                     var jsonResponse = wc.DownloadString("https://qrng.anu.edu.au/API/jsonI.php?length=30&type=uint8");
-                    var jObject = JObject.Parse(jsonResponse);
+                    string part = jsonResponse.Substring(jsonResponse.IndexOf('[') + 1).Remove(']');
 
-                    var tokens = jObject["data"].Children().ToList();
+                    var numberArray = part.Split(',').Select(Int32.Parse).ToList();
                     byte[] result = new byte[30];
-                    int i = 0;
 
-                    foreach (var token in tokens)
+                    for (int i = 0; i < result.Length; i++)
                     {
-                        byte part = token.ToObject<byte>();
-                        result[i] = part;
+                        result[i] = BitConverter.GetBytes(numberArray[i])[0];
                     }
-
+                    
                     return result;
                 }
             };

@@ -13,24 +13,22 @@ namespace Ventura
         private readonly IAccumulator accumulator;
         private readonly IGenerator generator;
 
-        private int ReseedCounter = 0;
+        private int reseedCounter = 0;
 
         public PRNGVenturaService(IAccumulator accumulator, IGenerator generator)
         {
             this.accumulator = accumulator;
             this.generator = generator;
-
-            InitialisePRNG();
         }
 
         public void InitialisePRNG()
         {
-            //generator = new VenturaGenerator();
+            
         }
 
         public byte[] GetRandomData()
         {
-            throw new NotImplementedException();
+            return new byte[] {};
         }
     }
 }

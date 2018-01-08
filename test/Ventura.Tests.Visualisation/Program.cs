@@ -16,13 +16,17 @@ namespace Ventura.Tests.Visualisation
     {
         private static void Main(string[] args)
         {
-            VisualiseRandomness();
-            //TestMethod();
+            //VisualiseRandomness();
+            TestMethod();
         }
 
         private static void TestMethod()
         {
-            var prng = PRNGVenturaServiceFactory.CreatePrng();
+            var accumulator = new VenturaAccumulator(
+                new List<IEntropyExtractor>() {new RemoteQuantumRngExtractor(0)});
+
+            accumulator.InitializePools();
+            accumulator.Collect();
         }
 
         private static void VisualiseRandomness()
