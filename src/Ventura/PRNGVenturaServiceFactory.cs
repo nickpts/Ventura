@@ -40,7 +40,10 @@ namespace Ventura
             IAccumulator accumulator = new VenturaAccumulator(extractors);
             IGenerator generator = new VenturaGenerator(cipher, seed);
 
-            return new PRNGVenturaService(accumulator, generator);
+            var prng = new PRNGVenturaService(accumulator, generator);
+            prng.InitialisePRNG();
+
+            return prng;
         }
 
         public static List<IEntropyExtractor> GetLocalEntropyExtractors() => 

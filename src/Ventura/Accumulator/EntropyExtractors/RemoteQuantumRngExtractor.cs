@@ -23,6 +23,7 @@ namespace Ventura.Accumulator.EntropyExtractors
 
         protected override Task<byte[]> ExtractEntropicData()
         {
+            
             Func<byte[]> extraction = () =>
             {
                 using (WebClient wc = new WebClient())
