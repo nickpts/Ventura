@@ -12,7 +12,7 @@ namespace Ventura.Tests.Accumulator
     public class EntropyExtractorTests
     {
         [TestMethod]
-        public void RemoteQuantiumRngExtractor_Returns_Data()
+        public void RemoteQuantumRngExtractor_Returns_Data()
         {
             var extractor = new RemoteQuantumRngExtractor(0);
             extractor.Start();

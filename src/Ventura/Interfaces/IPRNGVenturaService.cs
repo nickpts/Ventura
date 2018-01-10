@@ -8,5 +8,10 @@ namespace Ventura.Interfaces
     {
         void InitialisePRNG();
         byte[] GetRandomData();
+        int GetRandomNumber();
+        int[] GetRandomNumbers();
+        string GetRandomString(int length);
+        string[] GetRandomStrings(int length);
+        string[] GetRandomStrings(int minLength, int maxLength);
     }
 }

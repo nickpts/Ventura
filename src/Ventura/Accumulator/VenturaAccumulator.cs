@@ -47,7 +47,5 @@ namespace Ventura.Accumulator
                 }
             }
         }
-
-        
     }
 }

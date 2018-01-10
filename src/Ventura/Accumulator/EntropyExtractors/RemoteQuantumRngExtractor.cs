@@ -24,15 +24,14 @@ namespace Ventura.Accumulator.EntropyExtractors
 
         protected override Task<byte[]> ExtractEntropicData()
         {
-            
             Func<byte[]> extraction = () =>
             {
                 using (WebClient wc = new WebClient())
                 {
-                    // {"type":"uint8","length":30,"data":[73,25,61,41,83,159,7,119,13,23,228,167,1,145,105,237,25,18,114,148,221,109,154,123,227,70,201,210,127,227],"success":true}
-
                     var jsonResponse = wc.DownloadString("https://qrng.anu.edu.au/API/jsonI.php?length=30&type=uint8");
-                    string part = jsonResponse.Substring(jsonResponse.IndexOf('[') + 1).Remove(']');
+                    string part = jsonResponse.Substring(jsonResponse.IndexOf('[') + 1);
+
+                    part = part.Replace("],\"success\":true}\n", string.Empty);
 
                     var numberArray = part.Split(',').Select(Int32.Parse).ToList();
                     byte[] result = new byte[30];
