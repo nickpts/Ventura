@@ -30,5 +30,30 @@ namespace Ventura
         {
             return new byte[] {};
         }
+
+        public int GetRandomNumber()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int[] GetRandomNumbers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetRandomString(int length)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string[] GetRandomStrings(int length)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string[] GetRandomStrings(int minStringLength, int maxStringLength, int arrayLength)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

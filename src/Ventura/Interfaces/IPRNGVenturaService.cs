@@ -12,6 +12,6 @@ namespace Ventura.Interfaces
         int[] GetRandomNumbers();
         string GetRandomString(int length);
         string[] GetRandomStrings(int length);
-        string[] GetRandomStrings(int minLength, int maxLength);
+        string[] GetRandomStrings(int minStringLength, int maxStringLength, int arrayLength);
     }
 }

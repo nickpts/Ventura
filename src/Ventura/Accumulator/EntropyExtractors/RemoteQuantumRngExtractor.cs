@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 using Ventura.Interfaces;
 
-using Newtonsoft.Json.Linq;
-
 namespace Ventura.Accumulator.EntropyExtractors
 {
     /// <summary>
