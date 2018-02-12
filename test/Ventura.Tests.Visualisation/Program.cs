@@ -22,11 +22,14 @@ namespace Ventura.Tests.Visualisation
 
         private static void TestMethod()
         {
-            var accumulator = new VenturaAccumulator(
-                new List<IEntropyExtractor>() {new RemoteQuantumRngExtractor(0)});
+            //var accumulator = new VenturaAccumulator(
+            //    new List<IEntropyExtractor>() {new RemoteQuantumRngExtractor(0)});
 
-            accumulator.InitializePools();
-            accumulator.Collect();
+            //accumulator.InitializePools();
+            //accumulator.Collect();
+
+            var prng = PRNGVenturaServiceFactory.CreatePrng(Cipher.Aes, ReseedEntropySources.Full);
+            var data = prng.GetRandomData();
         }
 
         private static void VisualiseRandomness()

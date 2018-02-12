@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Generator;
@@ -23,7 +25,13 @@ namespace Ventura
 
         public void InitialisePRNG()
         {
-            
+            accumulator.Gather();
+
+            while (!accumulator.HasEnoughEntropy)
+            {
+                Debug.WriteLine("Not enough entropy... waiting");
+                Task.Delay(5);
+            }
         }
 
         public byte[] GetRandomData()

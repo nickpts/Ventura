@@ -81,7 +81,6 @@ namespace Ventura.Generator
 
         #region Private implementation
 
-
         protected virtual void InitialiseGenerator(byte[] seed)
         {
             state = new GeneratorState
