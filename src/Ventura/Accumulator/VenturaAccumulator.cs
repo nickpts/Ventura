@@ -22,6 +22,12 @@ namespace Ventura.Accumulator
                 throw new ArgumentException($"Cannot use more than {MaximumNumberOfSources} sources");
 
             this.entropyExtractors = entropyExtractors;
+
+            for (var i = 0; i < MaximumNumberOfPools; i++)
+            {
+                var pool = new EntropyPool(i);
+                pools.Add(pool);
+            }
         }
 
         public bool HasEnoughEntropy
@@ -35,22 +41,7 @@ namespace Ventura.Accumulator
             }
         }
 
-        public void Gather()
-        {
-            InitializePools();
-            DistributeEntropy();
-        }
-
-        public void InitializePools()
-        {
-            for (var i = 0; i < MaximumNumberOfPools; i++)
-            {
-                var pool = new EntropyPool(i);
-                pools.Add(pool);
-            }
-        }
-
-        public void DistributeEntropy()
+        public void Distribute()
         {
             foreach (var pool in pools)
             foreach (var extractor in entropyExtractors)
@@ -59,7 +50,9 @@ namespace Ventura.Accumulator
 
                 pool.AddEventData(
                     extractor.SourceNumber,
-                    extractor.Events.Where(e => e.ExtractionSuccessful).SelectMany(e => e.Data).ToArray());
+                    extractor.Events.Last(e => e.ExtractionSuccessful).Data.ToArray());
+
+                Console.WriteLine($"Extractor {extractor.SourceNumber} has {extractor.Events.Where(c => c.ExtractionSuccessful).SelectMany(c => c.Data).ToArray().Length } bytes of entropy");
             }
         }
     }

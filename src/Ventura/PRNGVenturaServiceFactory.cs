@@ -32,8 +32,8 @@ namespace Ventura
                     extractors.AddRange(GetRemoteEntropyExtractors());
                     break;
                 case ReseedEntropySources.Full:
-                    var allSources = GetLocalEntropyExtractors();
-                    allSources.AddRange(GetRemoteEntropyExtractors());
+                    extractors.AddRange(GetLocalEntropyExtractors());
+                    extractors.AddRange(GetRemoteEntropyExtractors());
                     break;
             }
 
