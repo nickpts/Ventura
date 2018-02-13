@@ -32,9 +32,17 @@ namespace Ventura.Tests.Accumulator
         public void Accumulator_ThrowsException_If_Passed_More_Than_MaxAmount_Of_Sources()
         {
             var extractors = new IEntropyExtractor[256];
-            var extractorList = extractors.ToList();
+            var accumulator = new VenturaAccumulator(extractors.ToList());
+        }
 
-            var accumulator = new VenturaAccumulator(extractorList);
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Accumulator_ThrowsException_If_HasEnoughEntropy_Called_BeforePoolsInitialised()
+        {
+            var extractors = new IEntropyExtractor[10];
+            IAccumulator accumulator = new VenturaAccumulator(extractors.ToList());
+
+            var state = accumulator.HasEnoughEntropy;
         }
     }
 }

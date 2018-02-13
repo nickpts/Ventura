@@ -17,8 +17,11 @@ namespace Ventura.Accumulator
 
         public void AddEventData(int sourceNumber, byte[] data)
         {
-            if (sourceNumber < 0 || sourceNumber > MaximumNumberOfSources) throw new ArgumentException($"{ nameof(sourceNumber) } must be between 0 and { MaximumNumberOfSources }");
-            if (data.Length > MaximumEventSize) throw new ArgumentException($"{ nameof(data.Length) } cannot be more than { MaximumEventSize } bytes");
+            if (sourceNumber < 0 || sourceNumber > MaximumNumberOfSources)
+                throw new ArgumentException($"{ nameof(sourceNumber) } must be between 0 and { MaximumNumberOfSources }");
+
+            if (data.Length > MaximumEventSize)
+                throw new ArgumentException($"{ nameof(data.Length) } cannot be more than { MaximumEventSize } bytes");
 
             var hashedData = SHA256.Create().ComputeHash(data);
             hash.AddRange(hashedData);

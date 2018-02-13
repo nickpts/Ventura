@@ -30,13 +30,13 @@ namespace Ventura
             while (!accumulator.HasEnoughEntropy)
             {
                 Debug.WriteLine("Not enough entropy... waiting");
-                Task.Delay(5);
+                Task.Delay(500);
             }
         }
 
         public byte[] GetRandomData()
         {
-            return new byte[] {};
+            throw new NotImplementedException();
         }
 
         public int GetRandomNumber()
