@@ -9,6 +9,7 @@ using Moq;
 using FluentAssertions;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
+using Ventura.Exceptions;
 using Ventura.Interfaces;
 
 namespace Ventura.Tests.Accumulator
@@ -36,13 +37,13 @@ namespace Ventura.Tests.Accumulator
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void Accumulator_ThrowsException_If_HasEnoughEntropy_Called_BeforePoolsInitialised()
+        [ExpectedException(typeof(AccumulatorEntropyException))]
+        public void Accumulator_Throws_Exception_If_NotEnoughEntropy_In_Pools_ToProvideRandomData()
         {
-            var extractors = new IEntropyExtractor[10];
+            var extractors = new IEntropyExtractor[1];
             IAccumulator accumulator = new VenturaAccumulator(extractors.ToList());
 
-            var state = accumulator.HasEnoughEntropy;
+            accumulator.GetRandomData();
         }
     }
 }
