@@ -8,5 +8,6 @@ namespace Ventura.Interfaces
     {
         bool HasEnoughEntropy { get; }
         void Distribute();
+        byte[] GetRandomData();
     }
 }

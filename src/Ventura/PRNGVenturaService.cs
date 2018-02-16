@@ -9,7 +9,7 @@ namespace Ventura
     {
         private readonly IAccumulator accumulator;
         private readonly IGenerator generator;
-
+        private DateTimeOffset lastReseedTime = DateTimeOffset.MinValue;
         private int reseedCounter = 0;
 
         public PRNGVenturaService(IAccumulator accumulator, IGenerator generator)
@@ -29,6 +29,13 @@ namespace Ventura
             }
 
             Console.WriteLine("I have enough entropy!");
+        }
+
+        public void Reseed(byte[] seed)
+        {
+            generator.Reseed(seed);
+            lastReseedTime = DateTimeOffset.UtcNow;
+            reseedCounter++;
         }
 
         public byte[] GetRandomData()

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Ventura.Exceptions;
 using Ventura.Interfaces;
 using static Ventura.Constants;
 
@@ -30,17 +30,8 @@ namespace Ventura.Accumulator
             }
         }
 
-        public bool HasEnoughEntropy
-        {
-            get
-            {
-                if (pools.Count == 0)
-                    throw new InvalidOperationException("Pools have not been initialised");
-
-                return pools.Any(p => p.HasEnoughEntropy);
-            }
-        }
-
+        public bool HasEnoughEntropy => pools.Any(p => p.HasEnoughEntropy);
+        
         public void Distribute()
         {
             foreach (var pool in pools)
@@ -54,6 +45,14 @@ namespace Ventura.Accumulator
 
                 Console.WriteLine($"Extractor {extractor.SourceNumber} has {extractor.Events.Where(c => c.ExtractionSuccessful).SelectMany(c => c.Data).ToArray().Length } bytes of entropy");
             }
+        }
+
+        public byte[] GetRandomData()
+        {
+            if (!HasEnoughEntropy)
+                throw new AccumulatorEntropyException("Not enough entropy accumulated");
+
+            return null;
         }
     }
 }
