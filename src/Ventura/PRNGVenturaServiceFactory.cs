@@ -18,7 +18,7 @@ namespace Ventura
 
         public static IPRNGVenturaService CreatePrng(Cipher cipher, ReseedEntropySources sources) =>
             CreatePrng(cipher, sources, null);
-        
+
         public static IPRNGVenturaService CreatePrng(Cipher cipher, ReseedEntropySources sources, byte[] seed)
         {
             var extractors = new List<IEntropyExtractor>();
@@ -26,14 +26,14 @@ namespace Ventura
             switch (sources)
             {
                 case ReseedEntropySources.Local:
-                    extractors.AddRange(GetLocalEntropyExtractors());
+                    extractors.Add(new GarbageCollectorExtractor(0));
                     break;
                 case ReseedEntropySources.Remote:
-                    extractors.AddRange(GetRemoteEntropyExtractors());
+                    extractors.Add(new RemoteQuantumRngExtractor(0));
                     break;
                 case ReseedEntropySources.Full:
-                    extractors.AddRange(GetLocalEntropyExtractors());
-                    extractors.AddRange(GetRemoteEntropyExtractors());
+                    extractors.Add(new GarbageCollectorExtractor(0));
+                    extractors.Add(new RemoteQuantumRngExtractor(1));
                     break;
             }
 
@@ -45,11 +45,5 @@ namespace Ventura
 
             return prng;
         }
-
-        public static List<IEntropyExtractor> GetLocalEntropyExtractors() => 
-            new List<IEntropyExtractor>() {new GarbageCollectorExtractor(0)};
-        
-        public static List<IEntropyExtractor> GetRemoteEntropyExtractors() =>
-            new List<IEntropyExtractor>() {new RemoteQuantumRngExtractor(1)};
     }
 }
