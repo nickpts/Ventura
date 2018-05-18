@@ -50,7 +50,7 @@ namespace Ventura.Accumulator
         public byte[] GetRandomData()
         {
             if (!HasEnoughEntropy)
-                throw new AccumulatorEntropyException("Not enough entropy accumulated");
+                throw new Exception("Not enough entropy accumulated");
 
             return null;
         }
