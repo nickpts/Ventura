@@ -8,7 +8,7 @@ namespace Ventura
     /// Indicates type of entropy sources used to 
     /// reseed the generator. 
     /// Local: only sources from the local system used
-    /// Remote: only remote sources (e.g RemoteQUantumRngExtractor) used
+    /// Remote: only remote sources (e.g RemoteQUantumRngExtractor) used. 
     /// Full: both types used
     /// </summary>
     public enum ReseedEntropySources

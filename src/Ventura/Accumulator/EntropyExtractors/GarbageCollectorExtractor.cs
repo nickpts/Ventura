@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 
 using Ventura.Interfaces;
 
 namespace Ventura.Accumulator.EntropyExtractors
 {
-    public class GarbageCollectorExtractor: EntropyExtractorBase, IEntropyExtractor
+    public class GarbageCollectorExtractor : EntropyExtractorBase, IEntropyExtractor
     {
         /// <summary>
         /// 
@@ -19,10 +20,18 @@ namespace Ventura.Accumulator.EntropyExtractors
 
         protected override Task<byte[]> ExtractEntropicData()
         {
-            var bytes = new byte[30];
-            Func<byte[]> extraction = () => bytes; // return a maximum of 28 bytes;
+            byte[] extraction()
+            {
+                var totalMemory = GC.GetTotalMemory(false);
 
-            return Task.Run(extraction); // need to specify options here
+                var firstGen = GC.CollectionCount(0);
+                var secondGen = GC.CollectionCount(1);
+                var thirdGen = GC.CollectionCount(2);
+
+                return BitConverter.GetBytes(totalMemory + firstGen + secondGen + thirdGen);
+            }
+
+            return Task.Run((Func<byte[]>) extraction); 
         }
     }
 }
