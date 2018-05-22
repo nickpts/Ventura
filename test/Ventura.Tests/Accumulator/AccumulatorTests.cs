@@ -36,14 +36,14 @@ namespace Ventura.Tests.Accumulator
             var accumulator = new VenturaAccumulator(extractors.ToList());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(AccumulatorEntropyException))]
-        public void Accumulator_Throws_Exception_If_NotEnoughEntropy_In_Pools_ToProvideRandomData()
-        {
-            var extractors = new IEntropyExtractor[1];
-            IAccumulator accumulator = new VenturaAccumulator(extractors.ToList());
+        //[TestMethod]
+        //[ExpectedException(typeof(AccumulatorEntropyException))]
+        //public void Accumulator_Throws_Exception_If_NotEnoughEntropy_In_Pools_ToProvideRandomData()
+        //{
+        //    var extractors = new IEntropyExtractor[1];
+        //    IAccumulator accumulator = new VenturaAccumulator(extractors.ToList());
 
-            accumulator.GetRandomData();
-        }
+        //    accumulator.GetRandomData();
+        //}
     }
 }
