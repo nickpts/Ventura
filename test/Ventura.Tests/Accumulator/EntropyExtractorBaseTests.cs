@@ -17,7 +17,6 @@ namespace Ventura.Tests.Accumulator
         [TestInitialize]
         public void Setup()
         {
-
         }
 
         [TestMethod]
@@ -75,14 +74,9 @@ namespace Ventura.Tests.Accumulator
     {
         private Func<byte[]> extractionLogic;
 
-        public TestEntropyExtractor(int sourceNumber, Func<byte[]> extractionLogic) : base(sourceNumber)
-        {
+        public TestEntropyExtractor(int sourceNumber, Func<byte[]> extractionLogic) : base(sourceNumber) =>
             this.extractionLogic = extractionLogic;
-        }
-
-        protected override Task<byte[]> ExtractEntropicData()
-        {
-            return Task.Run(extractionLogic);
-        }
+        
+        protected override Task<byte[]> ExtractEntropicData() => Task.Run(extractionLogic);
     }
 }

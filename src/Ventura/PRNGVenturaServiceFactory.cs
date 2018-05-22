@@ -27,13 +27,15 @@ namespace Ventura
             {
                 case ReseedEntropySources.Local:
                     extractors.Add(new GarbageCollectorExtractor(0));
+                    extractors.Add(new AppDomainExtractor(1));
                     break;
                 case ReseedEntropySources.Remote:
                     extractors.Add(new RemoteQuantumRngExtractor(0));
                     break;
                 case ReseedEntropySources.Full:
                     extractors.Add(new GarbageCollectorExtractor(0));
-                    extractors.Add(new RemoteQuantumRngExtractor(1));
+                    extractors.Add(new AppDomainExtractor(1));
+                    extractors.Add(new RemoteQuantumRngExtractor(2));
                     break;
             }
 

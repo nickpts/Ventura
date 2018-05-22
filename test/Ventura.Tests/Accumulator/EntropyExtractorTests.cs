@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -18,6 +19,18 @@ namespace Ventura.Tests.Accumulator
             extractor.Start();
 
             extractor.Events.Should().HaveCount(1);
+        }
+
+        [TestMethod]
+        public void ApplicationDomainExtractor_Returns_Data()
+        {
+            var extractor = new AppDomainExtractor(0);
+            extractor.Start();
+
+            var @event = extractor.Events.ToList().FirstOrDefault();
+            @event.Should().NotBeNull();
+
+            @event.Data.Should().NotBeEmpty();
         }
 
         [TestMethod]
