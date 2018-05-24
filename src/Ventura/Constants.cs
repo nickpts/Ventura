@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ventura
+﻿namespace Ventura
 {
     /// <summary>
     /// Indicates type of entropy sources used to 

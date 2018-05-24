@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Ventura.Interfaces;
-
 namespace Ventura.Accumulator.EntropyExtractors
 {
     public abstract class EntropyExtractorBase: IDisposable

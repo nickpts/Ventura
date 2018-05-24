@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ventura.Interfaces
+﻿namespace Ventura.Interfaces
 {
     interface IAccumulator
     {

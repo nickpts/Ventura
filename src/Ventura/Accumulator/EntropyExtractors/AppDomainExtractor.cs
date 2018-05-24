@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.ExceptionServices;
-using System.Text;
 using System.Threading.Tasks;
+
 using Ventura.Interfaces;
 
 namespace Ventura.Accumulator.EntropyExtractors

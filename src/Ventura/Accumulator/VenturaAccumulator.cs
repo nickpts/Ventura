@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ventura.Exceptions;
 using Ventura.Interfaces;
 using static Ventura.Constants;
 
 namespace Ventura.Accumulator
 {
-    /// <summsary>
+    /// <summary>
     /// Collects real random data from various sources
     /// and uses it to reseed the generator
     /// </summary>
