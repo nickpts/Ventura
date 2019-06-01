@@ -48,7 +48,7 @@
 
         /// <summary>
         /// The spec suggests a minimum of 128 bits of entropic data
-        //  is needed for an attacker to lose track of the generator state.
+        /// is needed for an attacker to lose track of the generator state.
         /// We set it to ten times (160 bytes) which means each pool should hold
         /// a minimum of five events before a reseed is triggered.
         /// </summary>

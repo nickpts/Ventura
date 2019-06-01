@@ -129,24 +129,12 @@ namespace Ventura.Tests.Generator
 
     internal class TestGenerator : VenturaGenerator
     {
-        public byte[] GenerateDatePerStateKey(byte[] input)
-        {
-            return GenerateDataPerStateKey(input);
-        }
+        public byte[] GenerateDatePerStateKey(byte[] input) => GenerateDataPerStateKey(input);
 
-        public byte[] TransformCounterToByteArray()
-        {
-            return state.TransformCounterToByteArray();
-        }
+        public byte[] TransformCounterToByteArray() => state.TransformCounterToByteArray();
 
-        public byte[] ReturnStateKey()
-        {
-            return state.Key;
-        }
+        public byte[] ReturnStateKey() => state.Key;
 
-        public bool IsSeeded()
-        {
-            return state.Seeded;
-        }
+        public bool IsSeeded() => state.Seeded;
     }
 }
