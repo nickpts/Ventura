@@ -125,7 +125,7 @@ namespace Ventura.Generator
             var pseudorandom = GenerateBlocks(roundedUpwards);
 
             Array.Clear(state.Key, 0, state.Key.Length);
-            state.Key = GenerateBlocks(2);
+            state.Key = GenerateBlocks(NumberOfBlocksForNewKey);
 
             return pseudorandom;
         }

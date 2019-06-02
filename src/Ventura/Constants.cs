@@ -1,4 +1,6 @@
-﻿namespace Ventura
+﻿using System;
+
+namespace Ventura
 {
     /// <summary>
     /// Indicates type of entropy sources used to 
@@ -62,5 +64,16 @@
 
         public const int MaximumNumberOfSources = 255;
         public const int MaximumNumberOfPools = 32;
+
+		/// <summary>
+		/// Accoding to the spec, a minimum number of blocks is neede 
+		/// to generate a new key
+		/// </summary>
+		public const int NumberOfBlocksForNewKey = 2;
+
+		/// <summary>
+		/// Used to limit the rate of reseeds according to spec (ten per second)
+		/// </summary>
+		public static readonly TimeSpan MaximumTimeSpanBetweenReseeds = TimeSpan.FromMilliseconds(100);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Ventura.Interfaces;
 using static Ventura.Constants;
@@ -42,14 +43,16 @@ namespace Ventura.Accumulator
                     extractor.SourceNumber,
                     extractor.Events.Last(e => e.ExtractionSuccessful).Data.ToArray());
 
-                Console.WriteLine($"Extractor {extractor.SourceNumber} has {extractor.Events.Where(c => c.ExtractionSuccessful).SelectMany(c => c.Data).ToArray().Length } bytes of entropy");
+                Debug.WriteLine($"Extractor {extractor.SourceNumber} has {extractor.Events.Where(c => c.ExtractionSuccessful).SelectMany(c => c.Data).ToArray().Length } bytes of entropy");
             }
         }
 
-        public byte[] GetRandomData()
+        public byte[] GetRandomDataFromPools()
         {
             if (!HasEnoughEntropy)
-                throw new Exception("Not enough entropy accumulated");
+                throw new InvalidOperationException("Not enough entropy accumulated");
+
+			if (pools.First().HasEnoughEntropy )
 
             return null;
         }

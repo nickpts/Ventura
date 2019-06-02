@@ -30,7 +30,7 @@ namespace Ventura.Tests.Visualisation
             //}
 
             var prng = PRNGVenturaServiceFactory.CreatePrng(Cipher.Aes, ReseedEntropySources.Local);
-            var data = prng.GetRandomData();
+            var data = prng.GetRandomData(new byte[1024]);
         }
 
         private static void VisualiseRandomness()

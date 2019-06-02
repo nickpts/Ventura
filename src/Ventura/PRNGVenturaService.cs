@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 using Ventura.Interfaces;
@@ -24,11 +25,11 @@ namespace Ventura
             {
                 accumulator.Distribute();
 
-                Console.WriteLine("Not enough entropy... waiting");
+                Debug.WriteLine("Not enough entropy... waiting");
                 Task.Delay(500);
             }
 
-            Console.WriteLine("I have enough entropy!");
+            Debug.WriteLine("I have enough entropy!");
         }
 
         public void Reseed(byte[] seed)
@@ -38,9 +39,9 @@ namespace Ventura
             reseedCounter++;
         }
 
-        public byte[] GetRandomData()
+        public byte[] GetRandomData(byte[] input)
         {
-            throw new NotImplementedException();
+			return generator.GenerateData(input);
         }
 
         public int GetRandomNumber()

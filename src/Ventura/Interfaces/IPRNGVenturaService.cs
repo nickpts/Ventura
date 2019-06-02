@@ -7,7 +7,7 @@ namespace Ventura.Interfaces
     public interface IPRNGVenturaService
     {
         void InitialisePRNG();
-        byte[] GetRandomData();
+        byte[] GetRandomData(byte[] input);
         int GetRandomNumber();
         int[] GetRandomNumbers();
         string GetRandomString(int length);
