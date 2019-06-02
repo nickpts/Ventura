@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 
 using Ventura.Interfaces;
 
+using static Ventura.Constants;
+
 namespace Ventura
 {
     internal class PRNGVenturaService : IPRNGVenturaService
@@ -11,7 +13,7 @@ namespace Ventura
         private readonly IAccumulator accumulator;
         private readonly IGenerator generator;
         private DateTimeOffset lastReseedTime = DateTimeOffset.MinValue;
-        private int reseedCounter = 0;
+        private int reseedCounter = 1;
 
         public PRNGVenturaService(IAccumulator accumulator, IGenerator generator)
         {
@@ -41,6 +43,15 @@ namespace Ventura
 
         public byte[] GetRandomData(byte[] input)
         {
+			var timeSinceLastReseed = DateTime.UtcNow - lastReseedTime;
+
+			if (accumulator.HasEnoughEntropy && timeSinceLastReseed > MaximumTimeSpanBetweenReseeds)
+			{
+				// Reseed the Generator
+				Reseed(accumulator.GetRandomDataFromPools(reseedCounter));
+				Debug.WriteLine("Reseeding completed!");
+			}
+
 			return generator.GenerateData(input);
         }
 

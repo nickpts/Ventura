@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+
 using Ventura.Interfaces;
+
 using static Ventura.Constants;
 
 namespace Ventura.Accumulator
@@ -14,7 +16,7 @@ namespace Ventura.Accumulator
     internal class VenturaAccumulator : IAccumulator
     {
         private readonly IEnumerable<IEntropyExtractor> entropyExtractors;
-        public readonly List<EntropyPool> pools = new List<EntropyPool>();
+        private readonly List<EntropyPool> pools = new List<EntropyPool>();
 
         public VenturaAccumulator(IEnumerable<IEntropyExtractor> entropyExtractors)
         {
@@ -47,14 +49,26 @@ namespace Ventura.Accumulator
             }
         }
 
-        public byte[] GetRandomDataFromPools()
+        public byte[] GetRandomDataFromPools(int reseedCounter)
         {
             if (!HasEnoughEntropy)
                 throw new InvalidOperationException("Not enough entropy accumulated");
 
-			if (pools.First().HasEnoughEntropy )
+			var randomData = new byte[MaximumSeedSize];
+			var tempIndex = 0;
 
-            return null;
+			for (int i = 0; i < pools.Count; i++)
+			{
+				if (Math.Pow(2, i) % reseedCounter != 0)
+					continue;
+
+				var data = pools[i].HashedData;
+
+				data.CopyTo(randomData, tempIndex);
+				tempIndex += data.Length;
+			}
+
+			return randomData;
         }
     }
 }

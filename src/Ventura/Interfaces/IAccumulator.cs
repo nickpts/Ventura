@@ -4,6 +4,6 @@
     {
         bool HasEnoughEntropy { get; }
         void Distribute();
-        byte[] GetRandomDataFromPools();
+        byte[] GetRandomDataFromPools(int reseedCounter);
     }
 }

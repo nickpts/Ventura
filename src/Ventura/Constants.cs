@@ -56,14 +56,11 @@ namespace Ventura
         /// </summary>
         public const int MinimumPoolSize = 1280;
 
-        /// <summary>
-        /// A reseed should happen only if the last reseed happened more than 
-        /// the amount of time in milliseconds specified here. 
-        /// </summary>
-        public const int ReseedingSpeed = 100;
 
         public const int MaximumNumberOfSources = 255;
         public const int MaximumNumberOfPools = 32;
+
+		public const int MaximumSeedSize = MaximumNumberOfPools * MinimumPoolSize;
 
 		/// <summary>
 		/// Accoding to the spec, a minimum number of blocks is neede 
