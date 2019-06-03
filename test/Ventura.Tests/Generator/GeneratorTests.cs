@@ -108,13 +108,13 @@ namespace Ventura.Tests.Generator
         public void Generator_WithSameSeed_ReturnsSameData()
         {
             var seed = new byte[1];
-            var generator = new VenturaGenerator(Cipher.Aes, seed);
+            var generator = new VenturaGenerator(Cipher.Isaac, seed);
 
             var input = new byte[1024];
 
             var firstOutput = generator.GenerateData(input);
 
-            var otherGenerator = new VenturaGenerator(Cipher.Aes, seed);
+            var otherGenerator = new VenturaGenerator(Cipher.Isaac, seed);
             var secondOutput = otherGenerator.GenerateData(input);
 
             Assert.IsTrue(firstOutput.SequenceEqual(secondOutput));

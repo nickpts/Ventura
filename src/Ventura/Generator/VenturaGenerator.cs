@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 
 using Ventura.Exceptions;
 using Ventura.Interfaces;
+using Ventura.Ciphers;
 using static Ventura.Constants;
 
 using Org.BouncyCastle.Crypto;
@@ -21,6 +22,7 @@ namespace Ventura.Generator
     {
         protected Cipher option;
         protected IBlockCipher cipher;
+		private IsaacCipher streamcipher;
         protected GeneratorState state;
 
         public VenturaGenerator(Cipher option = Cipher.Aes, byte[] seed = null)
@@ -107,6 +109,9 @@ namespace Ventura.Generator
                 case Cipher.Serpent:
                     cipher = new SerpentEngine();
                     break;
+				case Cipher.Isaac:
+					streamcipher = new IsaacCipher();
+					break;
             }
         }
 
@@ -122,10 +127,21 @@ namespace Ventura.Generator
                 throw new GeneratorInputException($"cannot generate array bigger than { MaximumRequestSizeForStateKey } bytes for state key");
 
             var roundedUpwards = (int)Math.Ceiling((double)input.Length / CipherBlockSize);
-            var pseudorandom = GenerateBlocks(roundedUpwards);
 
-            Array.Clear(state.Key, 0, state.Key.Length);
-            state.Key = GenerateBlocks(NumberOfBlocksForNewKey);
+			var pseudorandom = new byte[roundedUpwards];
+
+			if (cipher != null)
+			{
+				pseudorandom = GenerateBlocksWithBlockCipher(roundedUpwards);
+				Array.Clear(state.Key, 0, state.Key.Length);
+				state.Key = GenerateBlocksWithBlockCipher(NumberOfBlocksForNewKey);
+			}
+			else if (streamcipher != null)
+			{
+				pseudorandom = GenerateBlocksWithStreamCipher(roundedUpwards);
+				Array.Clear(state.Key, 0, state.Key.Length);
+				state.Key = GenerateBlocksWithStreamCipher(NumberOfBlocksForNewKey);
+			}
 
             return pseudorandom;
         }
@@ -134,7 +150,7 @@ namespace Ventura.Generator
         /// Fills each block with pseudorandom data and appends it to the result.
         /// Data used for the transformation is the counter changed into a byte array. 
         /// </summary>
-        protected virtual byte[] GenerateBlocks(int numberOfBlocks)
+        protected virtual byte[] GenerateBlocksWithBlockCipher(int numberOfBlocks)
         {
             if (!state.Seeded)
                 throw new GeneratorSeedException("Generator not seeded");
@@ -156,6 +172,31 @@ namespace Ventura.Generator
 
             return result;
         }
+
+		protected virtual byte[] GenerateBlocksWithStreamCipher(int numberOfBlocks)
+		{
+			if (!state.Seeded)
+				throw new GeneratorSeedException("Generator not seeded");
+
+			var result = new byte[numberOfBlocks * CipherBlockSize];
+			int destArrayLength = 0;
+
+			streamcipher.Seed(state.StringKey, true);
+
+			for (int i = 0; i < numberOfBlocks; i++)
+			{
+				var plainText = state.TransformCounterToByteArray();
+				var encryptedBlock = streamcipher.Vernam(plainText);
+
+				Array.Copy(encryptedBlock, 0, result, destArrayLength, encryptedBlock.Length);
+				Array.Clear(encryptedBlock, 0, encryptedBlock.Length);
+
+				destArrayLength += plainText.Length;
+				state.Counter++;
+			}
+
+			return result;
+		}
 
         #endregion
     }

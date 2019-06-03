@@ -21,7 +21,8 @@ namespace Ventura
         Aes,
         TwoFish,
         BlowFish,
-        Serpent
+        Serpent,
+		Isaac
     }
 
     public class Constants

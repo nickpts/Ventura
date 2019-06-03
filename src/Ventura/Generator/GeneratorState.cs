@@ -11,6 +11,7 @@ namespace Ventura.Generator
     {
         public int Counter { get; internal set; }
         public byte[] Key { get; internal set; }
+		public string StringKey => System.Text.Encoding.Default.GetString(Key);
         public bool Seeded { get; internal set; }
 
         public byte[] TransformCounterToByteArray()
@@ -22,5 +23,12 @@ namespace Ventura.Generator
 
             return destArray;
         }
+
+		public string TransformByteArrayCounterToString()
+		{
+			var counterArray = TransformCounterToByteArray();
+
+			return System.Text.Encoding.Default.GetString(counterArray);
+		}
     }
 }
