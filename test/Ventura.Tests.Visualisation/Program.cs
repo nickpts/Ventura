@@ -29,7 +29,7 @@ namespace Ventura.Tests.Visualisation
             //    ex.Start();
             //}
 
-            var prng = PRNGVenturaServiceFactory.CreatePrng(Cipher.Aes, ReseedEntropySources.Local);
+            var prng = PrngVenturaServiceFactory.CreatePrng(Cipher.Aes, ReseedEntropySources.Local);
             var data = prng.GetRandomData(new byte[1024]);
         }
 

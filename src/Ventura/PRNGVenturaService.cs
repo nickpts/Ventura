@@ -8,14 +8,14 @@ using static Ventura.Constants;
 
 namespace Ventura
 {
-    internal class PRNGVenturaService : IPRNGVenturaService
+    internal class PrngVenturaService : IPRNGVenturaService
     {
         private readonly IAccumulator accumulator;
         private readonly IGenerator generator;
         private DateTimeOffset lastReseedTime = DateTimeOffset.MinValue;
         private int reseedCounter = 1;
 
-        public PRNGVenturaService(IAccumulator accumulator, IGenerator generator)
+        public PrngVenturaService(IAccumulator accumulator, IGenerator generator)
         {
             this.accumulator = accumulator;
             this.generator = generator;

@@ -9,7 +9,7 @@ using Ventura.Interfaces;
 
 namespace Ventura
 {
-    public class PRNGVenturaServiceFactory
+    public class PrngVenturaServiceFactory
     {
         public static IPRNGVenturaService CreatePrng() => CreatePrng(Cipher.Aes, ReseedEntropySources.Full, null);
 
@@ -42,7 +42,7 @@ namespace Ventura
             IAccumulator accumulator = new VenturaAccumulator(extractors);
             IGenerator generator = new VenturaGenerator(cipher, seed);
 
-            var prng = new PRNGVenturaService(accumulator, generator);
+            var prng = new PrngVenturaService(accumulator, generator);
             prng.InitialisePRNG();
 
             return prng;
