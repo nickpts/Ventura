@@ -38,7 +38,7 @@ namespace Ventura
         public const int CipherBlockSize = 16; 
 
         /// <summary>
-        /// Maximum aamount of pseudorandom data generated
+        /// Maximum amount of pseudorandom data generated
         /// before the state key changes
         /// </summary>
         public const int MaximumRequestSizeForStateKey = 1048576;

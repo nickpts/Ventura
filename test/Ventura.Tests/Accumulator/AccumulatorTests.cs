@@ -23,9 +23,9 @@ namespace Ventura.Tests.Accumulator
         public void Setup()
         {
             IEntropyExtractor firstExtractor = new GarbageCollectorExtractor(1);
-            //IEntropyExtractor secondExtractor = new GarbageCollectorExtractor(1);
+            IEntropyExtractor secondExtractor = new AppDomainExtractor(2);
 
-            accumulator = new VenturaAccumulator(new List<IEntropyExtractor> { firstExtractor });
+            accumulator = new VenturaAccumulator(new List<IEntropyExtractor> { firstExtractor, secondExtractor });
         }
 
         [TestMethod]
@@ -36,14 +36,20 @@ namespace Ventura.Tests.Accumulator
             var accumulator = new VenturaAccumulator(extractors.ToList());
         }
 
-        //[TestMethod]
-        //[ExpectedException(typeof(AccumulatorEntropyException))]
-        //public void Accumulator_Throws_Exception_If_NotEnoughEntropy_In_Pools_ToProvideRandomData()
-        //{
-        //    var extractors = new IEntropyExtractor[1];
-        //    IAccumulator accumulator = new VenturaAccumulator(extractors.ToList());
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+		public void Accumulator_ThrowsException_If_Not_Enough_Entropy_Collected()
+        {
+	        var extractors = new IEntropyExtractor[1];
+	        var accumulator = new VenturaAccumulator(extractors.ToList());
 
-        //    accumulator.GetRandomData();
-        //}
-    }
+	        accumulator.GetRandomDataFromPools(4);
+        }
+
+		[TestMethod]
+		public void Accumulator_Throws_Exception()
+		{
+			accumulator.Distribute();
+		}
+	}
 }

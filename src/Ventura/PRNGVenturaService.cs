@@ -25,10 +25,10 @@ namespace Ventura
         {
             while (!accumulator.HasEnoughEntropy)
             {
-                accumulator.Distribute();
+                accumulator.Distribute(); // this needs multi-threading, it needs to run on teh background
 
                 Debug.WriteLine("Not enough entropy... waiting");
-                Task.Delay(500);
+                Task.Delay(10);
             }
 
             Debug.WriteLine("I have enough entropy!");

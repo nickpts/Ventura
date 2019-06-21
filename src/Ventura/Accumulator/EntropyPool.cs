@@ -6,10 +6,11 @@ using static Ventura.Constants;
 
 namespace Ventura.Accumulator
 {
-    public class EntropyPool
+    internal sealed class EntropyPool
     {
         private int poolNumber;
         private readonly List<byte> hash = new List<byte>();
+        private int eventsStored = 0;
 
         public EntropyPool(int poolNumber) => this.poolNumber = poolNumber;
 
@@ -23,9 +24,19 @@ namespace Ventura.Accumulator
 
             var hashedData = SHA256.Create().ComputeHash(data);
             hash.AddRange(hashedData);
+            eventsStored++;
         }
 
-        public byte[] HashedData => hash.ToArray();
-        public bool HasEnoughEntropy => HashedData.Length >= MinimumPoolSize;
+        public bool HasEnoughEntropy => hash.Count >= MinimumPoolSize;
+
+		public byte[] ReadData()
+        {
+	        return hash.ToArray();
+        }
+
+        public void Clear()
+        {
+			hash.Clear();
+        }
     }
 }

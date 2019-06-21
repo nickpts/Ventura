@@ -13,15 +13,13 @@ namespace Ventura
     {
         public static IPRNGVenturaService CreatePrng() => CreatePrng(Cipher.Aes, ReseedEntropySources.Full, null);
 
-        public static IPRNGVenturaService CreatePrng(Cipher cipher) =>
-            CreatePrng(cipher, ReseedEntropySources.Full, null);
+        public static IPRNGVenturaService CreatePrng(Cipher cipher) => CreatePrng(cipher, ReseedEntropySources.Full, null);
 
-        public static IPRNGVenturaService CreatePrng(Cipher cipher, ReseedEntropySources sources) =>
-            CreatePrng(cipher, sources, null);
+        public static IPRNGVenturaService CreatePrng(Cipher cipher, ReseedEntropySources sources) => CreatePrng(cipher, sources, null);
 
         public static IPRNGVenturaService CreatePrng(Cipher cipher, ReseedEntropySources sources, byte[] seed)
-        {
-            var extractors = new List<IEntropyExtractor>();
+		{ 
+	        var extractors = new List<IEntropyExtractor>();
 
             switch (sources)
             {
@@ -37,6 +35,8 @@ namespace Ventura
                     extractors.Add(new AppDomainExtractor(1));
                     extractors.Add(new RemoteQuantumRngExtractor(2));
                     break;
+                default:
+	                throw new ArgumentOutOfRangeException(nameof(sources), sources, null);
             }
 
             IAccumulator accumulator = new VenturaAccumulator(extractors);

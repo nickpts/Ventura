@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Ventura.Interfaces;
 
 using static Ventura.Constants;
@@ -32,21 +32,29 @@ namespace Ventura.Accumulator
             }
         }
 
-        public bool HasEnoughEntropy => pools.Any(p => p.HasEnoughEntropy);
+        public bool HasEnoughEntropy => pools.First().HasEnoughEntropy;
         
         public void Distribute()
         {
-            foreach (var pool in pools)
-            foreach (var extractor in entropyExtractors)
-            {
-                extractor.Start();
 
-                pool.AddEventData(
-                    extractor.SourceNumber,
-                    extractor.Events.Last(e => e.ExtractionSuccessful).Data.ToArray());
+	        foreach (var ex in entropyExtractors)
+	        {
+				ex.Start();
+	        }
 
-                Debug.WriteLine($"Extractor {extractor.SourceNumber} has {extractor.Events.Where(c => c.ExtractionSuccessful).SelectMany(c => c.Data).ToArray().Length } bytes of entropy");
-            }
+
+	        //foreach (var pool in pools)
+         //   foreach (var extractor in entropyExtractors)
+         //   {
+         //       extractor.Start();
+
+         //       pool.AddEventData(
+         //           extractor.SourceNumber,
+         //           extractor.Events.Last(e => e.ExtractionSuccessful).Data.ToArray());
+
+         //       Debug.WriteLine($"Extractor {extractor.SourceNumber}: {extractor.SourceName} has " +
+         //                       $"{extractor.Events.Where(c => c.ExtractionSuccessful).SelectMany(c => c.Data).ToArray().Length } bytes of entropy");
+         //   }
         }
 
         public byte[] GetRandomDataFromPools(int reseedCounter)
@@ -62,7 +70,8 @@ namespace Ventura.Accumulator
 				if (Math.Pow(2, i) % reseedCounter != 0)
 					continue;
 
-				var data = pools[i].HashedData;
+				var data = pools[i].ReadData();
+				pools[i].Clear();
 
 				data.CopyTo(randomData, tempIndex);
 				tempIndex += data.Length;
