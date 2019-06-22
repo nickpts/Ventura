@@ -13,7 +13,7 @@ namespace Ventura.Accumulator
     /// Collects real random data from various sources
     /// and uses it to reseed the generator
     /// </summary>
-    internal class VenturaAccumulator : IAccumulator
+    internal class VenturaAccumulator : IAccumulator, IDisposable
     {
         private readonly IEnumerable<IEntropyExtractor> entropyExtractors;
         private readonly List<EntropyPool> pools = new List<EntropyPool>();
@@ -25,21 +25,31 @@ namespace Ventura.Accumulator
 
             this.entropyExtractors = entropyExtractors;
 
-            for (var i = 0; i < MaximumNumberOfPools; i++)
-            {
-	            var pool = new EntropyPool(i);
-	            pools.Add(pool);
-            }
-
-            foreach (var ex in entropyExtractors)
-            {
-	            ex.EntropyAvailable += OnEntropyAvailable;
-            }
+            InitializePools();
+			RegisterExtractorEvents();
+			BeginAccumulation();
         }
 
 		public bool HasEnoughEntropy => pools.First().HasEnoughEntropy;
+
+		public void InitializePools()
+		{
+			for (var i = 0; i < MaximumNumberOfPools; i++)
+			{
+				var pool = new EntropyPool(i);
+				pools.Add(pool);
+			}
+		}
+
+		public void RegisterExtractorEvents()
+		{
+			foreach (var ex in entropyExtractors)
+			{
+				ex.EntropyAvailable += OnEntropyAvailable;
+			}
+		}
         
-        public void Distribute()
+        public void BeginAccumulation()
         {
 			Task.Factory.StartNew(() =>
 			{
@@ -52,11 +62,9 @@ namespace Ventura.Accumulator
 							entropyExtractor.Start();
 						}
 					});
-					//Task.Delay(1000);
 				}
 
-			}, TaskCreationOptions.LongRunning);
-
+			}, TaskCreationOptions.LongRunning); //TODO: canxellation token?
         }
 
         public byte[] GetRandomDataFromPools(int reseedCounter)
@@ -64,7 +72,7 @@ namespace Ventura.Accumulator
             if (!HasEnoughEntropy)
                 throw new InvalidOperationException("Not enough entropy accumulated");
 
-			var randomData = new byte[MaximumSeedSize]; //TODO : needs fixing!
+			var randomData = new byte[MaximumSeedSize]; 
 			var tempIndex = 0;
 
 			for (int i = 0; i < pools.Count; i++)
@@ -89,5 +97,18 @@ namespace Ventura.Accumulator
 		        pool.AddEventData(successfulExtraction.SourceNumber, successfulExtraction.Data);
 	        }
         }
-	}
+
+        public void Dispose()
+        {
+	        foreach (var ex in entropyExtractors)
+	        {
+		        ex.EntropyAvailable -= OnEntropyAvailable;
+	        }
+
+	        foreach (var p in pools)
+	        {
+				p.Dispose();
+	        }
+        }
+    }
 }

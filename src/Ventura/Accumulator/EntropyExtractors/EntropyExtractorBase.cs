@@ -6,16 +6,12 @@ using Ventura.Interfaces;
 
 namespace Ventura.Accumulator.EntropyExtractors
 {
-	public abstract class EntropyExtractorBase : IDisposable
+	public abstract class EntropyExtractorBase 
 	{
 		private readonly EventEmitter eventEmitter;
 
 		public event EntropyAvailabilityHandler EntropyAvailable;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sourceNumber"></param>
 		protected EntropyExtractorBase(int sourceNumber)
 		{
 			SourceNumber = sourceNumber;
@@ -35,10 +31,5 @@ namespace Ventura.Accumulator.EntropyExtractors
 		}
 
 		protected abstract Func<byte[]> ExtractEntropicData();
-
-		public void Dispose()
-		{
-
-		}
 	}
 }

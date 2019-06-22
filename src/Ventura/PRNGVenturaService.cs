@@ -20,20 +20,7 @@ namespace Ventura
             this.accumulator = accumulator;
             this.generator = generator;
         }
-
-        public void InitialisePRNG()
-        {
-	        accumulator.Distribute(); // TODO: this needs multi-threading, it needs to run on teh background
-
-			while (!accumulator.HasEnoughEntropy)
-            {
-	            Debug.WriteLine("Not enough entropy... waiting");
-				Task.Delay(100);
-            }
-
-            Debug.WriteLine("I have enough entropy!");
-        }
-
+		
         public void Reseed(byte[] seed)
         {
             generator.Reseed(seed);

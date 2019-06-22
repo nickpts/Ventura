@@ -44,23 +44,21 @@ namespace Ventura
         public const int MaximumRequestSizeForStateKey = 1048576;
 
         /// <summary>
-        /// Maximum anount of entropy data in bytes
+        /// Maximum amount of entropy data in bytes
         /// </summary>
         public const int MaximumEventSize = 32;
 
         /// <summary>
         /// The spec suggests a minimum of 128 bits of entropic data
         /// is needed for an attacker to lose track of the generator state.
-        /// We set it to 256 bits (32 bytes) which means each pool should hold
-        /// a minimum of two events before a reseed is triggered.
+        /// We set it to 256 bits (32 bytes) which means each pool should contain the concatenated hash
+        /// of a minimum of two events before a reseed is triggered.
         /// </summary>
         public const int MinimumPoolSize = 32;
 
-
         public const int MaximumNumberOfSources = 255;
         public const int MaximumNumberOfPools = 32;
-
-		public const int MaximumSeedSize = MaximumNumberOfPools * MinimumPoolSize;
+        public const int MaximumSeedSize = MaximumNumberOfPools * MinimumPoolSize;
 
 		/// <summary>
 		/// Accoding to the spec, a minimum number of blocks is neede 

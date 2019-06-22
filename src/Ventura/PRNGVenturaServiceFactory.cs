@@ -39,14 +39,8 @@ namespace Ventura
 	                throw new ArgumentOutOfRangeException(nameof(sources), sources, null);
             }
 
-            IAccumulator accumulator = new VenturaAccumulator(extractors);
-            IGenerator generator = new VenturaGenerator(cipher, seed);
-
-            var prng = new PrngVenturaService(accumulator, generator);
-            prng.InitialisePRNG();
-
-            return prng;
-        }
+            return new PrngVenturaService(new VenturaAccumulator(extractors), new VenturaGenerator(cipher, seed));
+		}
 
 		//TODO: have user specify sources
     }

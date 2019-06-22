@@ -7,17 +7,21 @@ using static Ventura.Constants;
 
 namespace Ventura.Accumulator
 {
-	internal sealed class EntropyPool
+	internal sealed class EntropyPool: IDisposable
 	{
-		private int poolNumber;
 		private byte[] hash = new byte[MinimumPoolSize];
+		private readonly SHA256 hashAlgorithm;
+		private readonly object syncRoot;
 		private int eventsStored = 0;
-		private readonly object locker = new object(); // TODO: proper locking!
+		private long runningSize;
+		private int poolNumber;
 
-
-		private int _runningSize; // TODO: rewrite
-
-		public EntropyPool(int poolNumber) => this.poolNumber = poolNumber;
+		public EntropyPool(int poolNumber)
+		{
+			this.poolNumber = poolNumber;
+			syncRoot = new object();
+			hashAlgorithm = SHA256.Create();
+		}
 
 		public void AddEventData(int sourceNumber, byte[] data)
 		{
@@ -27,32 +31,28 @@ namespace Ventura.Accumulator
 			if (data.Length > MaximumEventSize)
 				throw new ArgumentException($"{ nameof(data.Length) } cannot be more than { MaximumEventSize } bytes");
 
-			lock (locker)
+			lock (syncRoot)
 			{
-				var newData = hash.Concat(data).ToArray();
-				hash = SHA256.Create().ComputeHash(newData);
-				Interlocked.Add(ref _runningSize, newData.Length);
-				eventsStored++;
+				var concatenatedData = hash.Concat(data).ToArray();
+				hash = hashAlgorithm.ComputeHash(concatenatedData);
+				Interlocked.Add(ref runningSize, concatenatedData.Length);
+				Interlocked.Increment(ref eventsStored);
 			}
 		}
 
-		public bool HasEnoughEntropy => _runningSize >= MinimumPoolSize;
+		public bool HasEnoughEntropy => Interlocked.Read(ref runningSize) >= MinimumPoolSize;
 
-		public byte[] ReadData()
-		{
-			lock (locker)
-			{
-				return hash;
-			}
-		}
+		public byte[] ReadData() => hash;
 
 		public void Clear()
 		{
-			lock (locker)
-			{
-				Interlocked.Exchange(ref _runningSize, 0);
-				Array.Clear(hash, 0, hash.Length);
-			}
+			Interlocked.Exchange(ref runningSize, 0);
+			Array.Clear(hash, 0, hash.Length);
+		}
+
+		public void Dispose()
+		{
+			hashAlgorithm.Dispose();
 		}
 	}
 }
