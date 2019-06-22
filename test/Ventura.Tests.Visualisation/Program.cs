@@ -23,14 +23,15 @@ namespace Ventura.Tests.Visualisation
 
         private static void TestMethod()
         {
+
 			var prng = PrngVenturaServiceFactory.CreatePrng(Cipher.Aes, ReseedEntropySources.Local);
 
-            for (int i = 0; i <= 1000; i++)
-            {
-	            Thread.Sleep(100);
-	            var data = prng.GetRandomData(new byte[1024]);
+			for (int i = 0; i <= 1000; i++)
+			{
+				Thread.Sleep(100);
+				var data = prng.GetRandomData(new byte[1024]);
 			}
-        }
+		}
 
         private static void VisualiseRandomness()
         {

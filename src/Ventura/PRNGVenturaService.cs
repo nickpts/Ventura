@@ -23,12 +23,12 @@ namespace Ventura
 
         public void InitialisePRNG()
         {
-            while (!accumulator.HasEnoughEntropy)
-            {
-                accumulator.Distribute(); // this needs multi-threading, it needs to run on teh background
+	        accumulator.Distribute(); // TODO: this needs multi-threading, it needs to run on teh background
 
-                Debug.WriteLine("Not enough entropy... waiting");
-                Task.Delay(10);
+			while (!accumulator.HasEnoughEntropy)
+            {
+	            Debug.WriteLine("Not enough entropy... waiting");
+				Task.Delay(100);
             }
 
             Debug.WriteLine("I have enough entropy!");

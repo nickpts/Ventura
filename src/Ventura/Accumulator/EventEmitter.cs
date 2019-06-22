@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Ventura.Interfaces;
@@ -12,21 +14,15 @@ namespace Ventura.Accumulator
     {
         private readonly int sourceNumber;
 
-        public delegate void EntropyAvailabilityHander(Event successfulExtraction);
-        public event EntropyAvailabilityHander OnEntropyAvailable;
-
-        public delegate void EventFailureHandler(Event failedExtraction);
-        public event EventFailureHandler OnFailedEvent;
-
         public EventEmitter(int sourceNumber) => this.sourceNumber = sourceNumber;
         
-        public void Execute(Task<byte[]> extractionLogic)
+        public Task<Event> Execute(Func<byte[]> extractionLogic)
         {
             try
             {
-                var data = extractionLogic.Result;
+	            var data = extractionLogic.Invoke();
 
-                var result = new byte[MaximumEventSize];
+	            var result = new byte[MaximumEventSize];
                 var sourceNumberByte = BitConverter.GetBytes(sourceNumber).First();
                 var dataLength = BitConverter.GetBytes(data.Length).First();
 
@@ -36,21 +32,27 @@ namespace Ventura.Accumulator
                 Array.Copy(data, 0, result, 2, data.Length);
                 Array.Clear(data, 0, data.Length);
 
-                var @event = new Event { Data = result, ExtractionSuccessful = true };
-                OnEntropyAvailable?.Invoke(@event);
+                var @event = new Event { SourceNumber = sourceNumber, Data = result, ExtractionSuccessful = true };
+
+                //Debug.WriteLine($"Event emitted at thread: { Thread.CurrentThread.ManagedThreadId }");
+
+                return Task.FromResult(@event);
             }
             catch (AggregateException aex)
             {
                 //flatten, handle appropriately
                 aex.Flatten();
                 var @event = new Event { Exception = aex };
-                OnFailedEvent?.Invoke(@event);
+
+				//TODO: need to handle appropriately here
+                return Task.FromResult(@event);
             }
         }
     }
 
     public class Event
     {
+		public int SourceNumber { get; internal set; }
         public byte[] Data { get; internal set; }
         public bool ExtractionSuccessful { get; internal set; }
         public AggregateException Exception { get; internal set; }

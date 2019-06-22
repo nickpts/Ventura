@@ -17,20 +17,18 @@ namespace Ventura.Accumulator.EntropyExtractors
 
         public override string SourceName { get; protected set; } = ".NET CLR Garbage Collector";
 
-        protected override Task<byte[]> ExtractEntropicData()
+        protected override Func<byte[]> ExtractEntropicData()
         {
-            byte[] extraction()
-            {
-                var totalMemory = GC.GetTotalMemory(false);
+	        return () =>
+	        {
+		        var totalMemory = GC.GetTotalMemory(false);
 
-                var firstGen = GC.CollectionCount(0);
-                var secondGen = GC.CollectionCount(1);
-                var thirdGen = GC.CollectionCount(2);
+		        var firstGen = GC.CollectionCount(0);
+		        var secondGen = GC.CollectionCount(1);
+		        var thirdGen = GC.CollectionCount(2);
 
-                return BitConverter.GetBytes(totalMemory + firstGen + secondGen + thirdGen);
-            }
-
-            return Task.Run((Func<byte[]>) extraction); 
+		        return BitConverter.GetBytes(totalMemory + firstGen + secondGen + thirdGen);
+	        };
         }
     }
 }

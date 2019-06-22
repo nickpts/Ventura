@@ -19,9 +19,9 @@ namespace Ventura.Accumulator.EntropyExtractors
         {
         }
 
-        protected override Task<byte[]> ExtractEntropicData()
+        protected override Func<byte[]> ExtractEntropicData()
         {
-            Func<byte[]> extraction = () =>
+            return () =>
             {
                 using (WebClient wc = new WebClient())
                 {
@@ -41,8 +41,6 @@ namespace Ventura.Accumulator.EntropyExtractors
                     return result;
                 }
             };
-
-            return Task.Run(extraction);
         }
     }
 }

@@ -27,34 +27,36 @@ namespace Ventura.Accumulator
 
             for (var i = 0; i < MaximumNumberOfPools; i++)
             {
-                var pool = new EntropyPool(i);
-                pools.Add(pool);
+	            var pool = new EntropyPool(i);
+	            pools.Add(pool);
+            }
+
+            foreach (var ex in entropyExtractors)
+            {
+	            ex.EntropyAvailable += OnEntropyAvailable;
             }
         }
 
-        public bool HasEnoughEntropy => pools.First().HasEnoughEntropy;
+		public bool HasEnoughEntropy => pools.First().HasEnoughEntropy;
         
         public void Distribute()
         {
+			Task.Factory.StartNew(() =>
+			{
+				while (true)
+				{
+					Parallel.Invoke(() => 
+					{
+						foreach (var entropyExtractor in entropyExtractors)
+						{
+							entropyExtractor.Start();
+						}
+					});
+					//Task.Delay(1000);
+				}
 
-	        foreach (var ex in entropyExtractors)
-	        {
-				ex.Start();
-	        }
+			}, TaskCreationOptions.LongRunning);
 
-
-	        //foreach (var pool in pools)
-         //   foreach (var extractor in entropyExtractors)
-         //   {
-         //       extractor.Start();
-
-         //       pool.AddEventData(
-         //           extractor.SourceNumber,
-         //           extractor.Events.Last(e => e.ExtractionSuccessful).Data.ToArray());
-
-         //       Debug.WriteLine($"Extractor {extractor.SourceNumber}: {extractor.SourceName} has " +
-         //                       $"{extractor.Events.Where(c => c.ExtractionSuccessful).SelectMany(c => c.Data).ToArray().Length } bytes of entropy");
-         //   }
         }
 
         public byte[] GetRandomDataFromPools(int reseedCounter)
@@ -62,7 +64,7 @@ namespace Ventura.Accumulator
             if (!HasEnoughEntropy)
                 throw new InvalidOperationException("Not enough entropy accumulated");
 
-			var randomData = new byte[MaximumSeedSize];
+			var randomData = new byte[MaximumSeedSize]; //TODO : needs fixing!
 			var tempIndex = 0;
 
 			for (int i = 0; i < pools.Count; i++)
@@ -79,5 +81,13 @@ namespace Ventura.Accumulator
 
 			return randomData;
         }
-    }
+
+        protected virtual void OnEntropyAvailable(Event successfulExtraction)
+        {
+	        foreach (var pool in pools)
+	        {
+		        pool.AddEventData(successfulExtraction.SourceNumber, successfulExtraction.Data);
+	        }
+        }
+	}
 }
