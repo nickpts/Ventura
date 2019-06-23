@@ -1,8 +1,11 @@
-﻿namespace Ventura.Interfaces
+﻿using System;
+
+namespace Ventura.Interfaces
 {
-    interface IAccumulator
+    interface IAccumulator: IDisposable
     {
         bool HasEnoughEntropy { get; }
         byte[] GetRandomDataFromPools(int reseedCounter);
+        void Dispose();
     }
 }

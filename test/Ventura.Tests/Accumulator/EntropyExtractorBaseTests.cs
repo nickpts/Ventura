@@ -18,53 +18,14 @@ namespace Ventura.Tests.Accumulator
         public void Setup()
         {
         }
-
-        [TestMethod]
-        public void EntropyExtractor_Appends_Failed_Event_During_Extraction()
-        {
-            Func<byte[]> failure = () => throw new Exception("test");
-
-            using (var extractor = new TestEntropyExtractor(1, failure))
-            {
-                extractor.Start();
-                //extractor.FailedEvents.Should().HaveCount(1);
-            }
-        }
-
-        [TestMethod]
-        public void EntropyExtractor_Appended_FailedEvent_ContainsAggregate_Exception()
-        {
-            Func<byte[]> failure = () => throw new Exception("test");
-
-            using (var extractor = new TestEntropyExtractor(1, failure))
-            {
-                extractor.Start();
-
-            }
-        }
-
+		
         [TestMethod]
         public void EntropyExtractor_SuccessfulExtraction_ContainsEvent()
         {
             Func<byte[]> success = () => new byte[30];
 
-            using (var extractor = new TestEntropyExtractor(1, success))
-            {
-                extractor.Start();
-
-            }
-        }
-
-        [TestMethod]
-        public void EntropyExtractor_SuccessfulExtraction_FlagSetTrue_Exception_Null()
-        {
-            Func<byte[]> success = () => new byte[30];
-
-            using (var extractor = new TestEntropyExtractor(1, success))
-            {
-                extractor.Start();
-
-            }
+            var extractor = new TestEntropyExtractor(1, success);
+            extractor.Start();
         }
     }
 

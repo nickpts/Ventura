@@ -34,8 +34,6 @@ namespace Ventura.Accumulator
 
                 var @event = new Event { SourceNumber = sourceNumber, Data = result, ExtractionSuccessful = true };
 
-                //Debug.WriteLine($"Event emitted at thread: { Thread.CurrentThread.ManagedThreadId }");
-
                 return Task.FromResult(@event);
             }
             catch (AggregateException aex)

@@ -9,15 +9,15 @@ using Ventura.Interfaces;
 
 namespace Ventura
 {
-    public class PrngVenturaServiceFactory
+    public class PrngVenturaFactory
     {
-        public static IPRNGVenturaService CreatePrng() => CreatePrng(Cipher.Aes, ReseedEntropySources.Full, null);
+        public static IPrngVentura CreatePrng() => CreatePrng(Cipher.Aes, ReseedEntropySources.Full, null);
 
-        public static IPRNGVenturaService CreatePrng(Cipher cipher) => CreatePrng(cipher, ReseedEntropySources.Full, null);
+        public static IPrngVentura CreatePrng(Cipher cipher) => CreatePrng(cipher, ReseedEntropySources.Full, null);
 
-        public static IPRNGVenturaService CreatePrng(Cipher cipher, ReseedEntropySources sources) => CreatePrng(cipher, sources, null);
+        public static IPrngVentura CreatePrng(Cipher cipher, ReseedEntropySources sources) => CreatePrng(cipher, sources, null);
 
-        public static IPRNGVenturaService CreatePrng(Cipher cipher, ReseedEntropySources sources, byte[] seed)
+        public static IPrngVentura CreatePrng(Cipher cipher, ReseedEntropySources sources, byte[] seed)
 		{ 
 	        var extractors = new List<IEntropyExtractor>();
 
@@ -39,7 +39,7 @@ namespace Ventura
 	                throw new ArgumentOutOfRangeException(nameof(sources), sources, null);
             }
 
-            return new PrngVenturaService(new VenturaAccumulator(extractors), new VenturaGenerator(cipher, seed));
+            return new PrngVentura(new VenturaAccumulator(extractors), new VenturaGenerator(cipher, seed));
 		}
 
 		//TODO: have user specify sources

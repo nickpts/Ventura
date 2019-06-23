@@ -8,14 +8,14 @@ using static Ventura.Constants;
 
 namespace Ventura
 {
-    internal class PrngVenturaService : IPRNGVenturaService
+    internal class PrngVentura : IPrngVentura, IDisposable
     {
         private readonly IAccumulator accumulator;
         private readonly IGenerator generator;
         private DateTimeOffset lastReseedTime = DateTimeOffset.MinValue;
         private int reseedCounter = 1;
 
-        public PrngVenturaService(IAccumulator accumulator, IGenerator generator)
+        public PrngVentura(IAccumulator accumulator, IGenerator generator)
         {
             this.accumulator = accumulator;
             this.generator = generator;
@@ -65,6 +65,11 @@ namespace Ventura
         public string[] GetRandomStrings(int minStringLength, int maxStringLength, int arrayLength)
         {
             throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+			accumulator.Dispose();
         }
     }
 }
