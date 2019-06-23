@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Ventura.Interfaces;
 
@@ -27,7 +28,7 @@ namespace Ventura.Accumulator
 
             InitializePools();
 			RegisterExtractorEvents();
-			BeginAccumulation();
+			AccumulateEntropy();
         }
 
 		public bool HasEnoughEntropy => pools.First().HasEnoughEntropy;
@@ -74,22 +75,20 @@ namespace Ventura.Accumulator
 	        }
         }
 
-        private void BeginAccumulation()
+        private void AccumulateEntropy()
         {
-	        Task.Factory.StartNew(() =>
+	        foreach (var extractor in entropyExtractors)
 	        {
-		        while (true)
+		        Task.Factory.StartNew(() =>
 		        {
-			        Parallel.Invoke(() =>
+			        while (true)
 			        {
-				        foreach (var entropyExtractor in entropyExtractors)
-				        {
-					        entropyExtractor.Start();
-				        }
-			        });
-		        }
+				        extractor.Run();
+			        }
 
-	        }, TaskCreationOptions.LongRunning); //TODO: canxellation token?
+		        }, TaskCreationOptions.LongRunning); //TODO: canxellation token?
+
+			}
         }
 
 		private void OnEntropyAvailable(Event successfulExtraction)
@@ -97,6 +96,7 @@ namespace Ventura.Accumulator
 	        foreach (var pool in pools)
 	        {
 		        pool.AddEventData(successfulExtraction.SourceNumber, successfulExtraction.Data);
+				Debug.WriteLine($"Event from source { successfulExtraction.SourceNumber } added from thread: { Thread.CurrentThread.ManagedThreadId }");
 	        }
         }
 

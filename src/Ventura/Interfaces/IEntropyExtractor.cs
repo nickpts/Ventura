@@ -7,7 +7,7 @@ namespace Ventura.Interfaces
 {
     public interface IEntropyExtractor
     {
-        Task Start();
+        Task Run();
         int SourceNumber { get; }
 		string SourceName { get; }
 

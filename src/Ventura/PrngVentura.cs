@@ -20,14 +20,7 @@ namespace Ventura
             this.accumulator = accumulator;
             this.generator = generator;
         }
-		
-        public void Reseed(byte[] seed)
-        {
-            generator.Reseed(seed);
-            lastReseedTime = DateTimeOffset.UtcNow;
-            reseedCounter++;
-        }
-
+        
         public byte[] GetRandomData(byte[] input)
         {
 			var timeSinceLastReseed = DateTime.UtcNow - lastReseedTime;
@@ -36,13 +29,20 @@ namespace Ventura
 			{
 				// Reseed the Generator
 				Reseed(accumulator.GetRandomDataFromPools(reseedCounter));
-				Debug.WriteLine("Reseeding completed!");
+				Debug.WriteLine($"Reseeding completed! Counter: { reseedCounter }");
 			}
 
 			return generator.GenerateData(input);
         }
 
-        public int GetRandomNumber()
+        private void Reseed(byte[] seed)
+        {
+	        generator.Reseed(seed);
+	        lastReseedTime = DateTimeOffset.UtcNow;
+	        reseedCounter++;
+        }
+
+		public int GetRandomNumber()
         {
             throw new NotImplementedException();
         }

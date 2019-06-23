@@ -22,7 +22,7 @@ namespace Ventura.Accumulator.EntropyExtractors
 
 		public int SourceNumber { get; }
 
-		public virtual Task Start()
+		public virtual Task Run()
 		{
 			var result = eventEmitter.Execute(ExtractEntropicData()).Result;
 			EntropyAvailable?.Invoke(result);
