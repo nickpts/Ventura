@@ -52,12 +52,22 @@ namespace Ventura.Accumulator
 
 		public bool HasEnoughEntropy => Interlocked.Read(ref runningSize) >= MinimumPoolSize;
 
-		public byte[] ReadData() => hash;
+		public byte[] ReadData()
+		{
+			lock (syncRoot)
+			{
+				return hash;
+			}
+		}
 
 		public void Clear()
 		{
 			Interlocked.Exchange(ref runningSize, 0);
-			Array.Clear(hash, 0, hash.Length);
+
+			lock (syncRoot)
+			{
+				Array.Clear(hash, 0, hash.Length);
+			}
 		}
 
 		public void Dispose() => hashAlgorithm.Dispose();

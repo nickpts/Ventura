@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
@@ -42,10 +42,54 @@ namespace Ventura.Tests.Accumulator
 	        accumulator.GetRandomDataFromPools(4);
         }
 
-		[TestMethod]
-		public void Accumulator_Throws_Exception()
+		[TestMethod, Description("Test that pool zero is used and cleared on even and odd reseeds")]
+		public void Accumulator_Uses_Pool_Zero_On_Even_Reseed()
 		{
-			//accumulator.Distribute();
+			IsPoolUsed(1, 0).Should().BeTrue();
+			IsPoolUsed(2, 0).Should().BeTrue();
+			IsPoolUsed(5, 0).Should().BeTrue();
+			IsPoolUsed(10, 0).Should().BeTrue();
+		}
+
+		[TestMethod, Description("Test that first pool is used on every other ressed ")]
+		public void Accumulator_Does_Not_Use_First_Pool_On_First_Ressed()
+		{
+			IsPoolUsed(1, 1).Should().BeFalse();
+			IsPoolUsed(2, 1).Should().BeTrue();
+			IsPoolUsed(3, 1).Should().BeFalse();
+			IsPoolUsed(4, 1).Should().BeTrue();
+		}
+
+		public bool IsPoolUsed(int reseedNumber, int poolNumber)
+		{
+			var tokenSource = new CancellationTokenSource();
+
+			using (var accumulator = new TestAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(0) },
+				tokenSource.Token))
+			{
+				while (!accumulator.HasEnoughEntropy)
+				{
+					Thread.Sleep(100);
+				}
+
+				tokenSource.Cancel(); // stop accumulation so that pool is not populated
+				accumulator.GetRandomDataFromPools(reseedNumber); // start with reseed
+				return accumulator.EntropyPools.ElementAt(poolNumber).ReadData().All(b => b == 0);
+					
+			}
 		}
 	}
+
+    internal class TestAccumulator : VenturaAccumulator
+    {
+	    public TestAccumulator(IEnumerable<IEntropyExtractor> extractors, CancellationToken token) :
+		    base(extractors, token)
+	    {
+
+	    }
+
+	    public List<EntropyPool> EntropyPools => Pools;
+
+    }
+
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-
+using Ventura.Exceptions;
 using Ventura.Interfaces;
 
 using static Ventura.Constants;
@@ -32,8 +32,15 @@ namespace Ventura
 
 			if (accumulator.HasEnoughEntropy && timeSinceLastReseed > MaximumTimeSpanBetweenReseeds)
 			{
+
+				//TODO: reseed counter ??? if zero the first time it will not seed
 				Reseed(accumulator.GetRandomDataFromPools(reseedCounter));
 				Debug.WriteLine($"Reseeding completed! Counter: { reseedCounter }");
+			}
+
+			if (reseedCounter == 0)
+			{
+				throw new GeneratorSeedException("Generator not seeded yet!");
 			}
 
 			return generator.GenerateData(input);

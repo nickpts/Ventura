@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Ventura.Exceptions;
@@ -9,12 +10,12 @@ using Ventura.Interfaces;
 
 using static Ventura.Constants;
 
+[assembly: InternalsVisibleTo("Ventura.Tests")]
 namespace Ventura.Accumulator
 {
 	internal class VenturaAccumulator : IAccumulator
     {
-        private readonly IEnumerable<IEntropyExtractor> entropyExtractors;
-        private readonly List<EntropyPool> pools = new List<EntropyPool>();
+        protected readonly IEnumerable<IEntropyExtractor> entropyExtractors;
 
         public VenturaAccumulator(IEnumerable<IEntropyExtractor> entropyExtractors, CancellationToken token = default)
         {
@@ -28,10 +29,12 @@ namespace Ventura.Accumulator
 			AccumulateEntropy(token);
         }
 
-        /// <summary>
-        /// The accumulator has enough collected entropy as soon as first pool is full
-        /// </summary>
-		public bool HasEnoughEntropy => pools.First().HasEnoughEntropy;
+        protected List<EntropyPool> Pools { get; private set; }
+
+		/// <summary>
+		/// The accumulator has enough collected entropy as soon as first pool is full
+		/// </summary>
+		public bool HasEnoughEntropy => Pools.First().HasEnoughEntropy;
 
         /// <summary>
         /// Retrieves entropic data from pools, each pool
@@ -45,13 +48,13 @@ namespace Ventura.Accumulator
 			var randomData = new byte[MaximumSeedSize]; 
 			var tempIndex = 0;
 
-			for (int i = 0; i < pools.Count; i++)
+			for (int i = 0; i < Pools.Count; i++)
 			{
-				if (Math.Pow(2, i) % reseedCounter != 0)
+				if (reseedCounter % Math.Pow(2, i) != 0)
 					continue;
 
-				var data = pools[i].ReadData();
-				pools[i].Clear();
+				var data = Pools[i].ReadData();
+				Pools[i].Clear();
 
 				data.CopyTo(randomData, tempIndex);
 				tempIndex += data.Length;
@@ -63,11 +66,13 @@ namespace Ventura.Accumulator
 		#region Private implementation
 
 		private void InitializePools()
-        {
+		{
+			Pools = new List<EntropyPool>();
+
 	        for (var i = 0; i < MaximumNumberOfPools; i++)
 	        {
 		        var pool = new EntropyPool(i);
-		        pools.Add(pool);
+		        Pools.Add(pool);
 	        }
         }
 
@@ -104,7 +109,7 @@ namespace Ventura.Accumulator
 
 		private void OnEntropyAvailable(Event successfulExtraction)
 		{ 
-	        foreach (var pool in pools)
+	        foreach (var pool in Pools)
 	        {
 		        pool.AddEventData(successfulExtraction.SourceNumber, successfulExtraction.Data);
 				//Debug.WriteLine($"Event from source { successfulExtraction.SourceNumber } added from thread: { Thread.CurrentThread.ManagedThreadId }");
@@ -122,7 +127,7 @@ namespace Ventura.Accumulator
 		        ex.EntropyAvailable -= OnEntropyAvailable;
 	        }
 
-	        foreach (var p in pools)
+	        foreach (var p in Pools)
 	        {
 				p.Dispose();
 	        }
