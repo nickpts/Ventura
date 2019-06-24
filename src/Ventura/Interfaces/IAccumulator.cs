@@ -2,10 +2,15 @@
 
 namespace Ventura.Interfaces
 {
-    interface IAccumulator: IDisposable
+	/// <summary>
+	/// Collects real random data from various sources and uses it to reseed the generator
+	/// </summary>
+	interface IAccumulator : IDisposable
     {
-        bool HasEnoughEntropy { get; }
-        byte[] GetRandomDataFromPools(int reseedCounter);
+	    bool HasEnoughEntropy { get; }
+
+		byte[] GetRandomDataFromPools(int reseedCounter);
+
         void Dispose();
     }
 }

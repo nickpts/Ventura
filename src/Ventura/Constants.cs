@@ -9,7 +9,7 @@ namespace Ventura
     /// Remote: only remote sources (e.g RemoteQUantumRngExtractor) used. 
     /// Full: both types used
     /// </summary>
-    public enum ReseedEntropySources
+    public enum ReseedEntropySourceGroup
     {
         Local,
         Remote,

@@ -11,6 +11,9 @@ namespace Ventura.Interfaces
         int SourceNumber { get; }
 		string SourceName { get; }
 
+		/// <summary>
+		/// Triggered when entropic data is available
+		/// </summary>
 		event EntropyAvailabilityHandler EntropyAvailable;
 	}
 

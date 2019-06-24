@@ -16,7 +16,7 @@ namespace Ventura.Tests.Accumulator
         public void GarbageCollectorExtractor_Returns_Data()
         {
             var extractor = new GarbageCollectorExtractor(0);
-            extractor.Start();
+            extractor.Run();
 
         }
 
@@ -24,7 +24,7 @@ namespace Ventura.Tests.Accumulator
         public void ApplicationDomainExtractor_Returns_Data()
         {
             var extractor = new AppDomainExtractor(0);
-            extractor.Start();
+            extractor.Run();
 
 
         }
@@ -33,7 +33,7 @@ namespace Ventura.Tests.Accumulator
         public void RemoteQuantumRngExtractor_Returns_Data()
         {
             var extractor = new RemoteQuantumRngExtractor(0);
-            extractor.Start();
+            extractor.Run();
 
         }
     }

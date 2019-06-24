@@ -4,22 +4,19 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Ventura.Exceptions;
 using Ventura.Interfaces;
 
 using static Ventura.Constants;
 
 namespace Ventura.Accumulator
 {
-    /// <summary>
-    /// Collects real random data from various sources
-    /// and uses it to reseed the generator
-    /// </summary>
-    internal class VenturaAccumulator : IAccumulator
+	internal class VenturaAccumulator : IAccumulator
     {
         private readonly IEnumerable<IEntropyExtractor> entropyExtractors;
         private readonly List<EntropyPool> pools = new List<EntropyPool>();
 
-        public VenturaAccumulator(IEnumerable<IEntropyExtractor> entropyExtractors)
+        public VenturaAccumulator(IEnumerable<IEntropyExtractor> entropyExtractors, CancellationToken token = default)
         {
             if (entropyExtractors.Count() > MaximumNumberOfSources)
                 throw new ArgumentException($"Cannot use more than {MaximumNumberOfSources} sources");
@@ -28,15 +25,22 @@ namespace Ventura.Accumulator
 
             InitializePools();
 			RegisterExtractorEvents();
-			AccumulateEntropy();
+			AccumulateEntropy(token);
         }
 
+        /// <summary>
+        /// The accumulator has enough collected entropy as soon as first pool is full
+        /// </summary>
 		public bool HasEnoughEntropy => pools.First().HasEnoughEntropy;
-		
-        public byte[] GetRandomDataFromPools(int reseedCounter)
+
+        /// <summary>
+        /// Retrieves entropic data from pools, each pool
+        /// is used according to the divisor test 2i % ressed counter.
+        /// </summary>
+		public byte[] GetRandomDataFromPools(int reseedCounter)
         {
             if (!HasEnoughEntropy)
-                throw new InvalidOperationException("Not enough entropy accumulated");
+                throw new AccumulatorEntropyException("Not enough entropy accumulated");
 
 			var randomData = new byte[MaximumSeedSize]; 
 			var tempIndex = 0;
@@ -75,7 +79,12 @@ namespace Ventura.Accumulator
 	        }
         }
 
-        private void AccumulateEntropy()
+		/// <summary>
+		/// Starts each entropy extractor on its own thread.
+		/// The extractor will continue emitting events until cancel is called on the token
+		/// or the prng is stopped.
+		/// </summary>
+        private void AccumulateEntropy(CancellationToken token = default(CancellationToken))
         {
 	        foreach (var extractor in entropyExtractors)
 	        {
@@ -83,20 +92,22 @@ namespace Ventura.Accumulator
 		        {
 			        while (true)
 			        {
+				        if (token.IsCancellationRequested)
+					        break;
+
 				        extractor.Run();
 			        }
 
-		        }, TaskCreationOptions.LongRunning); //TODO: canxellation token?
-
-			}
+		        }, TaskCreationOptions.LongRunning); //TODO: cancellation token, but what happens on restart?
+	        }
         }
 
 		private void OnEntropyAvailable(Event successfulExtraction)
-        {
+		{ 
 	        foreach (var pool in pools)
 	        {
 		        pool.AddEventData(successfulExtraction.SourceNumber, successfulExtraction.Data);
-				Debug.WriteLine($"Event from source { successfulExtraction.SourceNumber } added from thread: { Thread.CurrentThread.ManagedThreadId }");
+				//Debug.WriteLine($"Event from source { successfulExtraction.SourceNumber } added from thread: { Thread.CurrentThread.ManagedThreadId }");
 	        }
         }
 

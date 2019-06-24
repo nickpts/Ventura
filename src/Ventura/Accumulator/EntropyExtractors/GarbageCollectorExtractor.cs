@@ -5,12 +5,11 @@ using Ventura.Interfaces;
 
 namespace Ventura.Accumulator.EntropyExtractors
 {
-    public class GarbageCollectorExtractor : EntropyExtractorBase, IEntropyExtractor
+	/// <summary>
+	/// Concatenates and returns information from the .NET garbage collector
+	/// </summary>
+	public class GarbageCollectorExtractor : EntropyExtractorBase, IEntropyExtractor
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sourceNumber"></param>
         public GarbageCollectorExtractor(int sourceNumber) : base(sourceNumber)
         {
         }

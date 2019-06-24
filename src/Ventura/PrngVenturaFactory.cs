@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Threading;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Generator;
@@ -11,37 +11,35 @@ namespace Ventura
 {
     public class PrngVenturaFactory
     {
-        public static IPrngVentura CreatePrng() => CreatePrng(Cipher.Aes, ReseedEntropySources.Full, null);
+        public static IPrngVentura CreatePrng() => CreatePrng(Cipher.Aes, ReseedEntropySourceGroup.Full, null, default(CancellationToken));
 
-        public static IPrngVentura CreatePrng(Cipher cipher) => CreatePrng(cipher, ReseedEntropySources.Full, null);
+        public static IPrngVentura CreatePrng(Cipher cipher) => CreatePrng(cipher, ReseedEntropySourceGroup.Full, null, default(CancellationToken));
 
-        public static IPrngVentura CreatePrng(Cipher cipher, ReseedEntropySources sources) => CreatePrng(cipher, sources, null);
+        public static IPrngVentura CreatePrng(Cipher cipher, ReseedEntropySourceGroup sourceGroup) => CreatePrng(cipher, sourceGroup, null, default(CancellationToken));
 
-        public static IPrngVentura CreatePrng(Cipher cipher, ReseedEntropySources sources, byte[] seed)
+        public static IPrngVentura CreatePrng(Cipher cipher, ReseedEntropySourceGroup sourceGroup, byte[] seed, CancellationToken entropyCancellationToken)
 		{ 
 	        var extractors = new List<IEntropyExtractor>();
 
-            switch (sources)
+            switch (sourceGroup)
             {
-                case ReseedEntropySources.Local:
+                case ReseedEntropySourceGroup.Local:
                     extractors.Add(new GarbageCollectorExtractor(0));
                     extractors.Add(new AppDomainExtractor(1));
                     break;
-                case ReseedEntropySources.Remote:
+                case ReseedEntropySourceGroup.Remote:
                     extractors.Add(new RemoteQuantumRngExtractor(0));
                     break;
-                case ReseedEntropySources.Full:
+                case ReseedEntropySourceGroup.Full:
                     extractors.Add(new GarbageCollectorExtractor(0));
                     extractors.Add(new AppDomainExtractor(1));
                     extractors.Add(new RemoteQuantumRngExtractor(2));
                     break;
                 default:
-	                throw new ArgumentOutOfRangeException(nameof(sources), sources, null);
+	                throw new ArgumentOutOfRangeException(nameof(sourceGroup), sourceGroup, null);
             }
 
-            return new PrngVentura(new VenturaAccumulator(extractors), new VenturaGenerator(cipher, seed));
+            return new PrngVentura(new VenturaAccumulator(extractors, entropyCancellationToken), new VenturaGenerator(cipher, seed));
 		}
-
-		//TODO: have user specify sources
     }
 }

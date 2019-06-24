@@ -5,6 +5,10 @@ using Ventura.Interfaces;
 
 namespace Ventura.Accumulator.EntropyExtractors
 {
+	/// <summary>
+	/// Concatenates and returns information regarding the current .NET
+	/// application domain's memory and processor metrics.
+	/// </summary>
 	public class AppDomainExtractor : EntropyExtractorBase, IEntropyExtractor
 	{
 		public AppDomainExtractor(int sourceNumber) : base(sourceNumber)

@@ -17,15 +17,13 @@ namespace Ventura.Tests.Accumulator
     [TestClass]
     public class AccumulatorTests
     {
+		//TODO: write tests
         private VenturaAccumulator accumulator;
 
         [TestInitialize]
         public void Setup()
         {
-            IEntropyExtractor firstExtractor = new GarbageCollectorExtractor(1);
-            IEntropyExtractor secondExtractor = new AppDomainExtractor(2);
 
-            accumulator = new VenturaAccumulator(new List<IEntropyExtractor> { firstExtractor, secondExtractor });
         }
 
         [TestMethod]
@@ -40,9 +38,7 @@ namespace Ventura.Tests.Accumulator
         [ExpectedException(typeof(InvalidOperationException))]
 		public void Accumulator_ThrowsException_If_Not_Enough_Entropy_Collected()
         {
-	        var extractors = new IEntropyExtractor[1];
-	        var accumulator = new VenturaAccumulator(extractors.ToList());
-
+	        var accumulator = new VenturaAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(1) });
 	        accumulator.GetRandomDataFromPools(4);
         }
 

@@ -24,12 +24,12 @@ namespace Ventura.Tests.Visualisation
         private static void TestMethod()
         {
 
-			var prng = PrngVenturaFactory.CreatePrng(Cipher.Aes, ReseedEntropySources.Local);
+			var prng = PrngVenturaFactory.CreatePrng(Cipher.Aes, ReseedEntropySourceGroup.Local);
 
 			for (int i = 0; i <= 1000; i++)
 			{
 				Thread.Sleep(100);
-				var data = prng.GetRandomData(new byte[1024000000]);
+				var data = prng.GetRandomData(new byte[1024000]);
 				Debug.WriteLine($"Data generated: {i}");
 			}
 		}

@@ -10,6 +10,11 @@ using static Ventura.Constants;
 
 namespace Ventura.Accumulator
 {
+	/// <summary>
+	/// Runs extraction logic and emits an event. In accordance to spec the first byte
+	/// in the random data contains the source number, the second the number of additional bytes of data
+	/// and the third the actual data. If an exception occurs it is encapsulated and added to the event.
+	/// </summary>
     internal class EventEmitter : IEventEmitter
     {
         private readonly int sourceNumber;

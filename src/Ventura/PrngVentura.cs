@@ -21,13 +21,17 @@ namespace Ventura
             this.generator = generator;
         }
         
+		/// <summary>
+		/// Returns data from generator, reseeds every time pool 0 has enough entropy or
+		/// a set amount of time (100ms according to spec) has passed between reseeds
+		/// </summary>
+		/// <returns>pseudorandomly generated data</returns>
         public byte[] GetRandomData(byte[] input)
         {
 			var timeSinceLastReseed = DateTime.UtcNow - lastReseedTime;
 
 			if (accumulator.HasEnoughEntropy && timeSinceLastReseed > MaximumTimeSpanBetweenReseeds)
 			{
-				// Reseed the Generator
 				Reseed(accumulator.GetRandomDataFromPools(reseedCounter));
 				Debug.WriteLine($"Reseeding completed! Counter: { reseedCounter }");
 			}

@@ -6,7 +6,7 @@ using Ventura.Accumulator;
 
 namespace Ventura.Interfaces
 {
-    public interface IEventEmitter
+	public interface IEventEmitter
     {
         Task<Event> Execute(Func<byte[]> extractionLogic);
     }

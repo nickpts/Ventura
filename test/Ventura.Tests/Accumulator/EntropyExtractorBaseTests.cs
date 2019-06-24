@@ -8,6 +8,7 @@ using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Interfaces;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Ventura.Accumulator;
 
 namespace Ventura.Tests.Accumulator
 {
@@ -25,9 +26,17 @@ namespace Ventura.Tests.Accumulator
             Func<byte[]> success = () => new byte[30];
 
             var extractor = new TestEntropyExtractor(1, success);
-            extractor.Start();
+			extractor.EntropyAvailable += Extractor_EntropyAvailable;
+            extractor.Run();
+			
+			// TODO: check that event was raised...
         }
-    }
+
+		private void Extractor_EntropyAvailable(Event successfulExtraction)
+		{
+			
+		}
+	}
 
     public class TestEntropyExtractor : EntropyExtractorBase, IEntropyExtractor
     {
