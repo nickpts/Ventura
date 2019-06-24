@@ -49,7 +49,7 @@ namespace Ventura.Tests.Accumulator
 			}
 		}
 
-
+		//TODO: change to TestCase, with NUnit
 		[TestMethod, Description("Test that pool zero is used and cleared on even and odd reseeds")]
 		public void Accumulator_Uses_Pool_Zero_On_Even_Reseed()
 		{

@@ -10,7 +10,6 @@ using Ventura.Interfaces;
 
 using static Ventura.Constants;
 
-[assembly: InternalsVisibleTo("Ventura.Tests")]
 namespace Ventura.Accumulator
 {
 	internal class VenturaAccumulator : IAccumulator

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Ventura.Exceptions;
 using Ventura.Interfaces;
@@ -17,15 +18,15 @@ namespace Ventura
 
         public PrngVentura(IAccumulator accumulator, IGenerator generator)
         {
-            this.accumulator = accumulator;
-            this.generator = generator;
+	        this.accumulator = accumulator ?? throw new ArgumentNullException();
+	        this.generator = generator ?? throw new ArgumentNullException();
         }
         
 		/// <summary>
 		/// Returns data from generator, reseeds every time pool 0 has enough entropy or
 		/// a set amount of time (100ms according to spec) has passed between reseeds
 		/// </summary>
-		/// <returns>pseudorandomly generated data</returns>
+		/// <returns>TODO: pseudorandomly generated data</returns>
         public byte[] GetRandomData(byte[] input)
         {
 			var timeSinceLastReseed = DateTime.UtcNow - lastReseedTime;
@@ -56,10 +57,8 @@ namespace Ventura
             throw new NotImplementedException();
         }
 
-        public int[] GetRandomNumbers()
-        {
-            throw new NotImplementedException();
-        }
+        public int[] GetRandomNumbers() => GetRandomData(new byte[100]).Select(x => (int)x).ToArray();
+		
 
         public string GetRandomString(int length)
         {
