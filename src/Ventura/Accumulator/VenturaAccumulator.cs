@@ -15,7 +15,7 @@ namespace Ventura.Accumulator
 {
 	internal class VenturaAccumulator : IAccumulator
     {
-        protected readonly IEnumerable<IEntropyExtractor> entropyExtractors;
+        private readonly IEnumerable<IEntropyExtractor> entropyExtractors;
 
         public VenturaAccumulator(IEnumerable<IEntropyExtractor> entropyExtractors, CancellationToken token = default)
         {

@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Moq;
-using FluentAssertions;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Exceptions;
 using Ventura.Interfaces;
+
+using static Ventura.Constants;
+
+using static Ventura.Constants;
 
 namespace Ventura.Tests.Accumulator
 {
@@ -31,16 +33,32 @@ namespace Ventura.Tests.Accumulator
         public void Accumulator_ThrowsException_If_Passed_More_Than_MaxAmount_Of_Sources()
         {
             var extractors = new IEntropyExtractor[256];
-            var accumulator = new VenturaAccumulator(extractors.ToList());
+            using (var accumulator = new VenturaAccumulator(extractors.ToList()))
+            {
+				
+            }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof(GeneratorSeedException))]
 		public void Accumulator_ThrowsException_If_Not_Enough_Entropy_Collected()
         {
-	        var accumulator = new VenturaAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(1) });
-	        accumulator.GetRandomDataFromPools(4);
+	        using (var accumulator = new TestAccumulator(new List<IEntropyExtractor>
+		        {new GarbageCollectorExtractor(1)}, default))
+	        {
+		        accumulator.GetRandomDataFromPools(4);
+	        }
         }
+
+		[TestMethod]
+		public void Accumulator_Initializes_Pools_On_Construction()
+		{
+			using (var accumulator = new TestAccumulator(new List<IEntropyExtractor>
+				{new GarbageCollectorExtractor(1)}, default))
+			{
+				accumulator.EntropyPools.Should().BeEquivalentTo(MaximumNumberOfPools);
+			}
+		}
 
 		[TestMethod, Description("Test that pool zero is used and cleared on even and odd reseeds")]
 		public void Accumulator_Uses_Pool_Zero_On_Even_Reseed()
@@ -52,7 +70,7 @@ namespace Ventura.Tests.Accumulator
 		}
 
 		[TestMethod, Description("Test that first pool is used on every other ressed ")]
-		public void Accumulator_Does_Not_Use_First_Pool_On_First_Ressed()
+		public void Accumulator_Does_Not_Use_First_Pool_On_First_Reseed()
 		{
 			IsPoolUsed(1, 1).Should().BeFalse();
 			IsPoolUsed(2, 1).Should().BeTrue();
@@ -75,7 +93,6 @@ namespace Ventura.Tests.Accumulator
 				tokenSource.Cancel(); // stop accumulation so that pool is not populated
 				accumulator.GetRandomDataFromPools(reseedNumber); // start with reseed
 				return accumulator.EntropyPools.ElementAt(poolNumber).ReadData().All(b => b == 0);
-					
 			}
 		}
 	}
@@ -89,7 +106,6 @@ namespace Ventura.Tests.Accumulator
 	    }
 
 	    public List<EntropyPool> EntropyPools => Pools;
-
     }
 
 }
