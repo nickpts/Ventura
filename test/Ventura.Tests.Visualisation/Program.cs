@@ -24,7 +24,7 @@ namespace Ventura.Tests.Visualisation
         private static void TestMethod()
         {
 
-			var prng = PrngVenturaFactory.CreatePrng(Cipher.Aes, ReseedEntropySourceGroup.Local);
+			var prng = PrngVenturaFactory.CreatePrng(Cipher.Aes, ReseedEntropySourceGroup.Full);
 
 			for (int i = 0; i <= 1000; i++)
 			{

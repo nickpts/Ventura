@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 using Ventura.Interfaces;
@@ -41,11 +39,9 @@ namespace Ventura.Accumulator
 
                 return Task.FromResult(@event);
             }
-            catch (AggregateException aex)
+            catch (Exception ex)
             {
-                //flatten, handle appropriately
-                aex.Flatten();
-                var @event = new Event { Exception = aex };
+                var @event = new Event { Exception = ex };
 
 				//TODO: need to handle appropriately here
                 return Task.FromResult(@event);
@@ -58,6 +54,6 @@ namespace Ventura.Accumulator
 		public int SourceNumber { get; internal set; }
         public byte[] Data { get; internal set; }
         public bool ExtractionSuccessful { get; internal set; }
-        public AggregateException Exception { get; internal set; }
+        public Exception Exception { get; internal set; }
     }
 }

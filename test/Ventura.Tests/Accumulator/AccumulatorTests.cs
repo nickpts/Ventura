@@ -12,23 +12,12 @@ using Ventura.Interfaces;
 
 using static Ventura.Constants;
 
-using static Ventura.Constants;
-
 namespace Ventura.Tests.Accumulator
 {
     [TestClass]
     public class AccumulatorTests
     {
-		//TODO: write tests
-        private VenturaAccumulator accumulator;
-
-        [TestInitialize]
-        public void Setup()
-        {
-
-        }
-
-        [TestMethod]
+	    [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void Accumulator_ThrowsException_If_Passed_More_Than_MaxAmount_Of_Sources()
         {
@@ -40,7 +29,7 @@ namespace Ventura.Tests.Accumulator
         }
 
         [TestMethod]
-        [ExpectedException(typeof(GeneratorSeedException))]
+        [ExpectedException(typeof(AccumulatorEntropyException))]
 		public void Accumulator_ThrowsException_If_Not_Enough_Entropy_Collected()
         {
 	        using (var accumulator = new TestAccumulator(new List<IEntropyExtractor>
@@ -56,9 +45,10 @@ namespace Ventura.Tests.Accumulator
 			using (var accumulator = new TestAccumulator(new List<IEntropyExtractor>
 				{new GarbageCollectorExtractor(1)}, default))
 			{
-				accumulator.EntropyPools.Should().BeEquivalentTo(MaximumNumberOfPools);
+				accumulator.EntropyPools.Count.Should().Be(MaximumNumberOfPools);
 			}
 		}
+
 
 		[TestMethod, Description("Test that pool zero is used and cleared on even and odd reseeds")]
 		public void Accumulator_Uses_Pool_Zero_On_Even_Reseed()
