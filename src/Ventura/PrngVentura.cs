@@ -14,7 +14,7 @@ namespace Ventura
         private readonly IAccumulator accumulator;
         private readonly IGenerator generator;
         private DateTimeOffset lastReseedTime = DateTimeOffset.MinValue;
-        private int reseedCounter = 1;
+        private int reseedCounter = 1; //TODO: this needs some attention
 
         public PrngVentura(IAccumulator accumulator, IGenerator generator)
         {
@@ -50,29 +50,6 @@ namespace Ventura
 	        generator.Reseed(seed);
 	        lastReseedTime = DateTimeOffset.UtcNow;
 	        reseedCounter++;
-        }
-
-		public int GetRandomNumber()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int[] GetRandomNumbers() => GetRandomData(new byte[100]).Select(x => (int)x).ToArray();
-		
-
-        public string GetRandomString(int length)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string[] GetRandomStrings(int length)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string[] GetRandomStrings(int minStringLength, int maxStringLength, int arrayLength)
-        {
-            throw new NotImplementedException();
         }
 
         public void Dispose()

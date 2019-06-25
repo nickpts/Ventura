@@ -1,0 +1,8 @@
+language: csharp
+solution: Ventura.sln
+mono: none
+dist: xenial
+dotnet: 2.2
+script:
+ - dotnet restore .\src\Ventura\Ventura.csproj
+ - dotnet test test/ECommerce.Api.PaymentGateway.Tests

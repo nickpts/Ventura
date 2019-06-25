@@ -24,7 +24,7 @@ namespace Ventura.Tests.Visualisation
         private static void TestMethod()
         {
 
-			var prng = PrngVenturaFactory.CreatePrng(Cipher.Aes, ReseedEntropySourceGroup.Full);
+			var prng = PrngVenturaFactory.Create(Cipher.Aes, ReseedEntropySourceGroup.Full);
 
 			//for (int i = 0; i <= 1000; i++)
 			//{
@@ -33,7 +33,6 @@ namespace Ventura.Tests.Visualisation
 			//	Debug.WriteLine($"Data generated: {i}");
 			//}
 
-			var numbers = prng.GetRandomNumbers();
         }
 
         private static void VisualiseRandomness()

@@ -11,13 +11,13 @@ namespace Ventura
 {
     public class PrngVenturaFactory
     {
-        public static IPrngVentura CreatePrng() => CreatePrng(Cipher.Aes, ReseedEntropySourceGroup.Full, null, default(CancellationToken));
+        public static IPrngVentura Create() => Create(Cipher.Aes, ReseedEntropySourceGroup.Full, null, default(CancellationToken));
 
-        public static IPrngVentura CreatePrng(Cipher cipher) => CreatePrng(cipher, ReseedEntropySourceGroup.Full, null, default(CancellationToken));
+        public static IPrngVentura Create(Cipher cipher) => Create(cipher, ReseedEntropySourceGroup.Full, null, default(CancellationToken));
 
-        public static IPrngVentura CreatePrng(Cipher cipher, ReseedEntropySourceGroup sourceGroup) => CreatePrng(cipher, sourceGroup, null, default(CancellationToken));
+        public static IPrngVentura Create(Cipher cipher, ReseedEntropySourceGroup sourceGroup) => Create(cipher, sourceGroup, null, default(CancellationToken));
 
-        public static IPrngVentura CreatePrng(Cipher cipher, ReseedEntropySourceGroup sourceGroup, byte[] seed, CancellationToken entropyCancellationToken)
+        public static IPrngVentura Create(Cipher cipher, ReseedEntropySourceGroup sourceGroup, byte[] seed, CancellationToken entropyCancellationToken)
 		{ 
 	        var extractors = new List<IEntropyExtractor>();
 
