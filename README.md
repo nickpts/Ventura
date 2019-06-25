@@ -1,6 +1,8 @@
 # Ventura
 A .NET Standard library implementing the [Fortuna PRNG](https://en.wikipedia.org/wiki/Fortuna_(PRNG)) as devised by Bruce Schneier and Niels Ferguson in 2003. Also implemented are reseeding improvements suggested by Dodis et al in ["How to Eat Your Entropy and Have it Too"](https://eprint.iacr.org/2014/167).
 
+[![Build Status](https://travis-ci.com/nickpts/Ventura.svg?branch=master)](https://travis-ci.com/nickpts/Ventura)
+
 ## Description
 How does this differ from existing Fortuna implementations?
   1. Reseeding is pseudo-random rather than cyclical (Dodis et al)
