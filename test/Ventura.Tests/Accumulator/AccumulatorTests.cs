@@ -29,17 +29,6 @@ namespace Ventura.Tests.Accumulator
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AccumulatorEntropyException))]
-		public void Accumulator_ThrowsException_If_Not_Enough_Entropy_Collected()
-        {
-	        using (var accumulator = new TestAccumulator(new List<IEntropyExtractor>
-		        {new GarbageCollectorExtractor(1)}, default))
-	        {
-		        accumulator.GetRandomDataFromPools(4);
-	        }
-        }
-
-		[TestMethod]
 		public void Accumulator_Initializes_Pools_On_Construction()
 		{
 			using (var accumulator = new TestAccumulator(new List<IEntropyExtractor>
