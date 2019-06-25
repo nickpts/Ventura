@@ -2,7 +2,7 @@
 A .NET Standard library implementing the [Fortuna PRNG](https://en.wikipedia.org/wiki/Fortuna_(PRNG)) as devised by Bruce Schneier and Niels Ferguson in 2003. Also implemented are reseeding improvements suggested by Dodis et al in ["How to Eat Your Entropy and Have it Too"](https://eprint.iacr.org/2014/167).
 
 [![Build Status](https://travis-ci.com/nickpts/Ventura.svg?branch=master)](https://travis-ci.com/nickpts/Ventura)
-[![Known Vulnerabilities](https://snyk.io//test/github/nickpts/Ventura/badge.svg?targetFile=test/Ventura.Tests.Visualisation/packages.config)](https://snyk.io//test/github/nickpts/Ventura?targetFile=test/Ventura.Tests.Visualisation/packages.config)
+[![Known Vulnerabilities](https://snyk.io//test/github/nickpts/Ventura/badge.svg?targetFile=src/Ventura/Ventura.csproj)](https://snyk.io//test/github/nickpts/Ventura?targetFile=src/Ventura/Ventura.csproj)
 
 ## Description
 How does this differ from existing Fortuna implementations?
