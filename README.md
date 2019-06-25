@@ -15,7 +15,7 @@ How does this differ from existing Fortuna implementations?
 ## Example
 ```C#
 
-// by default this instatiates with AES and both local/remote resources.
+// by default this instatiates with AES and local entropy sources.
 using (var prng = PrngVenturaFactory.Create())
 {
     // to use
@@ -26,7 +26,7 @@ using (var prng = PrngVenturaFactory.Create())
 // other constructors
 var prng = PrngVenturaFactory.Create(
   Cipher.TwoFish, // different ciphers supported
-  ReseedEntropySourceGroup.Local, // local, remote or both types of entropy sources
+  ReseedEntropySourceGroup.Full, // local, remote or both types of entropy sources
   byte[] seed, // optional user provided seed
   CancellationToken token = default) // stops entropy accumulation
 ```
