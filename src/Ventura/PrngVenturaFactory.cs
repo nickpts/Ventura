@@ -11,9 +11,9 @@ namespace Ventura
 {
     public class PrngVenturaFactory
     {
-        public static IPrngVentura Create() => Create(Cipher.Aes, ReseedEntropySourceGroup.Full, null, default(CancellationToken));
+        public static IPrngVentura Create() => Create(Cipher.Aes, ReseedEntropySourceGroup.Local, null, default(CancellationToken));
 
-        public static IPrngVentura Create(Cipher cipher) => Create(cipher, ReseedEntropySourceGroup.Full, null, default(CancellationToken));
+        public static IPrngVentura Create(Cipher cipher) => Create(cipher, ReseedEntropySourceGroup.Local, null, default(CancellationToken));
 
         public static IPrngVentura Create(Cipher cipher, ReseedEntropySourceGroup sourceGroup) => Create(cipher, sourceGroup, null, default(CancellationToken));
 
