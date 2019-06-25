@@ -16,11 +16,12 @@ How does this differ from existing Fortuna implementations?
 ```C#
 
 // by default this instatiates with AES and both local/remote resources.
-var prng = PrngVenturaFactory.Create();
-
-// to use
-var data = new byte[128];
-var random = prng.GetRandomData(data);
+using (var prng = PrngVenturaFactory.Create())
+{
+    // to use
+    var data = new byte[128];
+    var random = prng.GetRandomData(data);
+}
 
 // other constructors
 var prng = PrngVenturaFactory.Create(
