@@ -14,7 +14,7 @@ namespace Ventura
         private readonly IAccumulator accumulator;
         private readonly IGenerator generator;
         private DateTimeOffset lastReseedTime = DateTimeOffset.MinValue;
-        private int reseedCounter = 1; //TODO: this needs some attention
+        private int reseedCounter = 0;
 
         public PrngVentura(IAccumulator accumulator, IGenerator generator)
         {
@@ -33,6 +33,7 @@ namespace Ventura
 
 			if (accumulator.HasEnoughEntropy && timeSinceLastReseed > MaximumTimeSpanBetweenReseeds)
 			{
+				reseedCounter++;
 				Reseed(accumulator.GetRandomDataFromPools(reseedCounter));
 				Debug.WriteLine($"Reseeding completed! Counter: { reseedCounter }");
 			}
@@ -49,7 +50,6 @@ namespace Ventura
         {
 	        generator.Reseed(seed);
 	        lastReseedTime = DateTimeOffset.UtcNow;
-	        reseedCounter++;
         }
 
         public void Dispose()
