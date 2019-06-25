@@ -28,7 +28,7 @@ var prng = PrngVenturaFactory.Create(
   Cipher.TwoFish, // different ciphers supported
   ReseedEntropySourceGroup.Full, // local, remote or both types of entropy sources
   byte[] seed, // optional user provided seed
-  CancellationToken token = default) // stops entropy accumulation
+  CancellationToken token = default)); // stops entropy accumulation
 ```
 
 ## Acknowledgements
