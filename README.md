@@ -23,7 +23,7 @@ using (var prng = PrngVenturaFactory.Create())
     var random = prng.GetRandomData(data);
 }
 
-// other constructors
+// optional parameters
 var prng = PrngVenturaFactory.Create(
   Cipher.TwoFish, // different ciphers supported
   ReseedEntropySourceGroup.Full, // local, remote or both types of entropy sources
