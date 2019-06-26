@@ -3,10 +3,25 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
+    <Version>0.0.1</Version>
+    <Authors>Nick Patsaris</Authors>
+    <Description>A .NET Standard library implementing the Fortuna PRNG as devised by Bruce Schneier and Niels Ferguson in 2003. Also implemented are reseeding improvements suggested by Dodis et al in "How to Eat Your Entropy and Have it Too".</Description>
+    <Copyright>Copyright Nick Patsaris</Copyright>
+    <PackageLicenseFile>license.txt</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/nickpts/Ventura</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nickpts/Ventura.git</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\license.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
