@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,20 +16,19 @@ namespace Ventura
         private readonly IAccumulator accumulator;
         private readonly IGenerator generator;
         private DateTimeOffset lastReseedTime = DateTimeOffset.MinValue;
-        private int reseedCounter = 0;
+        private int reseedCounter;
 
         public PrngVentura(IAccumulator accumulator, IGenerator generator)
         {
 	        this.accumulator = accumulator ?? throw new ArgumentNullException();
 	        this.generator = generator ?? throw new ArgumentNullException();
         }
-        
+
 		/// <summary>
 		/// Returns data from generator, reseeds every time pool 0 has enough entropy or
 		/// a set amount of time (100ms according to spec) has passed between reseeds
 		/// </summary>
-		/// <returns>TODO: pseudorandomly generated data</returns>
-        public void GetRandomData(byte[] input)
+		public void GetRandomData(byte[] input)
         {
 			var timeSinceLastReseed = DateTime.UtcNow - lastReseedTime;
 

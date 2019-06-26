@@ -23,16 +23,13 @@ namespace Ventura.Tests.Visualisation
 
         private static void TestMethod()
         {
-
-			var cts = new CancellationTokenSource();
-			var prng = PrngVenturaFactory.Create(Cipher.Aes, ReseedEntropySourceGroup.Full, new byte[128], cts.Token);
+			var prng = PrngVenturaFactory.Create(Cipher.Aes, ReseedEntropySourceGroup.Full, new byte[128]);
 
 			for (int i = 0; i <= 1000; i++)
 			{
 				Thread.Sleep(100);
 				var data = new byte[1024000];
 				prng.GetRandomData(data);
-				cts.Cancel();
 				Debug.WriteLine($"Data generated: {i}");
 			}
 

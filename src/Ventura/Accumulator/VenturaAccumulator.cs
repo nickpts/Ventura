@@ -55,7 +55,7 @@ namespace Ventura.Accumulator
 			for (int i = 0; i < Pools.Count; i++)
 			{
 				if (reseedCounter % Math.Pow(2, i) != 0)
-					continue; // TODO: investigate if this cna be changedt to break for performance
+					continue; // TODO: investigate if this cna be changed to break for performance
 
 				var data = Pools[i].ReadData();
 				Pools[i].Clear();

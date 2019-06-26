@@ -43,6 +43,11 @@ namespace Ventura
         /// </summary>
         public const int MaximumRequestSizeForStateKey = 1048576;
 
+		/// <summary>
+		/// 
+		/// </summary>
+        public const int SeedFileSize = 64;
+
         /// <summary>
         /// Maximum amount of entropy data in bytes
         /// </summary>
