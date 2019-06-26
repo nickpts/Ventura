@@ -78,7 +78,7 @@ namespace Ventura.Tests.Accumulator
 
     internal class TestAccumulator : VenturaAccumulator
     {
-	    public TestAccumulator(IEnumerable<IEntropyExtractor> extractors, CancellationToken token) :
+	    public TestAccumulator(IEnumerable<IEntropyExtractor> extractors, CancellationToken token)  :
 		    base(extractors, token)
 	    {
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Ventura.Exceptions;
 using Ventura.Interfaces;
@@ -27,7 +28,7 @@ namespace Ventura
 		/// a set amount of time (100ms according to spec) has passed between reseeds
 		/// </summary>
 		/// <returns>TODO: pseudorandomly generated data</returns>
-        public byte[] GetRandomData(byte[] input)
+        public void GetRandomData(byte[] input)
         {
 			var timeSinceLastReseed = DateTime.UtcNow - lastReseedTime;
 
@@ -43,7 +44,7 @@ namespace Ventura
 				throw new GeneratorSeedException("Generator not seeded yet!");
 			}
 
-			return generator.GenerateData(input);
+			generator.GenerateData(input);
         }
 
         private void Reseed(byte[] seed)

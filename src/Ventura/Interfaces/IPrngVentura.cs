@@ -6,6 +6,6 @@ namespace Ventura.Interfaces
 {
     public interface IPrngVentura
     {
-	    byte[] GetRandomData(byte[] input);
+	    void GetRandomData(byte[] input);
     }
 }

@@ -32,10 +32,5 @@ namespace Ventura.Tests
 			var ventura = new PrngVentura(
 				new VenturaAccumulator(new List<IEntropyExtractor> {new GarbageCollectorExtractor(0)}), null);
 		}
-
-		public void PrngVentura_Throws_GeneratorSeedException_If_Ressed_Not_Completed()
-		{
-
-		}
 	}
 }

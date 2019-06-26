@@ -16,6 +16,11 @@ namespace Ventura.Accumulator
     {
         private readonly IEnumerable<IEntropyExtractor> entropyExtractors;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="entropyExtractors"></param>
+		/// <param name="token"></param>
         public VenturaAccumulator(IEnumerable<IEntropyExtractor> entropyExtractors, CancellationToken token = default)
         {
             if (entropyExtractors.Count() > MaximumNumberOfSources)
@@ -50,7 +55,7 @@ namespace Ventura.Accumulator
 			for (int i = 0; i < Pools.Count; i++)
 			{
 				if (reseedCounter % Math.Pow(2, i) != 0)
-					continue;
+					continue; // TODO: investigate if this cna be changedt to break for performance
 
 				var data = Pools[i].ReadData();
 				Pools[i].Clear();
@@ -85,8 +90,6 @@ namespace Ventura.Accumulator
 
 		/// <summary>
 		/// Starts each entropy extractor on its own thread.
-		/// The extractor will continue emitting events until cancel is called on the token
-		/// or the prng is stopped.
 		/// </summary>
         private void AccumulateEntropy(CancellationToken token = default(CancellationToken))
         {
@@ -96,13 +99,11 @@ namespace Ventura.Accumulator
 		        {
 			        while (true)
 			        {
-				        if (token.IsCancellationRequested)
-					        break;
-
+				        token.ThrowIfCancellationRequested();
 				        extractor.Run();
 			        }
 
-		        }, TaskCreationOptions.LongRunning); //TODO: cancellation token, but what happens on restart?
+		        }, TaskCreationOptions.LongRunning); 
 	        }
         }
 

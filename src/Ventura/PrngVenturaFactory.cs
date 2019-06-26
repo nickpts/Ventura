@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Generator;
@@ -11,13 +10,13 @@ namespace Ventura
 {
     public class PrngVenturaFactory
     {
-        public static IPrngVentura Create() => Create(Cipher.Aes, ReseedEntropySourceGroup.Local, null, default(CancellationToken));
+        public static IPrngVentura Create() => Create(Cipher.Aes, ReseedEntropySourceGroup.Local, null);
 
-        public static IPrngVentura Create(Cipher cipher) => Create(cipher, ReseedEntropySourceGroup.Local, null, default(CancellationToken));
+        public static IPrngVentura Create(Cipher cipher) => Create(cipher, ReseedEntropySourceGroup.Local, null);
 
-        public static IPrngVentura Create(Cipher cipher, ReseedEntropySourceGroup sourceGroup) => Create(cipher, sourceGroup, null, default(CancellationToken));
+        public static IPrngVentura Create(Cipher cipher, ReseedEntropySourceGroup sourceGroup) => Create(cipher, sourceGroup, null);
 
-        public static IPrngVentura Create(Cipher cipher, ReseedEntropySourceGroup sourceGroup, byte[] seed, CancellationToken entropyCancellationToken)
+        public static IPrngVentura Create(Cipher cipher, ReseedEntropySourceGroup sourceGroup, byte[] seed)
 		{ 
 	        var extractors = new List<IEntropyExtractor>();
 
@@ -39,7 +38,7 @@ namespace Ventura
 	                throw new ArgumentOutOfRangeException(nameof(sourceGroup), sourceGroup, null);
             }
 
-            return new PrngVentura(new VenturaAccumulator(extractors, entropyCancellationToken), new VenturaGenerator(cipher, seed));
+            return new PrngVentura(new VenturaAccumulator(extractors), new VenturaGenerator(cipher, seed));
 		}
     }
-}
+} 

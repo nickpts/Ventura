@@ -14,7 +14,7 @@ namespace Ventura
 
 		public static int[] GetRandomNumbers(this PrngVentura prng)
 		{
-			return prng.GetRandomData(new byte[100]).Select(x => (int) x).ToArray();
+			throw new NotImplementedException();
 		}
 
 		public static string GetRandomString(this PrngVentura prng, int length)
