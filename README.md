@@ -5,6 +5,7 @@ A .NET Standard library implementing the [Fortuna PRNG](https://en.wikipedia.org
 ![GitHub repo size](https://img.shields.io/github/repo-size/nickpts/Ventura.svg)
 ![GitHub](https://img.shields.io/github/license/nickpts/Ventura.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/nickpts/Ventura.svg)
+![Nuget](https://img.shields.io/nuget/v/Ventura.svg)
 [![Known Vulnerabilities](https://snyk.io//test/github/nickpts/Ventura/badge.svg?targetFile=src/Ventura/Ventura.csproj)](https://snyk.io//test/github/nickpts/Ventura?targetFile=src/Ventura/Ventura.csproj)
 
 ## Description
