@@ -19,8 +19,8 @@ How does this differ from existing Fortuna implementations?
 ## Example
 ```C#
 
-// by default this instatiates with AES and local entropy sources.
-using (var prng = PrngVenturaFactory.Create())
+// by default this instatiates with AES and local entropy sources and writes the seed to memory
+using (var prng = PrngVenturaFactory.Create(new MemoryStream()))
 {
     // to use
     var data = new byte[128];
@@ -29,9 +29,9 @@ using (var prng = PrngVenturaFactory.Create())
 
 // optional parameters
 var prng = PrngVenturaFactory.Create(
+  Stream stream, // stream to read/write seed from/to
   Cipher.TwoFish, // different block ciphers supported
-  ReseedEntropySourceGroup.Full, // local, remote or both types of entropy sources
-  byte[] seed); // optional user provided seed
+  ReseedEntropySourceGroup.Full); // local, remote or both types of entropy sources
 ```
 
 ## Acknowledgements
