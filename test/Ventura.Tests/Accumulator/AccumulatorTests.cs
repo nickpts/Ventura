@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+
 using FluentAssertions;
+
 using NUnit.Framework;
+
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
-using Ventura.Exceptions;
 using Ventura.Interfaces;
 
 using static Ventura.Constants;
@@ -36,21 +38,29 @@ namespace Ventura.Tests.Accumulator
 
 		//TODO: change to TestCase, with NUnit
 		[Test, Description("Test that pool zero is used and cleared on even and odd reseeds")]
-		public void Accumulator_Uses_Pool_Zero_On_Even_Reseed()
+		[TestCase(1, 0)]
+		[TestCase(2, 0)]
+		[TestCase(5, 0)]
+		[TestCase(10, 0)]
+		public void Accumulator_Uses_Pool_Zero_On_Even_Reseed(int reseedNumber, int poolNumber)
 		{
-			IsPoolUsed(1, 0).Should().BeTrue();
-			IsPoolUsed(2, 0).Should().BeTrue();
-			IsPoolUsed(5, 0).Should().BeTrue();
-			IsPoolUsed(10, 0).Should().BeTrue();
+			IsPoolUsed(reseedNumber, poolNumber).Should().BeTrue();
 		}
 
-		[Test, Description("Test that first pool is used on every other ressed ")]
-		public void Accumulator_Does_Not_Use_First_Pool_On_First_Reseed()
+		[Test, Description("Test that first pool is not used on odd reseeds (first, third) ")]
+		[TestCase(1, 1)]
+		[TestCase(3, 1)]
+		public void Accumulator_Does_Not_Use_First_Pool_On_Odd_Reseeds(int reseedNumber, int poolNumber)
 		{
-			IsPoolUsed(1, 1).Should().BeFalse();
-			IsPoolUsed(2, 1).Should().BeTrue();
-			IsPoolUsed(3, 1).Should().BeFalse();
-			IsPoolUsed(4, 1).Should().BeTrue();
+			IsPoolUsed(reseedNumber, poolNumber).Should().BeFalse();
+		}
+
+		[TestCase(2, 1)]
+		[TestCase(4, 1)]
+		[Test, Description("Test that first pool is not used on even reseeds (second, fourth) ")]
+		public void Accumulator_Uses_First_Pool_On_Even_Reseeds(int reseedNumber, int poolNumber)
+		{
+			IsPoolUsed(reseedNumber, poolNumber).Should().BeTrue();
 		}
 
 		public bool IsPoolUsed(int reseedNumber, int poolNumber)
