@@ -13,12 +13,15 @@ using Ventura.Interfaces;
 
 namespace Ventura.Tests.Visualisation
 {
-    class Program
+	class Program
     {
         private static void Main(string[] args)
         {
-            //VisualiseRandomness();
-            TestMethod();
+
+	        //var summary = BenchmarkRunner.Run<Ventura>();
+	        //VisualiseRandomness();
+	        //TestMethod();
+	        Console.ReadLine();
         }
 
         private static void TestMethod()
@@ -63,28 +66,32 @@ namespace Ventura.Tests.Visualisation
 
         private static void DrawImage(int width, int height, string path)
         {
-            var prng = new VenturaGenerator();
-            int index = width * height;
-            var bytes = prng.GenerateData(new byte[index]);
-            Color colour;
-            int temp = 0;
+	        using (var prng = PrngVenturaFactory.Create())
+	        {
+		        int length = width * height;
+		        
+		        var bytes = prng.GetRandomData(new byte[length]);
 
-            using (Bitmap map = new Bitmap(width, height))
-            {
-                for (int i = 0; i < map.Width; i++)
-                {
-                    for (int j = 0; j < map.Height; j++)
-                    {
-                        int rn = bytes[temp];
-                        colour = Color.FromArgb(rn, rn, rn);
-                        map.SetPixel(i, j, colour);
+		        Color colour;
+		        int temp = 0;
 
-                        temp++;
-                    }
-                }
+		        using (Bitmap map = new Bitmap(width, height))
+		        {
+			        for (int i = 0; i < map.Width; i++)
+			        {
+				        for (int j = 0; j < map.Height; j++)
+				        {
+					        int rn = bytes[temp];
+					        colour = Color.FromArgb(rn, rn, rn);
+					        map.SetPixel(i, j, colour);
 
-                map.Save(path, ImageFormat.Png);
-            }
+					        temp++;
+				        }
+			        }
+
+			        map.Save(path, ImageFormat.Png);
+		        }
+	        }
         }
     }
 }

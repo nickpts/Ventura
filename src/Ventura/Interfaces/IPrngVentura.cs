@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Ventura.Interfaces
 {
-    public interface IPrngVentura
+    public interface IPrngVentura: IDisposable
     {
-	    void GetRandomData(byte[] input);
+	    byte[] GetRandomData(byte[] input);
     }
 }

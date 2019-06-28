@@ -11,7 +11,7 @@ using static Ventura.Constants;
 
 namespace Ventura
 {
-    internal class PrngVentura : IPrngVentura, IDisposable
+    internal class PrngVentura : IPrngVentura
     {
         private readonly IAccumulator accumulator;
         private readonly IGenerator generator;
@@ -28,7 +28,7 @@ namespace Ventura
 		/// Returns data from generator, reseeds every time pool 0 has enough entropy or
 		/// a set amount of time (100ms according to spec) has passed between reseeds
 		/// </summary>
-		public void GetRandomData(byte[] input)
+		public byte[] GetRandomData(byte[] input)
         {
 			var timeSinceLastReseed = DateTime.UtcNow - lastReseedTime;
 
@@ -44,7 +44,7 @@ namespace Ventura
 				throw new GeneratorSeedException("Generator not seeded yet!");
 			}
 
-			generator.GenerateData(input);
+			return generator.GenerateData(input);
         }
 
         private void Reseed(byte[] seed)
