@@ -41,7 +41,7 @@ namespace Ventura.Accumulator
 			lock (syncRoot)
 			{
 				var concatenatedData = hash.Concat(data).ToArray();
-				hash = hashAlgorithm.ComputeHash(concatenatedData);
+				hash = hashAlgorithm.ComputeHash(concatenatedData); //TODO: exception here
 				Interlocked.Add(ref runningSize, concatenatedData.Length);
 				Interlocked.Increment(ref eventsStored);
 

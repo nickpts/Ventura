@@ -8,5 +8,10 @@ namespace Ventura.Interfaces
     {
 	    void Initialise();
 	    byte[] GetRandomData(byte[] input);
+
+	    int GetRandomNumber(int min, int max);
+
+	    int[] GetRandomNumbers(int min, int max, int length);
+
     }
 }

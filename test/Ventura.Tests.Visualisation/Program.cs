@@ -19,18 +19,15 @@ namespace Ventura.Tests.Visualisation
         private static void Main(string[] args)
         {
 	        //VisualiseRandomness();
-	        TestMethod();
+	        //TestMethod();
+			OutputRandomNumbers();
 	        Console.ReadLine();
         }
 
         private static void TestMethod()
         {
-	        using (var prng =
-		        PrngVenturaFactory.Create(new FileStream(@"C:\Users\Nick\Downloads\seed.bin", FileMode.OpenOrCreate)))
+	        using (var prng = PrngVenturaFactory.Create(new MemoryStream()))
 	        {
-
-
-
 		        for (int i = 0; i <= 10; i++)
 		        {
 			        Thread.Sleep(100);
@@ -38,9 +35,20 @@ namespace Ventura.Tests.Visualisation
 			        prng.GetRandomData(data);
 			        Debug.WriteLine($"Data generated: {i}");
 		        }
-
 	        }
         }
+
+        public static void OutputRandomNumbers()
+        {
+	        using (var prng = PrngVenturaFactory.Create(new MemoryStream()))
+	        {
+		        for (int i = 0; i <= 1000; i++)
+		        {
+			        int result = prng.GetRandomNumber(100, 346464);
+			        Console.WriteLine($"Data generated: {result}");
+		        }
+	        }
+		}
 
         private static void VisualiseRandomness()
         {

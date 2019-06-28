@@ -69,9 +69,55 @@ namespace Ventura
 			}
 		}
 
+		/// <summary>
+		/// Uses the generator to get 64 bytes of random data
+		/// and turns them to a positive integer
+		/// </summary>
+		/// <param name="min">minimum possible value</param>
+		/// <param name="max">maximum possible value</param>
+		/// <returns>pseudorandomly generated positive integer</returns>
+		public int GetRandomNumber(int min, int max)
+		{
+			byte[] result;
+
+			byte[] input = new byte[64];
+			result = GetRandomData(input);
+
+			int num = Math.Abs(BitConverter.ToInt32(result, 0));
+
+			return (num % (max - min)) + min;
+		}
+
+		public int[] GetRandomNumbers(int min, int max, int length)
+		{
+			var result = new int[length];
+
+			for (int i = 0; i < length; i++)
+			{
+				result[i] = GetRandomNumber(min, max);
+			}
+
+			return result;
+		}
+
+		public string GetRandomString(int length)
+		{
+			throw new NotImplementedException();
+		}
+
+		public string[] GetRandomStrings(int length)
+		{
+			throw new NotImplementedException();
+		}
+
+		public string[] GetRandomStrings(int minStringLength, int maxStringLength, int arrayLength)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void Dispose()
 		{
-			UpdateSeed(null);
+			UpdateSeed(null); 
 			stream.Close();
 			accumulator.Dispose();
 			reseedTimer.Dispose();
