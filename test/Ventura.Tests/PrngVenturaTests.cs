@@ -20,12 +20,7 @@ namespace Ventura.Tests
 		[Test]
 		public void PrngVentura_Throws_ArgumentNullException_If_Accumulator_Null()
 		{
-			void Start()
-			{
-				var ventura = new PrngVentura(null, new VenturaGenerator());
-			}
-
-			Assert.Throws(typeof(ArgumentNullException), Start);
+			Assert.Throws(typeof(ArgumentNullException), () => new PrngVentura(null, new VenturaGenerator()));
 		}
 
 		[Test]

@@ -13,11 +13,8 @@ namespace Ventura.Tests.Accumulator
 		private EventEmitter emitter;
 
 		[SetUp]
-		public void Setup()
-		{
-			emitter = new EventEmitter(0);
-		}
-
+		public void Setup() => emitter = new EventEmitter(0);
+		
 		[Test]
 		public void EventEmitter_Returns_ByteArray_From_EntropyFunction()
 		{
@@ -25,7 +22,7 @@ namespace Ventura.Tests.Accumulator
 
 			data.Result.ExtractionSuccessful.Should().BeTrue();
 			data.Result.SourceNumber.Should().Be(0);
-			data.Result.Data.Length.Should().Be(32);
+			data.Result.Data.Length.Should().NotBe(0);
 		}
 
 		[Test]
@@ -40,7 +37,11 @@ namespace Ventura.Tests.Accumulator
 		[Test]
 		public void EventEmitter_Returns_Data_In_Appropriate_Format()
 		{
-			// TODO
+			var data = emitter.Execute(() => new byte[] {0x20, 0x20, 0x20, 0x20, 0x20, 0x20});
+
+			data.Result.Data[0].Should().Be(0x0);
+			data.Result.Data[1].Should().Be(0x6);
+			data.Result.Data.Length.Should().Be(32);
 		}
 	}
 }

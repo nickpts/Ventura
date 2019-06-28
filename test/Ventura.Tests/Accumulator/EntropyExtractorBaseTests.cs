@@ -1,38 +1,34 @@
-﻿using System;
+﻿using FluentAssertions;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
+using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Interfaces;
 
-using NUnit.Framework;
-using NUnit.Framework.Internal;
-using Ventura.Accumulator;
-
 namespace Ventura.Tests.Accumulator
 {
-    [TestFixture()]
+	[TestFixture]
     public class EntropyExtractorBaseTests
     {
 	    [Test]
         public void EntropyExtractor_SuccessfulExtraction_ContainsEvent()
         {
             Func<byte[]> success = () => new byte[30];
-
             var extractor = new TestEntropyExtractor(1, success);
-			extractor.EntropyAvailable += Extractor_EntropyAvailable;
-            extractor.Run();
-			
-			// TODO: check that event was raised...
-        }
+            var events = new List<Event>();
 
-		private void Extractor_EntropyAvailable(Event successfulExtraction)
-		{
-			
-		}
-	}
+            void ExtractorEntropyAvailable(Event successfulExtraction)
+            {
+				events.Add(successfulExtraction);
+            }
+
+			extractor.EntropyAvailable += ExtractorEntropyAvailable;
+            extractor.Run();
+
+            events.Should().NotBeEmpty();
+        }
+    }
 
     public class TestEntropyExtractor : EntropyExtractorBase, IEntropyExtractor
     {
