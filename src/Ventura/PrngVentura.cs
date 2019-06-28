@@ -27,7 +27,7 @@ namespace Ventura
 			this.stream = stream ?? throw new ArgumentException();
 
 			if (!stream.CanRead || !stream.CanSeek || !stream.CanWrite)
-					throw new ArgumentException("Stream must be readable/writeable/seekable");
+					throw new ArgumentException("Stream must be readable/writable/seekable");
 		}
 
 		/// <summary>
