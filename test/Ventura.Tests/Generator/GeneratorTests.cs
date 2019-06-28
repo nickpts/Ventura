@@ -5,42 +5,47 @@ using System.Text;
 using Ventura.Exceptions;
 using Ventura.Generator;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using Moq;
 using FluentAssertions;
+using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace Ventura.Tests.Generator
 {
-    [TestClass]
+    [TestFixture]
     public class GeneratorTests
     {
         private VenturaGenerator concreteGenerator;
 
-        [TestInitialize]
+        [SetUp]
         public void Setup()
         {
             concreteGenerator = new VenturaGenerator();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(GeneratorInputException))]
+        [Test]
         public void Generator_ThrowsException_When_InputArray_Zero()
         {
             var testArray = new byte[] { };
-            concreteGenerator.GenerateData(testArray);
-        }
 
-        [TestMethod]
-        [ExpectedException(typeof(GeneratorInputException))]
+            Assert.Throws(typeof(GeneratorInputException), () => concreteGenerator.GenerateData(testArray));
+		}
+
+        [Test]
         public void Generator_ThrowsException_When_InputArray_GreaterThan_MaximumSize()
         {
             var testArray = new byte[15500000];
-            var testGenerator = new TestGenerator();
-            testGenerator.GenerateDatePerStateKey(testArray);
-        }
 
-        [TestMethod]
+            void Test()
+            {
+	            var testGenerator = new TestGenerator();
+	            testGenerator.GenerateDatePerStateKey(testArray);
+			}
+
+			Assert.Throws(typeof(GeneratorInputException), Test);
+		}
+
+        [Test]
         public void Counter_IsCorrectly_Transformed_UponInitialization()
         {
             var testGenerator = new TestGenerator();
@@ -50,14 +55,14 @@ namespace Ventura.Tests.Generator
             counter.Should().Be(1);
         }
 
-        [TestMethod]
+        [Test]
         public void Generator_IsSeeded_UponInitialisation()
         {
             var testGenerator = new TestGenerator();
             testGenerator.IsSeeded().Should().Be(true);
         }
 
-        [TestMethod]
+        [Test]
         public void Counter_IsIncremented_AfterReseed()
         {
             var testGenerator = new TestGenerator();
@@ -69,7 +74,7 @@ namespace Ventura.Tests.Generator
             counter.Should().Be(2);
         }
 
-        [TestMethod]
+        [Test]
         public void Generator_Changes_StateKey_After_Request()
         {
             var testArray = new byte[10];
@@ -81,7 +86,7 @@ namespace Ventura.Tests.Generator
             initialKey.Should().NotBeEquivalentTo(updatedKey);
         }
 
-        [TestMethod]
+        [Test]
         public void Generator_Returns_EncryptedData()
         {
             var testString = "All your base are belong to us";
@@ -93,7 +98,7 @@ namespace Ventura.Tests.Generator
             outputString.Should().NotBeSameAs(testString);
         }
 
-        [TestMethod]
+        [Test]
         public void Generator_InputOutputArrays_AreNotSequential()
         {
             var testString = "All your base are belong to us";
@@ -104,7 +109,7 @@ namespace Ventura.Tests.Generator
             Assert.IsFalse(inputBytes.SequenceEqual(result));
         }
 
-        [TestMethod]
+        [Test]
         public void Generator_WithSameSeed_ReturnsSameData()
         {
             var seed = new byte[1];
@@ -120,7 +125,7 @@ namespace Ventura.Tests.Generator
             Assert.IsTrue(firstOutput.SequenceEqual(secondOutput));
         }
 
-        [TestMethod]
+        [Test]
         public void UniformRandomDistributionTest()
         {
             

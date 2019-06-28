@@ -17,8 +17,6 @@ namespace Ventura.Tests.Visualisation
     {
         private static void Main(string[] args)
         {
-
-	        //var summary = BenchmarkRunner.Run<Ventura>();
 	        //VisualiseRandomness();
 	        //TestMethod();
 	        Console.ReadLine();

@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using NUnit.Framework;
+using NUnit.Framework.Internal;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 
 namespace Ventura.Tests.Accumulator
 {
-    [TestClass]
+    [TestFixture()]
     public class EntropyExtractorTests
     {
 		List<Event> receivedEvents = new List<Event>();
 
-        [TestMethod]
+        [Test]
         public void GarbageCollectorExtractor_Returns_Data()
         {
             var extractor = new GarbageCollectorExtractor(0);
@@ -25,7 +25,7 @@ namespace Ventura.Tests.Accumulator
             receivedEvents.Should().NotBeEmpty();
         }
 
-        [TestMethod]
+        [Test]
         public void RemoteQuantumRngExtractor_Returns_Data()
         {
 	        var extractor = new RemoteQuantumRngExtractor(0);

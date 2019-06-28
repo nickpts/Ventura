@@ -2,33 +2,31 @@
 using System.Collections.Generic;
 using System.Text;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using Moq;
 using FluentAssertions;
+using NUnit.Framework;
+using NUnit.Framework.Internal;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Interfaces;
 
 namespace Ventura.Tests.Accumulator
 {
-    [TestClass]
+    [TestFixture()]
     public class EntropyPoolTests
     {
         private EntropyPool testPool = new EntropyPool(0);
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void EntropyPool_ThrowsArgumentException_If_Source_Outside_Boundary()
         {
-            testPool.AddEventData(-1, new byte[10]);
-        }
+	        Assert.Throws(typeof(ArgumentException), () => testPool.AddEventData(-1, new byte[10]));
+		}
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void EntropyPool_ThrowsArgumentException_If_EventData_Bigger_Than_Allowed()
         {
-            testPool.AddEventData(0, new byte[33]);
-        }
+            Assert.Throws(typeof(ArgumentException), () => testPool.AddEventData(0, new byte[33]));
+		}
     }
 }

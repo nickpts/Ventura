@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
@@ -10,7 +9,7 @@ using Ventura.Interfaces;
 
 namespace Ventura.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class PrngVenturaTests
 	{
 		[SetUp]
@@ -18,19 +17,27 @@ namespace Ventura.Tests
 		{
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void PrngVentura_Throws_ArgumentNullException_If_Accumulator_Null()
 		{
-			var ventura = new PrngVentura(null, new VenturaGenerator());
+			void Start()
+			{
+				var ventura = new PrngVentura(null, new VenturaGenerator());
+			}
+
+			Assert.Throws(typeof(ArgumentNullException), Start);
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void PrngVentura_Throws_ArgumentNullException_If_Generator_Null()
 		{
-			var ventura = new PrngVentura(
-				new VenturaAccumulator(new List<IEntropyExtractor> {new GarbageCollectorExtractor(0)}), null);
+			void Test()
+			{
+				var ventura = new PrngVentura(
+					new VenturaAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(0) }), null);
+			}
+			
+			Assert.Throws(typeof(ArgumentNullException), Test);
 		}
 	}
 }

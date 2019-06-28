@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using NUnit.Framework;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Exceptions;
@@ -14,21 +13,18 @@ using static Ventura.Constants;
 
 namespace Ventura.Tests.Accumulator
 {
-    [TestClass]
+    [TestFixture]
     public class AccumulatorTests
     {
-	    [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Accumulator_ThrowsException_If_Passed_More_Than_MaxAmount_Of_Sources()
+	    [Test]
+	    public void Accumulator_ThrowsException_If_Passed_More_Than_MaxAmount_Of_Sources()
         {
             var extractors = new IEntropyExtractor[256];
-            using (var accumulator = new VenturaAccumulator(extractors.ToList()))
-            {
-				
-            }
+
+            Assert.Throws(typeof(ArgumentException), () => new VenturaAccumulator(extractors.ToList()));
         }
 
-        [TestMethod]
+        [Test]
 		public void Accumulator_Initializes_Pools_On_Construction()
 		{
 			using (var accumulator = new TestAccumulator(new List<IEntropyExtractor>
@@ -39,7 +35,7 @@ namespace Ventura.Tests.Accumulator
 		}
 
 		//TODO: change to TestCase, with NUnit
-		[TestMethod, Description("Test that pool zero is used and cleared on even and odd reseeds")]
+		[Test, Description("Test that pool zero is used and cleared on even and odd reseeds")]
 		public void Accumulator_Uses_Pool_Zero_On_Even_Reseed()
 		{
 			IsPoolUsed(1, 0).Should().BeTrue();
@@ -48,7 +44,7 @@ namespace Ventura.Tests.Accumulator
 			IsPoolUsed(10, 0).Should().BeTrue();
 		}
 
-		[TestMethod, Description("Test that first pool is used on every other ressed ")]
+		[Test, Description("Test that first pool is used on every other ressed ")]
 		public void Accumulator_Does_Not_Use_First_Pool_On_First_Reseed()
 		{
 			IsPoolUsed(1, 1).Should().BeFalse();

@@ -2,24 +2,23 @@
 using System.Collections.Generic;
 using System.Text;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using NUnit.Framework;
 using Ventura.Accumulator;
 
 namespace Ventura.Tests.Accumulator
 {
-	[TestClass]
+	[TestFixture]
 	public class EventEmitterTests
 	{
 		private EventEmitter emitter;
 
-		[TestInitialize]
+		[SetUp]
 		public void Setup()
 		{
 			emitter = new EventEmitter(0);
 		}
 
-		[TestMethod]
+		[Test]
 		public void EventEmitter_Returns_ByteArray_From_EntropyFunction()
 		{
 			var data = emitter.Execute(() => new byte[2] { 0, 1 } );
@@ -29,7 +28,7 @@ namespace Ventura.Tests.Accumulator
 			data.Result.Data.Length.Should().Be(32);
 		}
 
-		[TestMethod]
+		[Test]
 		public void EventEmitter_Encapsulates_Exception()
 		{
 			var data = emitter.Execute(() => throw new InvalidOperationException());
@@ -38,7 +37,7 @@ namespace Ventura.Tests.Accumulator
 			data.Result.Exception.Should().BeOfType<InvalidOperationException>();
 		}
 
-		[TestMethod]
+		[Test]
 		public void EventEmitter_Returns_Data_In_Appropriate_Format()
 		{
 			// TODO

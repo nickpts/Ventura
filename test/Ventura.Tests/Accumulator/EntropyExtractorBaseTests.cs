@@ -7,20 +7,16 @@ using FluentAssertions;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Interfaces;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using NUnit.Framework.Internal;
 using Ventura.Accumulator;
 
 namespace Ventura.Tests.Accumulator
 {
-    [TestClass]
+    [TestFixture()]
     public class EntropyExtractorBaseTests
     {
-        [TestInitialize]
-        public void Setup()
-        {
-        }
-		
-        [TestMethod]
+	    [Test]
         public void EntropyExtractor_SuccessfulExtraction_ContainsEvent()
         {
             Func<byte[]> success = () => new byte[30];
