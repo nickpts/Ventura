@@ -36,7 +36,6 @@ namespace Ventura.Tests.Accumulator
 			}
 		}
 
-		//TODO: change to TestCase, with NUnit
 		[Test, Description("Test that pool zero is used and cleared on even and odd reseeds")]
 		[TestCase(1, 0)]
 		[TestCase(2, 0)]

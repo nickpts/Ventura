@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.IO.IsolatedStorage;
 using System.Threading;
 using System.Threading.Tasks;
 using Ventura.Accumulator;
@@ -18,23 +19,28 @@ namespace Ventura.Tests.Visualisation
         private static void Main(string[] args)
         {
 	        //VisualiseRandomness();
-	        //TestMethod();
+	        TestMethod();
 	        Console.ReadLine();
         }
 
         private static void TestMethod()
         {
-			var prng = PrngVenturaFactory.Create(Cipher.Aes, ReseedEntropySourceGroup.Full, new byte[128]);
+	        using (var prng =
+		        PrngVenturaFactory.Create(new FileStream(@"C:\Users\Nick\Downloads\seed.bin", FileMode.OpenOrCreate)))
+	        {
 
-			for (int i = 0; i <= 1000; i++)
-			{
-				Thread.Sleep(100);
-				var data = new byte[1024000];
-				prng.GetRandomData(data);
-				Debug.WriteLine($"Data generated: {i}");
-			}
 
-		}
+
+		        for (int i = 0; i <= 10; i++)
+		        {
+			        Thread.Sleep(100);
+			        var data = new byte[1024000];
+			        prng.GetRandomData(data);
+			        Debug.WriteLine($"Data generated: {i}");
+		        }
+
+	        }
+        }
 
         private static void VisualiseRandomness()
         {
@@ -64,7 +70,7 @@ namespace Ventura.Tests.Visualisation
 
         private static void DrawImage(int width, int height, string path)
         {
-	        using (var prng = PrngVenturaFactory.Create())
+	        using (var prng = PrngVenturaFactory.Create(new MemoryStream()))
 	        {
 		        int length = width * height;
 		        

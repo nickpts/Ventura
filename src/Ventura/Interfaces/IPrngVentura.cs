@@ -6,6 +6,7 @@ namespace Ventura.Interfaces
 {
     public interface IPrngVentura: IDisposable
     {
+	    void Initialise();
 	    byte[] GetRandomData(byte[] input);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.IsolatedStorage;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Generator;
@@ -10,13 +11,11 @@ namespace Ventura
 {
     public class PrngVenturaFactory
     {
-        public static IPrngVentura Create() => Create(Cipher.Aes, ReseedEntropySourceGroup.Local, null);
+        public static IPrngVentura Create(Stream seedStream) => Create(seedStream, Cipher.Aes, ReseedEntropySourceGroup.Local);
 
-        public static IPrngVentura Create(Cipher cipher) => Create(cipher, ReseedEntropySourceGroup.Local, null);
+        public static IPrngVentura Create(Stream seedStream, Cipher cipher) => Create(seedStream, cipher, ReseedEntropySourceGroup.Local);
 
-        public static IPrngVentura Create(Cipher cipher, ReseedEntropySourceGroup sourceGroup) => Create(cipher, sourceGroup, null);
-
-        public static IPrngVentura Create(Cipher cipher, ReseedEntropySourceGroup sourceGroup, byte[] seed)
+        public static IPrngVentura Create(Stream seedStream, Cipher cipher, ReseedEntropySourceGroup sourceGroup)
 		{ 
 	        var extractors = new List<IEntropyExtractor>();
 
@@ -38,7 +37,12 @@ namespace Ventura
 	                throw new ArgumentOutOfRangeException(nameof(sourceGroup), sourceGroup, null);
             }
 
-            return new PrngVentura(new VenturaAccumulator(extractors), new VenturaGenerator(cipher, seed));
+            var prng = new PrngVentura(new VenturaAccumulator(extractors), new VenturaGenerator(cipher), seedStream);
+			prng.Initialise();
+
+			return prng;
 		}
+
+		//TODO: add isolatedstoragefilestream here?
     }
 } 
