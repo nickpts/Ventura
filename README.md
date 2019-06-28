@@ -26,7 +26,7 @@ using (var prng = PrngVenturaFactory.Create(new MemoryStream()))
     var data = new byte[128];
     byte[] random = prng.GetRandomData(data); 
     int randomNumber = prng.GetRandomNumber();
-    int[] randomNumbers = prng.GetRandomNumbers
+    int[] randomNumbers = prng.GetRandomNumbers();
 }
 
 // optional parameters
