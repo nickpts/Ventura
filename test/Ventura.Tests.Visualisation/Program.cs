@@ -18,9 +18,9 @@ namespace Ventura.Tests.Visualisation
     {
         private static void Main(string[] args)
         {
-	        VisualiseRandomness();
+	        //VisualiseRandomness();
 	        //TestMethod();
-			//OutputRandomNumbers();
+			OutputRandomNumbers();
 			//OutputRandomNumberArray();
 			Console.ReadLine();
         }
