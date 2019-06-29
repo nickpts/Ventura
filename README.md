@@ -23,7 +23,7 @@ How does this differ from existing Fortuna implementations?
 using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 {
     var data = new byte[128];
-    prng.GetRandomData(data); 
+    prng.GetBytes(data); 
     
     // get a random number from 0 to 10
     int randomNumber = prng.GetRandomNumber(0, 10); 
@@ -38,6 +38,9 @@ var prng = PrngVenturaFactory.Create(
   Cipher.TwoFish, // different block ciphers supported
   ReseedEntropySourceGroup.Full); // local, remote or both types of entropy sources
 ```
+## Performance
+Test conditions: local entropy sources, AES cipher, FileStream used for seed operations.
+![Alt text](https://live.staticflickr.com/65535/48153972572_2d5f6bbc26_o_d.jpg)
 
 ## Acknowledgements
 [Bouncy Castle](https://www.bouncycastle.org/) is used for the ciphers.
