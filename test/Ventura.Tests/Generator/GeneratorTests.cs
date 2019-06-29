@@ -39,7 +39,7 @@ namespace Ventura.Tests.Generator
             void Test()
             {
 	            var testGenerator = new TestGenerator();
-	            testGenerator.GenerateDatePerStateKey(testArray);
+	            testGenerator.GenerateDataPerStateKey(testArray);
 			}
 
 			Assert.Throws(typeof(GeneratorInputException), Test);
@@ -80,52 +80,54 @@ namespace Ventura.Tests.Generator
             var testArray = new byte[10];
             var testGenerator = new TestGenerator();
             var initialKey = testGenerator.ReturnStateKey();
-            testGenerator.GenerateDatePerStateKey(testArray);
+            testGenerator.GenerateDataPerStateKey(testArray);
             var updatedKey = testGenerator.ReturnStateKey();
 
             initialKey.Should().NotBeEquivalentTo(updatedKey);
         }
 
-        [Test]
-        public void Generator_Returns_EncryptedData()
-        {
-            var testString = "All your base are belong to us";
-            var inputBytes = Encoding.ASCII.GetBytes(testString);
+		[Test]
+		public void Generator_Returns_EncryptedData()
+		{
+			var testString = "All your base are belong to us";
+			var testBytes = Encoding.ASCII.GetBytes(testString);
+			var inputBytes = Encoding.ASCII.GetBytes(testString);
 
-            var result = concreteGenerator.GenerateData(inputBytes);
-            var outputString = Encoding.ASCII.GetString(result);
+			concreteGenerator.GenerateData(inputBytes);
 
-            outputString.Should().NotBeSameAs(testString);
-        }
+			testBytes.Should().NotBeEquivalentTo(inputBytes);
+		}
 
-        [Test]
-        public void Generator_InputOutputArrays_AreNotSequential()
-        {
-            var testString = "All your base are belong to us";
-            var inputBytes = Encoding.ASCII.GetBytes(testString);
+		[Test]
+		public void Generator_InputOutputArrays_AreNotSequential()
+		{
+			var testString = "All your base are belong to us";
+			var testBytes = Encoding.ASCII.GetBytes(testString);
+			var inputBytes = Encoding.ASCII.GetBytes(testString);
 
-            var result = concreteGenerator.GenerateData(inputBytes);
+			concreteGenerator.GenerateData(inputBytes);
 
-            Assert.IsFalse(inputBytes.SequenceEqual(result));
-        }
+			Assert.IsFalse(inputBytes.SequenceEqual(testBytes));
+		}
 
-        [Test]
-        public void Generator_WithSameSeed_ReturnsSameData()
-        {
-            var seed = new byte[1];
-            var generator = new VenturaGenerator(Cipher.Aes, seed);
+		[Test]
+		public void Generator_WithSameSeed_ReturnsSameData()
+		{
+			var seed = new byte[1];
+			var generator = new VenturaGenerator(Cipher.Aes, seed);
 
-            var input = new byte[1024];
+			var input = new byte[1024];
+			var secondInput = new byte[1024];
 
-            var firstOutput = generator.GenerateData(input);
+			generator.GenerateData(input);
 
-            var otherGenerator = new VenturaGenerator(Cipher.Aes, seed);
-            var secondOutput = otherGenerator.GenerateData(input);
+			var otherGenerator = new VenturaGenerator(Cipher.Aes, seed);
+			otherGenerator.GenerateData(secondInput);
 
-            Assert.IsTrue(firstOutput.SequenceEqual(secondOutput));
-        }
+			Assert.IsTrue(input.SequenceEqual(secondInput));
+		}
 
-        [Test]
+		[Test]
         public void UniformRandomDistributionTest()
         {
             
@@ -134,7 +136,7 @@ namespace Ventura.Tests.Generator
 
     internal class TestGenerator : VenturaGenerator
     {
-        public byte[] GenerateDatePerStateKey(byte[] input) => GenerateDataPerStateKey(input);
+        public byte[] GenerateDataPerStateKey(byte[] input) => GenerateDataPerStateKey(input);
 
         public byte[] TransformCounterToByteArray() => state.TransformCounterToByteArray();
 

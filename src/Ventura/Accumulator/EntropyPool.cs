@@ -14,10 +14,9 @@ namespace Ventura.Accumulator
 	/// an explicit design decision to avoid having a pool hold too much event data- the spec itself does
 	/// not specify the size of the pool.
 	/// </summary>
-	internal sealed class EntropyPool: IDisposable
+	internal sealed class EntropyPool
 	{
 		private byte[] hash = new byte[MinimumPoolSize];
-		private readonly SHA256 hashAlgorithm;
 		private readonly object syncRoot;
 		private readonly int poolNumber;
 		private int eventsStored = 0;
@@ -27,7 +26,6 @@ namespace Ventura.Accumulator
 		{
 			this.poolNumber = poolNumber;
 			syncRoot = new object();
-			hashAlgorithm = SHA256.Create();
 		}
 
 		public void AddEventData(int sourceNumber, byte[] data)
@@ -41,7 +39,12 @@ namespace Ventura.Accumulator
 			lock (syncRoot)
 			{
 				var concatenatedData = hash.Concat(data).ToArray();
-				hash = hashAlgorithm.ComputeHash(concatenatedData); //TODO: exception here
+
+				using (var algorithm = SHA256.Create())
+				{
+					hash = algorithm.ComputeHash(concatenatedData); 
+				}
+				
 				Interlocked.Add(ref runningSize, concatenatedData.Length);
 				Interlocked.Increment(ref eventsStored);
 
@@ -69,7 +72,5 @@ namespace Ventura.Accumulator
 				Array.Clear(hash, 0, hash.Length);
 			}
 		}
-
-		public void Dispose() => hashAlgorithm.Dispose();
 	}
 }

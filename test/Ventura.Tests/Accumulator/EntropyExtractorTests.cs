@@ -25,7 +25,7 @@ namespace Ventura.Tests.Accumulator
             receivedEvents.Should().NotBeEmpty();
         }
 
-        [Test]
+        [Test, Timeout(2000)]
         public void RemoteQuantumRngExtractor_Returns_Data()
         {
 	        var extractor = new RemoteQuantumRngExtractor(0);

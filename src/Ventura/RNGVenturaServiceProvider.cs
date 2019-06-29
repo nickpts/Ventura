@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
 using Ventura.Exceptions;
 using Ventura.Interfaces;
@@ -9,18 +10,17 @@ using static Ventura.Constants;
 
 namespace Ventura
 {
-	internal class PrngVentura : IPrngVentura
+	internal class RNGVenturaServiceProvider : RandomNumberGenerator, IRNGVenturaServiceProvider
 	{
 		private readonly IAccumulator accumulator;
 		private readonly IGenerator generator;
-		private DateTimeOffset lastReseedTime = DateTimeOffset.MinValue;
 		private readonly Stream stream;
 		private readonly object syncRoot = new object();
-		private static readonly TimeSpan seedUpdateInterval = TimeSpan.FromMinutes(10);
+		private DateTimeOffset lastReseedTime = DateTimeOffset.MinValue;
 		private int reseedCounter;
 		private Timer reseedTimer;
 
-		public PrngVentura(IAccumulator accumulator, IGenerator generator, Stream stream)
+		public RNGVenturaServiceProvider(IAccumulator accumulator, IGenerator generator, Stream stream)
 		{
 			this.accumulator = accumulator ?? throw new ArgumentNullException();
 			this.generator = generator ?? throw new ArgumentNullException();
@@ -32,7 +32,7 @@ namespace Ventura
 
 		/// <summary>
 		/// Reads the first 64 bytes from the seed stream and uses it to reseed the generator.
-		/// Runs a task on regular intervals that generates a new seed and writes it to the stream.
+		/// Runs a task on regular intervals to update the seed.
 		/// </summary>
 		public void Initialise()
 		{
@@ -40,14 +40,14 @@ namespace Ventura
 			stream.Read(seed, 0, SeedFileSize);
 			generator.Reseed(seed); 
 
-			reseedTimer = new Timer(UpdateSeed, null, 0, seedUpdateInterval.Milliseconds);
+			reseedTimer = new Timer(UpdateSeed, null, 0, SeedUpdateInterval.Milliseconds);
 		}
 
 		/// <summary>
 		/// Returns data from generator, reseeds every time pool 0 has enough entropy or
 		/// a set amount of time (100ms according to spec) has passed between reseeds
 		/// </summary>
-		public byte[] GetRandomData(byte[] input)
+		public override void GetBytes(byte[] data)
 		{
 			lock (syncRoot)
 			{
@@ -65,7 +65,7 @@ namespace Ventura
 					throw new GeneratorSeedException("Generator not seeded yet!");
 				}
 
-				return generator.GenerateData(input);
+				generator.GenerateData(data);
 			}
 		}
 
@@ -75,19 +75,23 @@ namespace Ventura
 		/// </summary>
 		/// <param name="min">minimum possible value</param>
 		/// <param name="max">maximum possible value</param>
-		/// <returns>pseudorandomly generated positive integer</returns>
+		/// <returns>pseudo-randomly generated positive integer</returns>
 		public int GetRandomNumber(int min, int max)
 		{
-			byte[] result;
+			byte[] data = new byte[64];
+			GetBytes(data);
 
-			byte[] input = new byte[64];
-			result = GetRandomData(input);
-
-			int num = Math.Abs(BitConverter.ToInt32(result, 0));
+			int num = Math.Abs(BitConverter.ToInt32(data, 0));
 
 			return (num % (max - min)) + min;
 		}
 
+		/// <summary>
+		/// Returns an array of the specified length with
+		/// pseudo-randomly generated positive integers
+		/// </summary>
+		/// <param name="min">minimum possible value</param>
+		/// <param name="max">maximum possible value</param>
 		public int[] GetRandomNumbers(int min, int max, int length)
 		{
 			var result = new int[length];
@@ -100,21 +104,10 @@ namespace Ventura
 			return result;
 		}
 
-		public string GetRandomString(int length)
-		{
-			throw new NotImplementedException();
-		}
-
-		public string[] GetRandomStrings(int length)
-		{
-			throw new NotImplementedException();
-		}
-
-		public string[] GetRandomStrings(int minStringLength, int maxStringLength, int arrayLength)
-		{
-			throw new NotImplementedException();
-		}
-
+		/// <summary>
+		/// Updates the seed one final time,
+		/// closes the stream, un-registers events and stops the timer
+		/// </summary>
 		public void Dispose()
 		{
 			UpdateSeed(null); 
@@ -133,14 +126,10 @@ namespace Ventura
 
 		private void UpdateSeed(object state)
 		{
-			var latestSeed = GetRandomData(new byte[SeedFileSize]);
-			Write(latestSeed);
-		}
-
-		private void Write(byte[] seed)
-		{
+			var data = new byte[SeedFileSize];
+			GetBytes(data);
 			stream.Seek(0, SeekOrigin.Begin);
-			stream.Write(seed, 0, SeedFileSize);
+			stream.Write(data, 0, SeedFileSize);
 			stream.Flush();
 		}
 

@@ -49,13 +49,16 @@ namespace Ventura.Generator
         /// of the remainder. Each block is transformed with a different state key.
         /// </summary>
         /// <returns></returns>
-        public virtual byte[] GenerateData(byte[] input)
+        public virtual void GenerateData(byte[] input)
         {
             if (input.Length == 0)
                 throw new GeneratorInputException("cannot encrypt empty array");
 
             if (input.Length <= MaximumRequestSizeForStateKey)
-                return GenerateDataPerStateKey(input);
+            {
+	            GenerateDataPerStateKey(input);
+	            return;
+            }
 
             var result = new byte[input.Length];
             var blocksToEncrypt = (int)Math.Ceiling((double)input.Length / MaximumRequestSizeForStateKey);
@@ -65,18 +68,16 @@ namespace Ventura.Generator
 
             do
             {
-                block = GenerateDataPerStateKey(block);
-                Array.Copy(block, 0, result, temp, block.Length);
+                GenerateDataPerStateKey(block);
+                Array.Copy(block, 0, input, temp, block.Length);
 
                 temp += block.Length;
                 blocksToEncrypt--;
             }
             while (blocksToEncrypt > 1);
 
-            finalBlock = GenerateDataPerStateKey(finalBlock);
-            Array.Copy(finalBlock, 0, result, temp, finalBlock.Length);
-
-            return result;
+            GenerateDataPerStateKey(finalBlock);
+            Array.Copy(finalBlock, 0, input, temp, finalBlock.Length);
         }
 
         #region Private implementation
@@ -116,7 +117,7 @@ namespace Ventura.Generator
         /// </summary>
         /// <param name="input">data to encrypt</param>
         /// <returns>pseudorandomly encrypted data</returns>
-        protected virtual byte[] GenerateDataPerStateKey(byte[] input)
+        protected virtual void GenerateDataPerStateKey(byte[] input)
         {
             if (input.Length > MaximumRequestSizeForStateKey)
                 throw new GeneratorInputException($"cannot generate array bigger than { MaximumRequestSizeForStateKey } bytes for state key");
@@ -127,7 +128,8 @@ namespace Ventura.Generator
             Array.Clear(state.Key, 0, state.Key.Length);
             state.Key = GenerateBlocks(NumberOfBlocksForNewKey);
 
-            return pseudorandom;
+            Array.Copy(pseudorandom, 0, input, 0, input.Length);
+			Array.Clear(pseudorandom, 0, pseudorandom.Length);
         }
 
         /// <summary>

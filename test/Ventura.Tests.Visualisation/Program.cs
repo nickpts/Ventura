@@ -18,21 +18,22 @@ namespace Ventura.Tests.Visualisation
     {
         private static void Main(string[] args)
         {
-	        //VisualiseRandomness();
+	        VisualiseRandomness();
 	        //TestMethod();
-			OutputRandomNumbers();
-	        Console.ReadLine();
+			//OutputRandomNumbers();
+			//OutputRandomNumberArray();
+			Console.ReadLine();
         }
 
         private static void TestMethod()
         {
-	        using (var prng = PrngVenturaFactory.Create(new MemoryStream()))
+	        using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 	        {
 		        for (int i = 0; i <= 10; i++)
 		        {
 			        Thread.Sleep(100);
 			        var data = new byte[1024000];
-			        prng.GetRandomData(data);
+			        prng.GetBytes(data);
 			        Debug.WriteLine($"Data generated: {i}");
 		        }
 	        }
@@ -40,17 +41,28 @@ namespace Ventura.Tests.Visualisation
 
         public static void OutputRandomNumbers()
         {
-	        using (var prng = PrngVenturaFactory.Create(new MemoryStream()))
+	        using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 	        {
-		        for (int i = 0; i <= 1000; i++)
+		        for (int i = 0; i <= 100000; i++)
 		        {
-			        int result = prng.GetRandomNumber(100, 346464);
+			        int result = prng.GetRandomNumber(0, 10);
 			        Console.WriteLine($"Data generated: {result}");
 		        }
 	        }
 		}
 
-        private static void VisualiseRandomness()
+        public static void OutputRandomNumberArray()
+        {
+	        using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+	        {
+
+		        var result = prng.GetRandomNumbers(0, 1000, 10000);
+			    Console.WriteLine($"Data generated: {result}");
+		        
+	        }
+        }
+
+		private static void VisualiseRandomness()
         {
             Console.Write("Enter width:");
             int width = Convert.ToInt32(Console.ReadLine());
@@ -78,11 +90,12 @@ namespace Ventura.Tests.Visualisation
 
         private static void DrawImage(int width, int height, string path)
         {
-	        using (var prng = PrngVenturaFactory.Create(new MemoryStream()))
+	        using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 	        {
 		        int length = width * height;
-		        
-		        var bytes = prng.GetRandomData(new byte[length]);
+
+		        var data = new byte[length];
+		        prng.GetBytes(data);
 
 		        Color colour;
 		        int temp = 0;
@@ -93,7 +106,7 @@ namespace Ventura.Tests.Visualisation
 			        {
 				        for (int j = 0; j < map.Height; j++)
 				        {
-					        int rn = bytes[temp];
+					        int rn = data[temp];
 					        colour = Color.FromArgb(rn, rn, rn);
 					        map.SetPixel(i, j, colour);
 

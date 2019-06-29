@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-using Moq;
-using FluentAssertions;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using Ventura.Accumulator;
-using Ventura.Accumulator.EntropyExtractors;
-using Ventura.Interfaces;
 
 namespace Ventura.Tests.Accumulator
 {

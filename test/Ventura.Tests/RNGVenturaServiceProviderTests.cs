@@ -14,7 +14,7 @@ using Moq;
 namespace Ventura.Tests
 {
 	[TestFixture]
-	public class PrngVenturaTests
+	public class RNGVenturaServiceProviderTests
 	{
 		private Mock<Stream> stream;
 
@@ -27,7 +27,7 @@ namespace Ventura.Tests
 		[Test]
 		public void PrngVentura_Throws_ArgumentNullException_If_Accumulator_Null()
 		{
-			Assert.Throws(typeof(ArgumentNullException), () => new PrngVentura(null, new VenturaGenerator(), stream.Object));
+			Assert.Throws(typeof(ArgumentNullException), () => new RNGVenturaServiceProvider(null, new VenturaGenerator(), stream.Object));
 		}
 
 		[Test]
@@ -35,7 +35,7 @@ namespace Ventura.Tests
 		{
 			void Test()
 			{
-				var ventura = new PrngVentura(
+				var ventura = new RNGVenturaServiceProvider(
 					new VenturaAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(0) }), null, stream.Object);
 			}
 			

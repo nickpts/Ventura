@@ -126,11 +126,6 @@ namespace Ventura.Accumulator
 	        {
 		        ex.EntropyAvailable -= OnEntropyAvailable;
 	        }
-
-	        foreach (var p in Pools)
-	        {
-				p.Dispose();
-	        }
         }
 
 		#endregion

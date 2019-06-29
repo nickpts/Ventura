@@ -43,9 +43,6 @@ namespace Ventura
         /// </summary>
         public const int MaximumRequestSizeForStateKey = 1048576;
 
-		/// <summary>
-		/// 
-		/// </summary>
         public const int SeedFileSize = 64;
 
         /// <summary>
@@ -75,5 +72,7 @@ namespace Ventura
 		/// Used to limit the rate of reseeds according to spec (ten per second)
 		/// </summary>
 		public static readonly TimeSpan MaximumTimeSpanBetweenReseeds = TimeSpan.FromMilliseconds(100);
-    }
+
+		public static readonly TimeSpan SeedUpdateInterval = TimeSpan.FromMinutes(10);
+	}
 }

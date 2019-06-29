@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Ventura.Interfaces
 {
-    public interface IPrngVentura: IDisposable
+    public interface IRNGVenturaServiceProvider : IDisposable
     {
 	    void Initialise();
-	    byte[] GetRandomData(byte[] input);
+	    void GetBytes(byte[] input);
 
 	    int GetRandomNumber(int min, int max);
 

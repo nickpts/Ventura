@@ -6,7 +6,7 @@ namespace Ventura.Interfaces
 {
     public interface IGenerator
     {
-        byte[] GenerateData(byte[] input);
+        void GenerateData(byte[] input);
         void Reseed(byte[] seed);
     }
 }
