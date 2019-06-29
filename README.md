@@ -20,10 +20,10 @@ How does this differ from existing Fortuna implementations?
 ```C#
 
 // instantiate and write the seed to memory
-using (var prng = PrngVenturaFactory.Create(new MemoryStream()))
+using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 {
     var data = new byte[128];
-    byte[] random = prng.GetRandomData(data); 
+    prng.GetRandomData(data); 
     
     // get a random number from 0 to 10
     int randomNumber = prng.GetRandomNumber(0, 10); 
