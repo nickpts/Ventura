@@ -80,6 +80,7 @@ namespace Ventura.Tests.Generator
             var testArray = new byte[10];
             var testGenerator = new TestGenerator();
             var initialKey = testGenerator.ReturnStateKey();
+			
             testGenerator.GenerateDataPerStateKey(testArray);
             var updatedKey = testGenerator.ReturnStateKey();
 
@@ -136,7 +137,7 @@ namespace Ventura.Tests.Generator
 
     internal class TestGenerator : VenturaGenerator
     {
-        public byte[] GenerateDataPerStateKey(byte[] input) => GenerateDataPerStateKey(input);
+        public new void GenerateDataPerStateKey(byte[] input) => base.GenerateDataPerStateKey(input);
 
         public byte[] TransformCounterToByteArray() => state.TransformCounterToByteArray();
 
