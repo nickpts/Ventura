@@ -10,6 +10,7 @@ using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Generator;
 using Ventura.Interfaces;
 using Moq;
+using NUnit.Framework.Constraints;
 
 namespace Ventura.Tests
 {
@@ -40,6 +41,32 @@ namespace Ventura.Tests
 			}
 			
 			Assert.Throws(typeof(ArgumentNullException), Test);
+		}
+
+		[Test]
+		public void PrngVentura_Throws_ArgumentException_If_Stream_Null()
+		{
+			void Test()
+			{
+				var ventura = new RNGVenturaServiceProvider(
+					new VenturaAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(0) }), new VenturaGenerator(), null);
+			}
+
+			Assert.Throws(typeof(ArgumentException), Test);
+		}
+
+		[Test]
+		public void PrngVentura_Throws_Argument_Exception_If_Stream_Not_Writable()
+		{
+			void Test()
+			{
+				var nonWritablestream = new MemoryStream(new byte[1], false);
+
+				var ventura = new RNGVenturaServiceProvider(
+					new VenturaAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(0) }), new VenturaGenerator(), nonWritablestream);
+			}
+
+			Assert.Throws(typeof(ArgumentException), Test);
 		}
 
 	}

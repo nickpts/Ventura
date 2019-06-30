@@ -21,7 +21,14 @@ namespace Ventura.Tests.Accumulator
             var extractor = new GarbageCollectorExtractor(0);
 			extractor.EntropyAvailable += Extractor_EntropyAvailable;
 
-            extractor.Run();
+			for (int i = 0; i < 1000; i++)
+			{
+				extractor.Run();
+				GC.Collect(0);
+				GC.Collect(1);
+				GC.Collect(2);
+			}
+
             receivedEvents.Should().NotBeEmpty();
         }
 
