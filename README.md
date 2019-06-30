@@ -39,7 +39,7 @@ var prng = RNGVenturaServiceProviderFactory.Create(
 ```
 ## Performance
 Test conditions: local entropy sources, AES cipher, FileStream used for seed operations.
-![Alt text](https://live.staticflickr.com/65535/48153972572_2d5f6bbc26_o_d.jpg)
+![Alt text](https://live.staticflickr.com/65535/48164764467_1187c930fb_z_d.jpg)
 
 ## Acknowledgements
 [Bouncy Castle](https://www.bouncycastle.org/) is used for the ciphers.
