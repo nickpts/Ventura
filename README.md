@@ -32,7 +32,7 @@ using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 }
 
 // optional parameters
-var prng = PrngVenturaFactory.Create(
+var prng = RNGVenturaServiceProviderFactory.Create(
   Stream stream, // stream to read/write seed from/to
   Cipher.TwoFish, // different block ciphers supported
   ReseedEntropySourceGroup.Full); // local, remote or both types of entropy sources
