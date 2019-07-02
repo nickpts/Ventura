@@ -17,9 +17,11 @@ How does this differ from existing Fortuna implementations?
 
 ## Example
 ```C#
+// seed stream
+var stream = new FileStream("seed.bin", FileMode.OpenOrCreate);
 
-// instantiate and write the seed to memory
-using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+// instantiate and read seed 
+using (var prng = RNGVenturaServiceProviderFactory.Create(stream))
 {
     var data = new byte[128];
     prng.GetBytes(data); 
@@ -29,7 +31,7 @@ using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
     
     // get an array with 100 random numbers from 0 to 10
     int[] randomNumbers = prng.GetRandomNumbers(0, 10, 100); 
-}
+} // new seed will be written to stream.
 
 // optional parameters
 var prng = RNGVenturaServiceProviderFactory.Create(
