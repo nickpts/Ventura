@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ventura.Tests", "test\Ventu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ventura.Tests.Visualisation", "test\Ventura.Tests.Visualisation\Ventura.Tests.Visualisation.csproj", "{A69C5402-3678-446E-ABC0-C8BAC617F61D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ventura.Cli", "src\Ventura.CLI\Ventura.Cli.csproj", "{720198E8-FCEE-42E9-B97A-6D33DD373579}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ventura.Cli", "src\Ventura.Cli\Ventura.Cli.csproj", "{720198E8-FCEE-42E9-B97A-6D33DD373579}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
