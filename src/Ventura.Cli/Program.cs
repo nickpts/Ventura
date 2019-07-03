@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
 using CommandLine;
-using Ventura;
 using Ventura.Cli;
 
 namespace Ventura.CLI
