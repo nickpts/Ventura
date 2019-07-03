@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <StartupObject></StartupObject>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
     <Description>Command-line interface for Ventura- A .NET Standard library implementing the Fortuna PRNG as devised by Bruce Schneier and Niels Ferguson in 2003. Also implemented are reseeding improvements suggested by Dodis et al in "How to Eat Your Entropy and Have it Too".</Description>
@@ -13,10 +13,6 @@
     <RepositoryUrl>https://github.com/nickpts/Ventura.git</RepositoryUrl>
     <Version>1.0.0-alpha</Version>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Dockerfile" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.5.0" />
