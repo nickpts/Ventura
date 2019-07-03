@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Ventura.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "rns -s seed.bin -i 1 -x 10 -n 100"
+    }
+  }
+}

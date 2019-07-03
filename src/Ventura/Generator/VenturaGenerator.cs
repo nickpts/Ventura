@@ -60,7 +60,6 @@ namespace Ventura.Generator
 	            return;
             }
 
-            var result = new byte[input.Length];
             var blocksToEncrypt = (int)Math.Ceiling((double)input.Length / MaximumRequestSizeForStateKey);
             var block = new byte[MaximumRequestSizeForStateKey];
             var finalBlock = new byte[input.Length % MaximumRequestSizeForStateKey];

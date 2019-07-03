@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.IO.IsolatedStorage;
 using System.Threading;
-using System.Threading.Tasks;
-using Ventura.Accumulator;
-using Ventura.Accumulator.EntropyExtractors;
-using Ventura.Generator;
-using Ventura.Interfaces;
 
 namespace Ventura.Tests.Visualisation
 {
@@ -41,21 +34,25 @@ namespace Ventura.Tests.Visualisation
 
         public static void OutputRandomNumbers()
         {
-	        using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+	        using (var prng = RNGVenturaServiceProviderFactory.Create(new FileStream("seed.bin", FileMode.OpenOrCreate)))
 	        {
-		        for (int i = 0; i <= 100000; i++)
-		        {
-			        int result = prng.GetRandomNumber(0, 10);
-			        Console.WriteLine($"Data generated: {result}");
-		        }
-	        }
+				//for (int i = 0; i <= 100000; i++)
+				//{
+				// int result = prng.GetRandomNumber(0, 10);
+				// Console.WriteLine($"Data generated: {result}");
+				//}
+
+				var result = prng.GetRandomNumbers(0, 1000, 10000);
+				Console.WriteLine($"Data generated: {result}");
+			}
+
+
 		}
 
         public static void OutputRandomNumberArray()
         {
 	        using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 	        {
-
 		        var result = prng.GetRandomNumbers(0, 1000, 10000);
 			    Console.WriteLine($"Data generated: {result}");
 		        
