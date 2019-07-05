@@ -1,48 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
+
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 
 namespace Ventura.Tests.Accumulator
 {
-    [TestFixture()]
+    [TestFixture]
     public class EntropyExtractorTests
     {
-		List<Event> receivedEvents = new List<Event>();
+		private readonly List<Event> receivedEvents = new List<Event>();
 
         [Test]
-        public void GarbageCollectorExtractor_Returns_Data()
-        {
-            var extractor = new GarbageCollectorExtractor(0);
-			extractor.EntropyAvailable += Extractor_EntropyAvailable;
+        public void GarbageCollectorExtractor_Returns_Data() => 
+	        Test(new GarbageCollectorExtractor(0));
 
-			for (int i = 0; i < 1000; i++)
-			{
-				extractor.Run();
-				GC.Collect(0);
-				GC.Collect(1);
-				GC.Collect(2);
-			}
-
-            receivedEvents.Should().NotBeEmpty();
-        }
+        [Test]
+        public void ProcessExtractor_Returns_Data() => 
+	        Test(new ProcessEntropyExtractor(0));
 
         [Test, Explicit]
-        public void RemoteQuantumRngExtractor_Returns_Data()
-        {
-	        var extractor = new RemoteQuantumRngExtractor(0);
-	        extractor.EntropyAvailable += Extractor_EntropyAvailable;
+        public void RemoteQuantumRngExtractor_Returns_Data() => 
+	        Test(new RemoteQuantumRngExtractor(0));
+        
+        [Test]
+        public void RemoteNistRngExtractor_Returns_Data() =>
+	        Test(new RemoteNistCsrngExtractor(0));
 
+        [Test]
+        public void RngCryptoServiceProviderExtractor_Returns_Data() =>
+	        Test(new RNGCryptoServiceProviderExtractor(0));
+
+        public void Test(EntropyExtractorBase extractor)
+        {
+	        extractor.EntropyAvailable += Extractor_EntropyAvailable;
 	        extractor.Run();
+
 	        receivedEvents.Should().NotBeEmpty();
         }
 
 		private void Extractor_EntropyAvailable(Event successfulExtraction) => receivedEvents.Add(successfulExtraction);
-		
     }
 }

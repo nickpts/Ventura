@@ -11,9 +11,9 @@ namespace Ventura.Tests.Visualisation
     {
         private static void Main(string[] args)
         {
-	        //VisualiseRandomness();
+	        VisualiseRandomness();
 	        //TestMethod();
-			OutputRandomNumbers();
+			//OutputRandomNumbers();
 			//OutputRandomNumberArray();
 			Console.ReadLine();
         }
@@ -45,9 +45,7 @@ namespace Ventura.Tests.Visualisation
 				var result = prng.GetRandomNumbers(0, 1000, 10000);
 				Console.WriteLine($"Data generated: {result}");
 			}
-
-
-		}
+        }
 
         public static void OutputRandomNumberArray()
         {

@@ -23,15 +23,21 @@ namespace Ventura
                 case ReseedEntropySourceGroup.Local:
                     extractors.Add(new GarbageCollectorExtractor(0));
                     extractors.Add(new AppDomainExtractor(1));
+					extractors.Add(new RNGCryptoServiceProviderExtractor(2));
+					extractors.Add(new ProcessEntropyExtractor(3));
                     break;
                 case ReseedEntropySourceGroup.Remote:
                     extractors.Add(new RemoteQuantumRngExtractor(0));
+					extractors.Add(new RemoteNistCsrngExtractor(1));
                     break;
                 case ReseedEntropySourceGroup.Full:
                     extractors.Add(new GarbageCollectorExtractor(0));
                     extractors.Add(new AppDomainExtractor(1));
-                    extractors.Add(new RemoteQuantumRngExtractor(2));
-                    break;
+                    extractors.Add(new RNGCryptoServiceProviderExtractor(2));
+                    extractors.Add(new ProcessEntropyExtractor(3));
+					extractors.Add(new RemoteQuantumRngExtractor(4));
+                    extractors.Add(new RemoteNistCsrngExtractor(5));
+					break;
                 default:
 	                throw new ArgumentOutOfRangeException(nameof(sourceGroup), sourceGroup, null);
             }
