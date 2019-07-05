@@ -10,7 +10,9 @@
     <PackageProjectUrl>https://github.com/nickpts/Ventura</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nickpts/Ventura.git</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.3-alpha</Version>
+    <Version>1.0.4-alpha</Version>
+    <AssemblyVersion>1.0.4.0</AssemblyVersion>
+    <FileVersion>1.0.4.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

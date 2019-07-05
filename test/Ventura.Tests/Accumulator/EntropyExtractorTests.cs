@@ -32,6 +32,10 @@ namespace Ventura.Tests.Accumulator
         public void RngCryptoServiceProviderExtractor_Returns_Data() =>
 	        Test(new RNGCryptoServiceProviderExtractor(0));
 
+		[Test]
+		public void RemoteRandomOrgExtract_Returns_Data() =>
+			Test(new RemoteRandomOrgExtractor(0));
+
         public void Test(EntropyExtractorBase extractor)
         {
 	        extractor.EntropyAvailable += Extractor_EntropyAvailable;
