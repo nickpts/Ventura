@@ -80,12 +80,15 @@ namespace Ventura
 		/// Uses the generator to get 64 bytes of random data
 		/// and turns them to a positive integer
 		/// </summary>
-		/// <param name="min">minimum possible value</param>
+		/// <param name="min">minimum possible value, equal to or greater than zero </param>
 		/// <param name="max">maximum possible value</param>
 		/// <returns>pseudo-randomly generated positive integer</returns>
 		public int GetRandomNumber(int min, int max)
 		{
-			byte[] data = new byte[64];
+			if (min < 0)
+				throw new ArgumentException("Less than zero not supported");
+
+			byte[] data = new byte[4];
 			GetBytes(data);
 
 			int num = Math.Abs(BitConverter.ToInt32(data, 0));
@@ -97,10 +100,16 @@ namespace Ventura
 		/// Returns an array of the specified length with
 		/// pseudo-randomly generated positive integers
 		/// </summary>
-		/// <param name="min">minimum possible value</param>
+		/// <param name="min">minimum possible value, equal to or greater than zero</param>
 		/// <param name="max">maximum possible value</param>
 		public int[] GetRandomNumbers(int min, int max, int length)
 		{
+			if (min < 0)
+				throw new ArgumentException("Less than zero not supported");
+
+			if (length <= 0) 
+				throw new ArgumentException(nameof(length));
+
 			var result = new int[length];
 
 			for (int i = 0; i < length; i++)

@@ -81,5 +81,55 @@ namespace Ventura.Tests
 			Assert.Throws(typeof(ArgumentException), Test);
 		}
 
+		[Test]
+		public void PrngVentura_GetRandomNumber_Throws_Exception_For_Negative_Values()
+		{
+			void Test()
+			{
+				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				{
+					var result = prng.GetRandomNumber(-1, 10);
+				}
+			}
+
+			Assert.Throws<ArgumentException>(Test);
+		}
+
+		[Test]
+		public void PrngVentura_GetRandomNumbers_Throws_Exception_For_Negative_Values()
+		{
+			void Test()
+			{
+				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				{
+					var result = prng.GetRandomNumbers(-1, 10, 1000);
+				}
+			}
+
+			Assert.Throws<ArgumentException>(Test);
+		}
+
+		[Test]
+		public void PrngVentura_GetRandomNumbers_Throws_Exception_For_Zero_Or_Negative_Array_Length_Values()
+		{
+			void ZeroTest()
+			{
+				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				{
+					var result = prng.GetRandomNumbers(1, 10, -1);
+				}
+			}
+
+			void NegativeTest()
+			{
+				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				{
+					var result = prng.GetRandomNumbers(1, 10, 0);
+				}
+			}
+
+			Assert.Throws<ArgumentException>(ZeroTest);
+			Assert.Throws<ArgumentException>(NegativeTest);
+		}
 	}
 }
