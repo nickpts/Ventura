@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 using Ventura.Interfaces;
 
@@ -10,7 +9,7 @@ namespace Ventura.Accumulator.EntropyExtractors
 	/// </summary>
 	public class GarbageCollectorExtractor : EntropyExtractorBase, IEntropyExtractor
     {
-        public GarbageCollectorExtractor(int sourceNumber) : base(sourceNumber)
+        public GarbageCollectorExtractor(IEventEmitter eventEmitter) : base(eventEmitter)
         {
         }
 

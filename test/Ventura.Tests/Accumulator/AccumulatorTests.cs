@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-
+using System.Threading.Tasks;
 using FluentAssertions;
+
+using Moq;
 
 using NUnit.Framework;
 
@@ -18,6 +20,15 @@ namespace Ventura.Tests.Accumulator
     [TestFixture]
     public class AccumulatorTests
     {
+	    private Mock<IEventEmitter> mockEmitter;
+
+		[SetUp]
+	    public void Setup()
+	    {
+			mockEmitter = new Mock<IEventEmitter>(0);
+			mockEmitter.SetupAllProperties();
+	    }
+
 	    [Test]
 	    public void Accumulator_ThrowsException_If_Passed_More_Than_MaxAmount_Of_Sources()
         {
@@ -30,7 +41,7 @@ namespace Ventura.Tests.Accumulator
 		public void Accumulator_Initializes_Pools_On_Construction()
 		{
 			using (var accumulator = new TestAccumulator(new List<IEntropyExtractor>
-				{new GarbageCollectorExtractor(1)}, default))
+				{new GarbageCollectorExtractor(new EventEmitter(1))}, default))
 			{
 				accumulator.EntropyPools.Count.Should().Be(MaximumNumberOfPools);
 			}
@@ -41,32 +52,47 @@ namespace Ventura.Tests.Accumulator
 		[TestCase(2, 0)]
 		[TestCase(5, 0)]
 		[TestCase(10, 0)]
-		public void Accumulator_Uses_Pool_Zero_On_Even_Reseed(int reseedNumber, int poolNumber)
-		{
-			IsPoolUsed(reseedNumber, poolNumber).Should().BeTrue();
-		}
+		public void Accumulator_Uses_Pool_Zero_On_Even_Reseed(int reseedNumber, int poolNumber) =>
+			RunPoolTest(reseedNumber, poolNumber).Should().BeTrue();
+		
 
 		[Test, Description("Test that first pool is not used on odd reseeds (first, third) ")]
 		[TestCase(1, 1)]
 		[TestCase(3, 1)]
-		public void Accumulator_Does_Not_Use_First_Pool_On_Odd_Reseeds(int reseedNumber, int poolNumber)
-		{
-			IsPoolUsed(reseedNumber, poolNumber).Should().BeFalse();
-		}
+		public void Accumulator_Does_Not_Use_First_Pool_On_Odd_Reseeds(int reseedNumber, int poolNumber) =>
+			RunPoolTest(reseedNumber, poolNumber).Should().BeFalse();
+		
 
 		[TestCase(2, 1)]
 		[TestCase(4, 1)]
 		[Test, Description("Test that first pool is not used on even reseeds (second, fourth) ")]
-		public void Accumulator_Uses_First_Pool_On_Even_Reseeds(int reseedNumber, int poolNumber)
+		public void Accumulator_Uses_First_Pool_On_Even_Reseeds(int reseedNumber, int poolNumber) => 
+			RunPoolTest(reseedNumber, poolNumber).Should().BeTrue();
+
+		[Test]
+		public void Accumulator_Stops_Running_Extractor_If_Not_Healthy()
 		{
-			IsPoolUsed(reseedNumber, poolNumber).Should().BeTrue();
+			Func<byte[]> test = () => new byte[30];
+
+			var failedEvent = new Event()
+			{
+				ExtractionSuccessful = false
+			};
+
+			Task<Event> extraction = Task.FromResult<Event>(failedEvent);
+			mockEmitter.Setup(e => e.Execute(test)).Returns(extraction);
+
+			var extractor = new TestEntropyExtractor(test, mockEmitter.Object);
+			var accumulator = new TestAccumulator(new List<IEntropyExtractor> { extractor }, default);
+
+			mockEmitter.Verify(e => e.Execute(test), Times.Exactly(FailedEventThreshold));
 		}
 
-		public bool IsPoolUsed(int reseedNumber, int poolNumber)
+		public bool RunPoolTest(int reseedNumber, int poolNumber)
 		{
 			var tokenSource = new CancellationTokenSource();
 
-			using (var accumulator = new TestAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(0) },
+			using (var accumulator = new TestAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(new EventEmitter(0)) },
 				tokenSource.Token))
 			{
 				while (!accumulator.HasEnoughEntropy)
@@ -91,5 +117,4 @@ namespace Ventura.Tests.Accumulator
 
 	    public List<EntropyPool> EntropyPools => Pools;
     }
-
 }

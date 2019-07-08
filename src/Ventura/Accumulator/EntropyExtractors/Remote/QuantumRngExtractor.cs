@@ -13,9 +13,9 @@ namespace Ventura.Accumulator.EntropyExtractors
     /// For more see: http://qrng.anu.edu.au/API/api-demo.php.
     /// JSON.NET is deliberately not used here.
     /// </summary>
-    public class RemoteQuantumRngExtractor : EntropyExtractorBase, IEntropyExtractor
+    public class QuantumRngExtractor : EntropyExtractorBase, IEntropyExtractor
     {
-        public RemoteQuantumRngExtractor(int sourceNumber) : base(sourceNumber)
+        public QuantumRngExtractor(IEventEmitter eventEmitter) : base(eventEmitter)
         {
         }
 

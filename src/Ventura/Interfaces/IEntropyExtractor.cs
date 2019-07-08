@@ -10,12 +10,13 @@ namespace Ventura.Interfaces
         Task Run();
         int SourceNumber { get; }
 		string SourceName { get; }
+		bool IsHealthy { get; }
 
 		/// <summary>
 		/// Triggered when entropic data is available
 		/// </summary>
-		event EntropyAvailabilityHandler EntropyAvailable;
-	}
+		event EntropyAvailabilityHandler OnEntropyAvailable;
+    }
 
     public delegate void EntropyAvailabilityHandler(Event successfulExtraction);
 }

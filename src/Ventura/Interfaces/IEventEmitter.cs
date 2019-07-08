@@ -9,5 +9,6 @@ namespace Ventura.Interfaces
 	public interface IEventEmitter
     {
         Task<Event> Execute(Func<byte[]> extractionLogic);
+        int SourceNumber { get; set; }
     }
 }

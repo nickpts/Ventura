@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using Ventura.Interfaces;
 
@@ -14,7 +13,7 @@ namespace Ventura.Accumulator.EntropyExtractors
 	{
 		private readonly Process process = Process.GetCurrentProcess();
 
-		public ProcessEntropyExtractor(int sourceNumber) : base(sourceNumber)
+		public ProcessEntropyExtractor(IEventEmitter eventEmitter) : base(eventEmitter)
 		{
 
 		}

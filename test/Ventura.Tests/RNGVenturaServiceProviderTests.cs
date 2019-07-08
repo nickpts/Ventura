@@ -37,7 +37,11 @@ namespace Ventura.Tests
 			void Test()
 			{
 				var ventura = new RNGVenturaServiceProvider(
-					new VenturaAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(0) }), null, stream.Object);
+					new VenturaAccumulator(
+						new List<IEntropyExtractor>
+						{
+							new GarbageCollectorExtractor(new EventEmitter(0))
+						}), null, stream.Object);
 			}
 			
 			Assert.Throws(typeof(ArgumentNullException), Test);
@@ -49,7 +53,11 @@ namespace Ventura.Tests
 			void Test()
 			{
 				var ventura = new RNGVenturaServiceProvider(
-					new VenturaAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(0) }), new VenturaGenerator(), null);
+					new VenturaAccumulator(
+						new List<IEntropyExtractor>
+						{
+							new GarbageCollectorExtractor(new EventEmitter(0))
+						}), new VenturaGenerator(), null);
 			}
 
 			Assert.Throws(typeof(ArgumentException), Test);
@@ -63,7 +71,11 @@ namespace Ventura.Tests
 				var nonWritablestream = new MemoryStream(new byte[1], false);
 
 				var ventura = new RNGVenturaServiceProvider(
-					new VenturaAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(0) }), new VenturaGenerator(), nonWritablestream);
+					new VenturaAccumulator(
+						new List<IEntropyExtractor>
+						{
+							new GarbageCollectorExtractor(new EventEmitter(0))
+						}), new VenturaGenerator(), nonWritablestream);
 			}
 
 			Assert.Throws(typeof(ArgumentException), Test);

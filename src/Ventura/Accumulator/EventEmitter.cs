@@ -15,18 +15,18 @@ namespace Ventura.Accumulator
 	/// </summary>
     internal class EventEmitter : IEventEmitter
     {
-        private readonly int sourceNumber;
+        public EventEmitter(int sourceNumber) => SourceNumber = sourceNumber;
 
-        public EventEmitter(int sourceNumber) => this.sourceNumber = sourceNumber;
-        
-        public Task<Event> Execute(Func<byte[]> extractionLogic)
+        public int SourceNumber { get; set; }
+
+		public Task<Event> Execute(Func<byte[]> extractionLogic)
         {
             try
             {
 	            var data = extractionLogic.Invoke();
 
 	            var result = new byte[MaximumEventSize];
-                var sourceNumberByte = BitConverter.GetBytes(sourceNumber).First();
+                var sourceNumberByte = BitConverter.GetBytes(SourceNumber).First();
                 var dataLength = BitConverter.GetBytes(data.Length).First();
 
                 result[0] = sourceNumberByte;
@@ -35,7 +35,7 @@ namespace Ventura.Accumulator
                 Array.Copy(data, 0, result, 2, data.Length);
                 Array.Clear(data, 0, data.Length);
 
-                var @event = new Event { SourceNumber = sourceNumber, Data = result, ExtractionSuccessful = true };
+                var @event = new Event { SourceNumber = SourceNumber, Data = result, ExtractionSuccessful = true };
 
                 return Task.FromResult(@event);
             }
@@ -47,6 +47,7 @@ namespace Ventura.Accumulator
                 return Task.FromResult(@event);
             }
         }
+        
     }
 
     public class Event

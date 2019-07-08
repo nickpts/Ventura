@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 using Ventura.Interfaces;
 
@@ -11,7 +10,7 @@ namespace Ventura.Accumulator.EntropyExtractors
 	/// </summary>
 	public class AppDomainExtractor : EntropyExtractorBase, IEntropyExtractor
 	{
-		public AppDomainExtractor(int sourceNumber) : base(sourceNumber)
+		public AppDomainExtractor(IEventEmitter eventEmitter) : base(eventEmitter)
 		{
 		}
 

@@ -13,24 +13,46 @@ namespace Ventura.Accumulator.EntropyExtractors
 		/// <summary>
 		/// Runs extraction logic
 		/// </summary>
-		private readonly EventEmitter eventEmitter;
-		public event EntropyAvailabilityHandler EntropyAvailable;
+		private readonly IEventEmitter eventEmitter;
 
-		protected EntropyExtractorBase(int sourceNumber)
+		/// <summary>
+		/// Event handler for successful entropy events
+		/// </summary>
+		public event EntropyAvailabilityHandler OnEntropyAvailable;
+
+		protected EntropyExtractorBase(IEventEmitter eventEmitter)
 		{
-			SourceNumber = sourceNumber;
-			eventEmitter = new EventEmitter(sourceNumber);
+			this.eventEmitter = eventEmitter;
+			SourceNumber = eventEmitter.SourceNumber;
+			IsHealthy = true;
 		}
 
-		public virtual string SourceName { get; protected set; }
+		/// <summary>
+		/// Running total of failed event operations
+		/// </summary>
+		public int FailedEventCount { get; protected set; }
+
+		/// <summary>
+		/// Indicates if an extractor has been consistently producing successful events
+		/// </summary>
+		public bool IsHealthy{ get; protected set; }
+
 		public int SourceNumber { get; }
+		public virtual string SourceName { get; protected set; }
 
 		public virtual Task Run()
 		{
 			var result = eventEmitter.Execute(ExtractEntropicData()).Result;
 
-			if (result.ExtractionSuccessful) 
-				EntropyAvailable?.Invoke(result);
+			if (result.ExtractionSuccessful)
+				OnEntropyAvailable?.Invoke(result);
+			else
+			{
+				FailedEventCount++;
+
+				if (FailedEventCount >= Constants.FailedEventThreshold)
+					IsHealthy = false;
+			}
 
 			return Task.CompletedTask;
 		}

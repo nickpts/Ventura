@@ -21,22 +21,22 @@ namespace Ventura
             switch (sourceGroup)
             {
                 case ReseedEntropySourceGroup.Local:
-                    extractors.Add(new GarbageCollectorExtractor(0));
-                    extractors.Add(new AppDomainExtractor(1));
-					extractors.Add(new RNGCryptoServiceProviderExtractor(2));
-					extractors.Add(new ProcessEntropyExtractor(3));
+                    extractors.Add(new GarbageCollectorExtractor(new EventEmitter(0)));
+                    extractors.Add(new AppDomainExtractor(new EventEmitter(1)));
+					extractors.Add(new RNGCryptoServiceProviderExtractor(new EventEmitter(2)));
+					extractors.Add(new ProcessEntropyExtractor(new EventEmitter(3)));
                     break;
                 case ReseedEntropySourceGroup.Remote:
-                    extractors.Add(new RemoteQuantumRngExtractor(0));
-					extractors.Add(new RemoteNistCsrngExtractor(1));
+                    extractors.Add(new QuantumRngExtractor(new EventEmitter(0)));
+					extractors.Add(new NistCsrngExtractor(new EventEmitter(1)));
                     break;
                 case ReseedEntropySourceGroup.Full:
-                    extractors.Add(new GarbageCollectorExtractor(0));
-                    extractors.Add(new AppDomainExtractor(1));
-                    extractors.Add(new RNGCryptoServiceProviderExtractor(2));
-                    extractors.Add(new ProcessEntropyExtractor(3));
-					extractors.Add(new RemoteQuantumRngExtractor(4));
-                    extractors.Add(new RemoteNistCsrngExtractor(5));
+                    extractors.Add(new GarbageCollectorExtractor(new EventEmitter(0)));
+                    extractors.Add(new AppDomainExtractor(new EventEmitter(1)));
+                    extractors.Add(new RNGCryptoServiceProviderExtractor(new EventEmitter(2)));
+                    extractors.Add(new ProcessEntropyExtractor(new EventEmitter(3)));
+					extractors.Add(new QuantumRngExtractor(new EventEmitter(4)));
+                    extractors.Add(new NistCsrngExtractor(new EventEmitter(5)));
 					break;
                 default:
 	                throw new ArgumentOutOfRangeException(nameof(sourceGroup), sourceGroup, null);

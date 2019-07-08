@@ -63,6 +63,12 @@ namespace Ventura
         public const int MaximumSeedSize = MaximumNumberOfPools * MinimumPoolSize;
 
 		/// <summary>
+		/// The amount of failed entropy event extraction operations before
+		/// a circuit breaker on the extractor is triggered
+		/// </summary>
+        public const int FailedEventThreshold = 10;
+
+		/// <summary>
 		/// Accoding to the spec, a minimum number of blocks is neede 
 		/// to generate a new key
 		/// </summary>

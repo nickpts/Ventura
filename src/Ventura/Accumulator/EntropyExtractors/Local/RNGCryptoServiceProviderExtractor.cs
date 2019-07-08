@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+
 using Ventura.Interfaces;
 
 namespace Ventura.Accumulator.EntropyExtractors
@@ -11,7 +12,7 @@ namespace Ventura.Accumulator.EntropyExtractors
 	{
 		RNGCryptoServiceProvider _rng = new RNGCryptoServiceProvider();
 
-		public RNGCryptoServiceProviderExtractor(int sourceNumber) : base(sourceNumber)
+		public RNGCryptoServiceProviderExtractor(IEventEmitter eventEmitter) : base(eventEmitter)
 		{
 		}
 

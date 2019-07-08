@@ -82,22 +82,22 @@ namespace Ventura.Accumulator
 
         private void RegisterExtractorEvents()
         {
-	        foreach (var ex in entropyExtractors)
+	        foreach (var en in entropyExtractors)
 	        {
-		        ex.EntropyAvailable += OnEntropyAvailable;
+		        en.OnEntropyAvailable += DistributeEvent;
 	        }
         }
 
 		/// <summary>
 		/// Starts each entropy extractor on its own thread.
 		/// </summary>
-        private void AccumulateEntropy(CancellationToken token = default(CancellationToken))
+        private void AccumulateEntropy(CancellationToken token = default)
         {
 	        foreach (var extractor in entropyExtractors)
 	        {
 		        Task.Factory.StartNew(() =>
 		        {
-			        while (true)
+			        while (extractor.IsHealthy)
 			        {
 				        token.ThrowIfCancellationRequested();
 				        extractor.Run();
@@ -107,7 +107,7 @@ namespace Ventura.Accumulator
 	        }
         }
 
-		private void OnEntropyAvailable(Event successfulExtraction)
+		private void DistributeEvent(Event successfulExtraction)
 		{ 
 	        foreach (var pool in Pools)
 	        {
@@ -122,9 +122,9 @@ namespace Ventura.Accumulator
 
 		public void Dispose()
         {
-	        foreach (var ex in entropyExtractors)
+	        foreach (var en in entropyExtractors)
 	        {
-		        ex.EntropyAvailable -= OnEntropyAvailable;
+		        en.OnEntropyAvailable -= DistributeEvent;
 	        }
         }
 

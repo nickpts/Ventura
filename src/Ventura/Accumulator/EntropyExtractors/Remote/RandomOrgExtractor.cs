@@ -9,9 +9,9 @@ namespace Ventura.Accumulator.EntropyExtractors
 	/// <summary>
 	///  Makes a REST call to an API provided by Random.org
 	/// </summary>
-	public class RemoteRandomOrgExtractor: EntropyExtractorBase, IEntropyExtractor
+	public class RandomOrgExtractor: EntropyExtractorBase, IEntropyExtractor
 	{
-		public RemoteRandomOrgExtractor(int sourceNumber) : base(sourceNumber)
+		public RandomOrgExtractor(IEventEmitter eventEmitter) : base(eventEmitter)
 		{
 		}
 		protected override Func<byte[]> ExtractEntropicData()

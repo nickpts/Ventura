@@ -9,9 +9,9 @@ namespace Ventura.Accumulator.EntropyExtractors
 	/// <summary>
 	/// Makes a REST call to an API by csrng.net. Retrieves the maximum allowed number under the free version.
 	/// </summary>
-	public class RemoteNistCsrngExtractor : EntropyExtractorBase, IEntropyExtractor
+	public class NistCsrngExtractor : EntropyExtractorBase, IEntropyExtractor
 	{
-		public RemoteNistCsrngExtractor(int sourceNumber) : base(sourceNumber)
+		public NistCsrngExtractor(IEventEmitter eventEmitter) : base(eventEmitter)
 		{
 		}
 
