@@ -19,6 +19,7 @@ namespace Ventura
 		private DateTimeOffset lastReseedTime = DateTimeOffset.MinValue;
 		private int reseedCounter;
 		private Timer reseedTimer;
+		private bool isDisposed;
 
 		public RNGVenturaServiceProvider(IAccumulator accumulator, IGenerator generator, Stream stream)
 		{
@@ -108,12 +109,17 @@ namespace Ventura
 		/// Updates the seed one final time,
 		/// closes the stream, un-registers events and stops the timer
 		/// </summary>
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
+			if (isDisposed) return;
+
 			UpdateSeed(null); 
 			stream.Close();
 			accumulator.Dispose();
 			reseedTimer.Dispose();
+
+			base.Dispose(disposing);
+			isDisposed = true;
 		}
 
 		#region Private implementation

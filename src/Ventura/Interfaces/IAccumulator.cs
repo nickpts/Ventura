@@ -11,6 +11,5 @@ namespace Ventura.Interfaces
 
 		byte[] GetRandomDataFromPools(int reseedCounter);
 
-        void Dispose();
     }
 }

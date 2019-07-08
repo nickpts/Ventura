@@ -11,9 +11,9 @@ namespace Ventura.Tests.Visualisation
     {
         private static void Main(string[] args)
         {
-	        VisualiseRandomness();
+	        //VisualiseRandomness();
 	        //TestMethod();
-			//OutputRandomNumbers();
+			OutputRandomNumbers();
 			//OutputRandomNumberArray();
 			Console.ReadLine();
         }
@@ -36,14 +36,16 @@ namespace Ventura.Tests.Visualisation
         {
 	        using (var prng = RNGVenturaServiceProviderFactory.Create(new FileStream("seed.bin", FileMode.OpenOrCreate)))
 	        {
-				//for (int i = 0; i <= 100000; i++)
-				//{
-				// int result = prng.GetRandomNumber(0, 10);
-				// Console.WriteLine($"Data generated: {result}");
-				//}
+				
 
-				var result = prng.GetRandomNumbers(0, 1000, 10000);
-				Console.WriteLine($"Data generated: {result}");
+				var result = prng.GetRandomNumbers(1000000, 1000000000, 10000);
+
+				for (int i = 0; i < result.Length; i++)
+				{
+					Console.WriteLine($"Data generated: {result[i]}");
+				}
+
+				
 			}
         }
 
