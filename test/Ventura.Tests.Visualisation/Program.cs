@@ -34,11 +34,9 @@ namespace Ventura.Tests.Visualisation
 
         public static void OutputRandomNumbers()
         {
-	        using (var prng = RNGVenturaServiceProviderFactory.Create(new FileStream("seed.bin", FileMode.OpenOrCreate)))
+	        using (var prng = RNGVenturaServiceProviderFactory.Create(new FileStream("seed.bin", FileMode.OpenOrCreate), Cipher.Aes, ReseedEntropySourceGroup.Remote))
 	        {
-				
-
-				var result = prng.GetRandomNumbers(1000000, 1000000000, 10000);
+		        var result = prng.GetRandomNumbers(1000000, 1000000000, 10000);
 
 				for (int i = 0; i < result.Length; i++)
 				{

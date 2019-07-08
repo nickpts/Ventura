@@ -32,15 +32,21 @@ namespace Ventura
 		}
 
 		/// <summary>
-		/// Reads the first 64 bytes from the seed stream and uses it to reseed the generator.
-		/// Runs a task on regular intervals to update the seed.
+		/// Waits for accumulator to generate enough entropy then
+		/// reads the first 64 bytes from the seed stream and uses it to reseed the generator.
+		/// Runs a task on regular intervals to update the seed. 
 		/// </summary>
 		public void Initialise()
 		{
 			var seed = new byte[SeedFileSize];
-			stream.Read(seed, 0, SeedFileSize);
-			generator.Reseed(seed); 
+			stream.ReadAsync(seed, 0, SeedFileSize);
 
+			while (!accumulator.HasEnoughEntropy)
+			{
+				Thread.Sleep(1);
+			}
+
+			generator.Reseed(seed);
 			reseedTimer = new Timer(UpdateSeed, null, 0, SeedUpdateInterval.Milliseconds);
 		}
 
@@ -105,6 +111,8 @@ namespace Ventura
 			return result;
 		}
 
+		#region Private implementation
+
 		/// <summary>
 		/// Updates the seed one final time,
 		/// closes the stream, un-registers events and stops the timer
@@ -113,7 +121,7 @@ namespace Ventura
 		{
 			if (isDisposed) return;
 
-			UpdateSeed(null); 
+			UpdateSeed(null);
 			stream.Close();
 			accumulator.Dispose();
 			reseedTimer.Dispose();
@@ -121,8 +129,6 @@ namespace Ventura
 			base.Dispose(disposing);
 			isDisposed = true;
 		}
-
-		#region Private implementation
 
 		private void Reseed(byte[] seed)
 		{
