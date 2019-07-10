@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
 using CommandLine;
-using Ventura.Cli;
 
-namespace Ventura.CLI
+namespace Ventura.Cli
 {
 	public class Program
 	{

@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ventura.Cli", "src\Ventura.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{B0F291E2-82E9-4CB9-9016-C541609D01D5}"
 	ProjectSection(SolutionItems) = preProject
-		.travis.yml = .travis.yml
+		build\.travis.yml = build\.travis.yml
 		Dockerfile = Dockerfile
 		README.md = README.md
 	EndProjectSection
