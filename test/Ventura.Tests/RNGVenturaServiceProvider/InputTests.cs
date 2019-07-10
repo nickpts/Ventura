@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.IsolatedStorage;
-using System.Text;
-using FluentAssertions;
+using Moq;
 using NUnit.Framework;
+
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Generator;
 using Ventura.Interfaces;
-using Moq;
-using NUnit.Framework.Constraints;
 
 namespace Ventura.Tests
 {
 	[TestFixture]
-	public class RNGVenturaServiceProviderTests
+	public class InputTests
 	{
 		private Mock<Stream> stream;
 
@@ -26,13 +23,13 @@ namespace Ventura.Tests
 		}
 
 		[Test]
-		public void PrngVentura_Throws_ArgumentNullException_If_Accumulator_Null()
+		public void RNGVentura_Throws_ArgumentNullException_If_Accumulator_Null()
 		{
 			Assert.Throws(typeof(ArgumentNullException), () => new RNGVenturaServiceProvider(null, new VenturaGenerator(), stream.Object));
 		}
 
 		[Test]
-		public void PrngVentura_Throws_ArgumentNullException_If_Generator_Null()
+		public void RNGVentura_Throws_ArgumentNullException_If_Generator_Null()
 		{
 			void Test()
 			{
@@ -43,12 +40,12 @@ namespace Ventura.Tests
 							new GarbageCollectorExtractor(new EventEmitter(0))
 						}), null, stream.Object);
 			}
-			
+
 			Assert.Throws(typeof(ArgumentNullException), Test);
 		}
 
 		[Test]
-		public void PrngVentura_Throws_ArgumentException_If_Stream_Null()
+		public void RNGVentura_Throws_ArgumentException_If_Stream_Null()
 		{
 			void Test()
 			{
@@ -64,7 +61,7 @@ namespace Ventura.Tests
 		}
 
 		[Test]
-		public void PrngVentura_Throws_Argument_Exception_If_Stream_Not_Writable()
+		public void RNGVentura_Throws_Argument_Exception_If_Stream_Not_Writable()
 		{
 			void Test()
 			{
@@ -82,7 +79,7 @@ namespace Ventura.Tests
 		}
 
 		[Test]
-		public void PrngVentura_GetRandomNumber_Throws_Exception_For_Negative_Values()
+		public void RNGVentura_GetRandomNumber_Throws_Exception_For_Negative_Values()
 		{
 			void Test()
 			{
@@ -96,7 +93,7 @@ namespace Ventura.Tests
 		}
 
 		[Test]
-		public void PrngVentura_GetRandomNumbers_Throws_Exception_For_Negative_Values()
+		public void RNGVentura_GetRandomNumbers_Throws_Exception_For_Negative_Values()
 		{
 			void Test()
 			{
@@ -110,7 +107,7 @@ namespace Ventura.Tests
 		}
 
 		[Test]
-		public void PrngVentura_GetRandomNumbers_Throws_Exception_For_Zero_Or_Negative_Array_Length_Values()
+		public void RNGVentura_GetRandomNumbers_Throws_Exception_For_Zero_Or_Negative_Array_Length_Values()
 		{
 			void ZeroTest()
 			{
@@ -125,6 +122,57 @@ namespace Ventura.Tests
 				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 				{
 					var result = prng.GetRandomNumbers(1, 10, 0);
+				}
+			}
+
+			Assert.Throws<ArgumentException>(ZeroTest);
+			Assert.Throws<ArgumentException>(NegativeTest);
+		}
+
+		[Test]
+		public void RNGVentura_GetRandomNumber_Throws_Exception_If_Round_To_Decimals_Less_Than_Zero()
+		{
+			void NegativeTest()
+			{
+				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				{
+					var result = prng.GetRandomNumber(-1);
+				}
+			}
+
+			Assert.Throws<ArgumentException>(NegativeTest);
+		}
+
+		[Test]
+		public void RNGVentura_GetRandomNumbers_Throws_Exception_If_Round_To_Decimals_Less_Than_Zero()
+		{
+			void NegativeTest()
+			{
+				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				{
+					var result = prng.GetRandomNumbers(-1, 10);
+				}
+			}
+
+			Assert.Throws<ArgumentException>(NegativeTest);
+		}
+
+		[Test]
+		public void RNGVentura_GetRandomNumbers_Throws_Exception_If_Length_Zero_Or_Less_Than_Zero()
+		{
+			void ZeroTest()
+			{
+				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				{
+					var result = prng.GetRandomNumbers(2, 0);
+				}
+			}
+
+			void NegativeTest()
+			{
+				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				{
+					var result = prng.GetRandomNumbers(2, -1);
 				}
 			}
 

@@ -13,5 +13,8 @@ namespace Ventura.Interfaces
 
 	    int[] GetRandomNumbers(int min, int max, int length);
 
+	    double GetRandomNumber(int roundToDecimals);
+
+	    double[] GetRandomNumbers(int roundToDecimals, int length);
     }
 }

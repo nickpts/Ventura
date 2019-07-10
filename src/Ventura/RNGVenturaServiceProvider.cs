@@ -120,6 +120,44 @@ namespace Ventura
 			return result;
 		}
 
+		/// <summary>
+		/// Returns a 64-bit floating point value ranging from 0 to 1
+		/// </summary>
+		/// <param name="roundToDecimals">decimal place to round to</param>
+		public double GetRandomNumber(int roundToDecimals = 0)
+		{
+			if (roundToDecimals < 0)
+				throw new ArgumentException(nameof(roundToDecimals));
+
+			byte[] data = new byte[8];
+			GetBytes(data);
+
+			return Math.Round(((double) BitConverter.ToUInt64(data, 0) / ulong.MaxValue), roundToDecimals);
+		}
+
+		/// <summary>
+		/// Returns an array of 64-bit floating point values ranging from 0 to 1
+		/// </summary>
+		/// <param name="roundToDecimals">decimal place to round to</param>
+		/// <param name="length">array length</param>
+		public double[] GetRandomNumbers(int roundToDecimals, int length)
+		{
+			if (roundToDecimals < 0)
+				throw new ArgumentException(nameof(roundToDecimals));
+
+			if (length <= 0)
+				throw new ArgumentException(nameof(length));
+
+			var result = new double[length];
+
+			for (int i = 0; i < length; i++)
+			{
+				result[i] = GetRandomNumber(roundToDecimals);
+			}
+
+			return result;
+		}
+
 		#region Private implementation
 
 		/// <summary>
