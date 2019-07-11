@@ -1,4 +1,6 @@
-# Ventura
+# Ventura 
+![!Alt_Text](https://live.staticflickr.com/65535/48260901146_95a33faff0_q_d.jpg)
+
 A .NET Standard library implementing the [Fortuna PRNG](https://en.wikipedia.org/wiki/Fortuna_(PRNG)) as devised by Bruce Schneier and Niels Ferguson in 2003. Also implemented are reseeding improvements suggested by Dodis et al in ["How to Eat Your Entropy and Have it Too"](https://eprint.iacr.org/2014/167).
 
 [![Build Status](https://travis-ci.com/nickpts/Ventura.svg?branch=master)](https://travis-ci.com/nickpts/Ventura)
