@@ -9,7 +9,7 @@ using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Generator;
 using Ventura.Interfaces;
 
-namespace Ventura.Tests
+namespace Ventura.Tests.Prng
 {
 	[TestFixture]
 	public class InputTests

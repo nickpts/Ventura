@@ -6,6 +6,7 @@ using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 
 using Moq;
+using Ventura.Accumulator.EntropyExtractors.Remote;
 
 namespace Ventura.Tests.Accumulator
 {
@@ -38,7 +39,11 @@ namespace Ventura.Tests.Accumulator
 		public void RemoteRandomOrgExtract_Returns_Data() =>
 			Test(new RandomOrgExtractor(new EventEmitter(0)));
 
-        public void Test(EntropyExtractorBase extractor)
+		[Test]
+		public void RemoteHotBitsExtractor_Returns_Data() =>
+			Test(new HotBitsExtractor(new EventEmitter(0)));
+
+		public void Test(EntropyExtractorBase extractor)
         {
 	        extractor.OnEntropyAvailable += Extractor_EntropyAvailable;
 	        extractor.Run();

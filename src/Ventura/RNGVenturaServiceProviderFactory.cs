@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
+using Ventura.Accumulator.EntropyExtractors.Remote;
 using Ventura.Generator;
 using Ventura.Interfaces;
 
@@ -29,7 +30,9 @@ namespace Ventura
                 case ReseedEntropySourceGroup.Remote:
                     extractors.Add(new QuantumRngExtractor(new EventEmitter(0)));
 					extractors.Add(new NistCsrngExtractor(new EventEmitter(1)));
-                    break;
+					extractors.Add(new RandomOrgExtractor(new EventEmitter(2)));
+                    extractors.Add(new HotBitsExtractor(new EventEmitter(3)));
+					break;
                 case ReseedEntropySourceGroup.Full:
                     extractors.Add(new GarbageCollectorExtractor(new EventEmitter(0)));
                     extractors.Add(new AppDomainExtractor(new EventEmitter(1)));
@@ -37,6 +40,8 @@ namespace Ventura
                     extractors.Add(new ProcessEntropyExtractor(new EventEmitter(3)));
 					extractors.Add(new QuantumRngExtractor(new EventEmitter(4)));
                     extractors.Add(new NistCsrngExtractor(new EventEmitter(5)));
+                    extractors.Add(new RandomOrgExtractor(new EventEmitter(6)));
+                    extractors.Add(new HotBitsExtractor(new EventEmitter(7)));
 					break;
                 default:
 	                throw new ArgumentOutOfRangeException(nameof(sourceGroup), sourceGroup, null);

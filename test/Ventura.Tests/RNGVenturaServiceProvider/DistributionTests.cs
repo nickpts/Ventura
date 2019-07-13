@@ -4,7 +4,7 @@ using Accord.Statistics.Testing;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Ventura.Tests
+namespace Ventura.Tests.Prng
 {
 	[TestFixture]
 	public class DistributionTests
@@ -12,7 +12,7 @@ namespace Ventura.Tests
 
 		[Test, Description("Runs a Kolgomorov-Smirnov test against the RNG's output compared to a " +
 						   "uniform continuous distribution and a normal distribution")]
-		public void RNGVentura_KolgomorovSmirnovTest_Approaches_Uniform_Continuous_Distribution()
+		public void RNGVentura_KolmogorovSmirnovTest_Approaches_Uniform_Continuous_Distribution()
 		{
 			double[] sample = GenerateFloatingPointNumberArray();
 
