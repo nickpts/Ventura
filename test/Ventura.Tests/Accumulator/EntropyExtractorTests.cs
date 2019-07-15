@@ -23,19 +23,7 @@ namespace Ventura.Tests.Accumulator
         public void ProcessExtractor_Returns_Data() => 
 	        Test(new ProcessEntropyExtractor(new EventEmitter(0)));
 
-     
-        public void RemoteQuantumRngExtractor_Returns_Data() => 
-	        Test(new QuantumRngExtractor(new EventEmitter(0)));
-        
         [Test]
-        public void RemoteNistRngExtractor_Returns_Data() =>
-	        Test(new NistCsrngExtractor(new EventEmitter(0)));
-
-        [Test]
-        public void RngCryptoServiceProviderExtractor_Returns_Data() =>
-	        Test(new RNGCryptoServiceProviderExtractor(new EventEmitter(0)));
-
-		[Test]
 		public void RemoteRandomOrgExtract_Returns_Data() =>
 			Test(new RandomOrgExtractor(new EventEmitter(0)));
 

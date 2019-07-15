@@ -24,24 +24,18 @@ namespace Ventura
                 case ReseedEntropySourceGroup.Local:
                     extractors.Add(new GarbageCollectorExtractor(new EventEmitter(0)));
                     extractors.Add(new AppDomainExtractor(new EventEmitter(1)));
-					extractors.Add(new RNGCryptoServiceProviderExtractor(new EventEmitter(2)));
-					extractors.Add(new ProcessEntropyExtractor(new EventEmitter(3)));
+                    extractors.Add(new ProcessEntropyExtractor(new EventEmitter(2)));
                     break;
                 case ReseedEntropySourceGroup.Remote:
-                    extractors.Add(new QuantumRngExtractor(new EventEmitter(0)));
-					extractors.Add(new NistCsrngExtractor(new EventEmitter(1)));
-					extractors.Add(new RandomOrgExtractor(new EventEmitter(2)));
-                    extractors.Add(new HotBitsExtractor(new EventEmitter(3)));
+	                extractors.Add(new RandomOrgExtractor(new EventEmitter(0)));
+                    extractors.Add(new HotBitsExtractor(new EventEmitter(1)));
 					break;
                 case ReseedEntropySourceGroup.Full:
                     extractors.Add(new GarbageCollectorExtractor(new EventEmitter(0)));
                     extractors.Add(new AppDomainExtractor(new EventEmitter(1)));
-                    extractors.Add(new RNGCryptoServiceProviderExtractor(new EventEmitter(2)));
-                    extractors.Add(new ProcessEntropyExtractor(new EventEmitter(3)));
-					extractors.Add(new QuantumRngExtractor(new EventEmitter(4)));
-                    extractors.Add(new NistCsrngExtractor(new EventEmitter(5)));
-                    extractors.Add(new RandomOrgExtractor(new EventEmitter(6)));
-                    extractors.Add(new HotBitsExtractor(new EventEmitter(7)));
+                    extractors.Add(new ProcessEntropyExtractor(new EventEmitter(2)));
+                    extractors.Add(new RandomOrgExtractor(new EventEmitter(3)));
+                    extractors.Add(new HotBitsExtractor(new EventEmitter(4)));
 					break;
                 default:
 	                throw new ArgumentOutOfRangeException(nameof(sourceGroup), sourceGroup, null);

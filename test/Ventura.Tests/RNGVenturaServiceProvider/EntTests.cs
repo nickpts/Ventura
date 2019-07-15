@@ -29,10 +29,16 @@ namespace Ventura.Tests.Prng
 		[Test]
 		public void Ent_Test_Suite_Chi_Square_Entropy_Is_Outside_Suspect_Ranges()
 		{
-			GenerateTestFile();
-			RunEntTest();
-			DeleteTestFile();
-			AssertChiSquare();
+			try
+			{
+				GenerateTestFile();
+				RunEntTest();
+				AssertChiSquare();
+			}
+			finally
+			{
+				DeleteTestFile();
+			}
 		}
 
 		public void GenerateTestFile()

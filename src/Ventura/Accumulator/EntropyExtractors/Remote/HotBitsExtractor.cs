@@ -1,11 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Net;
-using System.Text;
+using System.Text.RegularExpressions;
+
 using Ventura.Interfaces;
 
 namespace Ventura.Accumulator.EntropyExtractors.Remote
 {
+	/// <summary>
+	/// Makes a REST call to an API provided by John Walker (https://fourmilab.ch/hotbits/)
+	/// The entropy comes from radioactive decay.
+	/// </summary>
 	public class HotBitsExtractor: EntropyExtractorBase, IEntropyExtractor
 	{
 		private const string apiLink =
@@ -22,10 +27,18 @@ namespace Ventura.Accumulator.EntropyExtractors.Remote
 				using (WebClient wc = new WebClient())
 				{
 					var jsonResponse = wc.DownloadString(apiLink);
-					long.TryParse(jsonResponse.Substring(74, 15), out var number);
-					var bytes = BitConverter.GetBytes(number);
 
-					return bytes;
+					string toBeSearched = "\"data\": ";
+					jsonResponse = jsonResponse.Substring(jsonResponse.IndexOf(toBeSearched) + toBeSearched.Length);
+					jsonResponse = Regex.Replace(jsonResponse, @"\n", " ");
+					jsonResponse = jsonResponse.Replace('[', ' ');
+					jsonResponse = jsonResponse.Replace(']', ' ');
+					jsonResponse = jsonResponse.Replace('}', ' ');
+					jsonResponse = jsonResponse.Replace(',', ' '); //TODO: replace these with regex
+
+					var result = jsonResponse.Split(' ').Where(n => !string.IsNullOrEmpty(n)).Select(byte.Parse).ToArray();
+
+					return result;
 				}
 			};
 		}

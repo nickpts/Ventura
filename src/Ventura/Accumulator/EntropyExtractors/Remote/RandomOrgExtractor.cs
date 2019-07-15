@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using Ventura.Interfaces;
 
 
 namespace Ventura.Accumulator.EntropyExtractors
 {
 	/// <summary>
-	///  Makes a REST call to an API provided by Random.org
+	/// Makes a REST call to an API provided by Random.org (https://www.random.org/bytes/)
+	/// The entropy comes from atmospheric noise.
 	/// </summary>
 	public class RandomOrgExtractor: EntropyExtractorBase, IEntropyExtractor
 	{
@@ -22,15 +24,8 @@ namespace Ventura.Accumulator.EntropyExtractors
 				{
 					var response = wc.DownloadString("https://www.random.org/cgi-bin/randbyte?nbytes=30&format=d");
 
-					var numberArray = response.Split(' ').Where(n => !string.IsNullOrEmpty(n)).Select(int.Parse).ToList();
-					byte[] result = new byte[30];
-
-					for (int i = 0; i < result.Length; i++)
-					{
-						result[i] = BitConverter.GetBytes(numberArray[i])[0];
-					}
-
-					return result;
+					response = Regex.Replace(response, @"\n", " ");
+					return response.Split(' ').Where(n => !string.IsNullOrEmpty(n)).Select(byte.Parse).ToArray();
 				}
 			};
 		}

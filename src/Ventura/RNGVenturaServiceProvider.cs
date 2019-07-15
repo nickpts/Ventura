@@ -16,10 +16,12 @@ namespace Ventura
 		private readonly IGenerator generator;
 		private readonly Stream stream;
 		private readonly object syncRoot = new object();
-		private DateTimeOffset lastReseedTime = DateTimeOffset.MinValue;
+
 		private int reseedCounter;
-		private Timer reseedTimer;
 		private bool isDisposed;
+
+		private DateTimeOffset lastReseedTime = DateTimeOffset.MinValue;
+		private Timer reseedTimer;
 
 		public RNGVenturaServiceProvider(IAccumulator accumulator, IGenerator generator, Stream stream)
 		{

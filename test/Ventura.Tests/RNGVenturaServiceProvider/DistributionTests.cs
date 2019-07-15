@@ -49,7 +49,7 @@ namespace Ventura.Tests.Prng
 			var distribution = UniformContinuousDistribution.Estimate(sample);
 			var ndistribution = NormalDistribution.Estimate(sample);
 
-			var lillie = new LillieforsTest(sample, distribution, iterations: 10 * 1000 * 1000);
+			var lillie = new LillieforsTest(sample, distribution);
 			var nlillie = new LillieforsTest(sample, ndistribution);
 
 			// no significant deviation from a uniform continuous distribution estimate
