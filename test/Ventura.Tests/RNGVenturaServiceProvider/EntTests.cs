@@ -26,7 +26,7 @@ namespace Ventura.Tests.Prng
 		private static string Arguments = "-b testfile";
 		private static string ChiSquareDistribution;
 
-		[Test]
+		[Test, Explicit]
 		public void Ent_Test_Suite_Chi_Square_Entropy_Is_Outside_Suspect_Ranges()
 		{
 			try
