@@ -16,7 +16,7 @@ How does this differ from existing Fortuna implementations?
   2. Support for TwoFish, Serpent and BlowFish in addition to AES (default).
   3. Remote entropy sources included apart from local. 
   
-For more info on the above, please see the [wiki](https://github.com/nickpts/Ventura/wiki)
+For more info on the above, please see the [wiki](https://github.com/nickpts/Ventura/wiki).
   
 ## Example
 ```C#
