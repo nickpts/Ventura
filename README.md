@@ -16,8 +16,8 @@ How does this differ from existing Fortuna implementations?
   2. Support for TwoFish, Serpent and BlowFish in addition to AES (default).
   3. Remote entropy sources included apart from local. 
   
-## Entropy sources
-
+For more info on the above, please see the [wiki](https://github.com/nickpts/Ventura/wiki)
+  
 ## Example
 ```C#
 // seed stream
@@ -57,10 +57,6 @@ docker pull nickpatsaris/ventura.cli
 docker run -ti 147dbbbb24da rn -s seed.bin -i 1 -x 10
 docker run -ti 147dbbbb24da rns -s seed.bin -i 1 -x 10 -n 100
 ```
-
-## Performance
-Test conditions: local entropy sources, AES cipher, FileStream used for seed operations.
-![Alt text](https://live.staticflickr.com/65535/48164764467_1187c930fb_z_d.jpg)
 
 ## Acknowledgements
 [Bouncy Castle](https://www.bouncycastle.org/) is used for the ciphers.
