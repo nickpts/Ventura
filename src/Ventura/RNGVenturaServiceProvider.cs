@@ -173,7 +173,6 @@ namespace Ventura
 			if (isDisposed) return;
 
 			UpdateSeed(closeStream: true);
-			stream.Close();
 			accumulator.Dispose();
 			reseedTimer.Dispose();
 
