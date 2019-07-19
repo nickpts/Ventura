@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -29,22 +30,13 @@ namespace Ventura.Accumulator.EntropyExtractors.Remote
 					var response = wc.DownloadString($"https://community-open-weather-map.p.rapidapi.com/weather?q={cityCountryPair.Key}%2C{cityCountryPair.Value}");
 
 					//TODO: replace with regex
-					//TODO: needs more testing
-					var match = Regex.Match(response, "pressure(.{6})").Groups[0].Value;
-					var pressure = int.Parse(match.Substring(match.Length - 4));
-
-					match = Regex.Match(response, "temp_min(.{8})").Groups[0].Value;
-					var minTemp = int.Parse(match.Substring(match.Length - 6));
-
-					match = Regex.Match(response, "temp_max(.{8})").Groups[0].Value;
-					var maxTemp = int.Parse(match.Substring(match.Length - 6));
-
-					match = Regex.Match(response, "sunrise(.{12})").Groups[0].Value;
-					var sunrise = int.Parse(match.Substring(match.Length - 10));
-
-					match = Regex.Match(response, "humidity(.{4})").Groups[0].Value;
-					var humidity = int.Parse(match.Substring(match.Length - 2));
-
+					
+					var pressure = ExtractIntValue(4, Regex.Match(response, "pressure(.{6})").Groups[0].Value);
+					var minTemp = ExtractFloatValue(6, Regex.Match(response, "temp_min(.{8})").Groups[0].Value);
+					var maxTemp = ExtractFloatValue(6, Regex.Match(response, "temp_max(.{8})").Groups[0].Value);
+					var sunrise = ExtractIntValue(10, Regex.Match(response, "sunrise(.{12})").Groups[0].Value);
+					var humidity = ExtractIntValue(2, Regex.Match(response, "humidity(.{4})").Groups[0].Value);
+					
 					return BitConverter.GetBytes(pressure)
 						.Concat(BitConverter.GetBytes(minTemp))
 						.Concat(BitConverter.GetBytes(maxTemp))
@@ -52,7 +44,29 @@ namespace Ventura.Accumulator.EntropyExtractors.Remote
 						.Concat(BitConverter.GetBytes(humidity)).ToArray();
 				}
 			};
+		}
 
+		private int ExtractIntValue(int digitsToGoBack, string match)
+		{
+			match = match.Substring(match.Length - digitsToGoBack);
+
+			if (int.TryParse(match, out var result))
+			{
+				return result;
+			}
+
+			return default;
+		}
+
+		private float ExtractFloatValue(int digitsToGoBack, string match)
+		{
+			match = match.Substring(match.Length - digitsToGoBack);
+
+			if (float.TryParse(match, out var result))
+			{
+				return result;
+			}
+			return default;
 		}
 	}
 }
