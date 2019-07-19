@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Accumulator.EntropyExtractors.Remote;
@@ -46,5 +47,10 @@ namespace Ventura
 
 			return prng;
 		}
+
+        public static RandomNumberGenerator CreateRng(Stream seedStream, Cipher cipher, ReseedEntropySourceGroup sourceGroup)
+        {
+	        return (RandomNumberGenerator) Create(seedStream, cipher, sourceGroup);
+        }
 	}
 } 

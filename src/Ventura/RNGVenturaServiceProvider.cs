@@ -49,7 +49,7 @@ namespace Ventura
 			}
 
 			generator.Reseed(seed);
-			reseedTimer = new Timer(UpdateSeed, null, 0, SeedUpdateInterval.Milliseconds);
+			reseedTimer = new Timer(UpdateSeed, false, 0, SeedUpdateInterval.Milliseconds);
 		}
 
 		/// <summary>
@@ -172,7 +172,7 @@ namespace Ventura
 		{
 			if (isDisposed) return;
 
-			UpdateSeed(null);
+			UpdateSeed(closeStream: true);
 			stream.Close();
 			accumulator.Dispose();
 			reseedTimer.Dispose();
@@ -187,13 +187,16 @@ namespace Ventura
 			lastReseedTime = DateTimeOffset.UtcNow;
 		}
 
-		private void UpdateSeed(object state)
+		private void UpdateSeed(object closeStream)
 		{
 			var data = new byte[SeedFileSize];
 			GetBytes(data);
 			stream.Seek(0, SeekOrigin.Begin);
 			stream.Write(data, 0, SeedFileSize);
 			stream.Flush();
+
+			if ((bool) closeStream)
+				stream.Close();
 		}
 
 		#endregion
