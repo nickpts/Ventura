@@ -79,13 +79,13 @@ namespace Ventura.Tests.Prng
 		}
 
 		[Test]
-		public void RNGVentura_GetRandomNumber_Throws_Exception_For_Negative_Values()
+		public void RNGVentura_Next_Throws_Exception_For_Negative_Values()
 		{
 			void Test()
 			{
 				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 				{
-					var result = prng.GetRandomNumber(-1, 10);
+					var result = prng.Next(-1, 10);
 				}
 			}
 
@@ -93,13 +93,13 @@ namespace Ventura.Tests.Prng
 		}
 
 		[Test]
-		public void RNGVentura_GetRandomNumbers_Throws_Exception_For_Negative_Values()
+		public void RNGVentura_NextArray_Throws_Exception_For_Negative_Values()
 		{
 			void Test()
 			{
 				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 				{
-					var result = prng.GetRandomNumbers(-1, 10, 1000);
+					var result = prng.NextArray(-1, 10, 1000);
 				}
 			}
 
@@ -107,13 +107,13 @@ namespace Ventura.Tests.Prng
 		}
 
 		[Test]
-		public void RNGVentura_GetRandomNumbers_Throws_Exception_For_Zero_Or_Negative_Array_Length_Values()
+		public void RNGVentura_NextArray_Throws_Exception_For_Zero_Or_Negative_Array_Length_Values()
 		{
 			void ZeroTest()
 			{
 				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 				{
-					var result = prng.GetRandomNumbers(1, 10, -1);
+					var result = prng.NextArray(1, 10, -1);
 				}
 			}
 
@@ -121,7 +121,7 @@ namespace Ventura.Tests.Prng
 			{
 				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 				{
-					var result = prng.GetRandomNumbers(1, 10, 0);
+					var result = prng.NextArray(1, 10, 0);
 				}
 			}
 
@@ -130,13 +130,13 @@ namespace Ventura.Tests.Prng
 		}
 
 		[Test]
-		public void RNGVentura_GetRandomNumber_Throws_Exception_If_Round_To_Decimals_Less_Than_Zero()
+		public void RNGVentura_NextDouble_Throws_Exception_If_Round_To_Decimals_Less_Than_Zero()
 		{
 			void NegativeTest()
 			{
 				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 				{
-					var result = prng.GetRandomNumber(-1);
+					var result = prng.NextDouble(-1);
 				}
 			}
 
@@ -144,13 +144,13 @@ namespace Ventura.Tests.Prng
 		}
 
 		[Test]
-		public void RNGVentura_GetRandomNumbers_Throws_Exception_If_Round_To_Decimals_Less_Than_Zero()
+		public void RNGVentura_NextDoubleArray_Throws_Exception_If_Round_To_Decimals_Less_Than_Zero()
 		{
 			void NegativeTest()
 			{
 				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 				{
-					var result = prng.GetRandomNumbers(-1, 10);
+					var result = prng.NextDoubleArray(-1, 10);
 				}
 			}
 
@@ -158,13 +158,13 @@ namespace Ventura.Tests.Prng
 		}
 
 		[Test]
-		public void RNGVentura_GetRandomNumbers_Throws_Exception_If_Length_Zero_Or_Less_Than_Zero()
+		public void RNGVentura_NextDoubleArray_Throws_Exception_If_Length_Zero_Or_Less_Than_Zero()
 		{
 			void ZeroTest()
 			{
 				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 				{
-					var result = prng.GetRandomNumbers(2, 0);
+					var result = prng.NextDoubleArray(2, 0);
 				}
 			}
 
@@ -172,7 +172,7 @@ namespace Ventura.Tests.Prng
 			{
 				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 				{
-					var result = prng.GetRandomNumbers(2, -1);
+					var result = prng.NextDoubleArray(2, -1);
 				}
 			}
 

@@ -14,7 +14,7 @@ namespace Ventura.Accumulator.EntropyExtractors
 		{
 		}
 
-		public override string SourceName { get; protected set; } = ".NET Application domain entropy extractor";
+		public override string SourceName { get; protected set; } = nameof(AppDomainExtractor);
 
 		protected override Func<byte[]> ExtractEntropicData()
 		{

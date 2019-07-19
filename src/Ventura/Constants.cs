@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Ventura
 {
@@ -80,5 +81,48 @@ namespace Ventura
 		public static readonly TimeSpan MaximumTimeSpanBetweenReseeds = TimeSpan.FromMilliseconds(100);
 
 		public static readonly TimeSpan SeedUpdateInterval = TimeSpan.FromMinutes(10);
+
+		/// <summary>
+		/// A list of cities/countries for use by the weather entropy extractor
+		/// </summary>
+		public static Dictionary<string, string> citiesCountries = new Dictionary<string, string>()
+		{
+			{ "London", "UK"},
+			{ "Paris", "France" },
+			{ "Berlin", "Germany"},
+			{ "Rome", "Italy"},
+			{ "Stockholm", "Sweden"},
+			{ "New York", "USA"},
+			{ "Los Angeles", "USA"},
+			{ "Tokyo", "Japan"},
+			{ "Beijing", "China"},
+			{ "Moscow", "Russia"},
+			{ "Delhi", "India"},
+			{ "Brasilia", "Brazil"},
+			{ "Seoul", "South Korea"},
+			{ "Madrid", "Spain"},
+			{ "Sydney", "Australia"},
+			{ "Jakarta", "Indonesia"},
+			{ "Ankara", "Turkey"},
+			{ "Amsterdam", "Netherlands" },
+			{ "Riyadh", "Saudi Arabia" },
+			{ "Berne", "Switzerland" },
+			{ "Taipei", "Taiwan" },
+			{ "Warsaw", "Poland" },
+			{ "Brussels", "Belgium" },
+			{ "Buenos Aires", "Argentina" },
+			{ "Bangkok", "Thailand" },
+			{ "Vienna", "Austria" },
+			{ "Tehran", "Iran" },
+			{ "Oslo", "Norway" },
+			{ "Lagos", "Nigeria" },
+			{ "Dublin", "Ireland" },
+			{ "Tel Aviv", "Israel" },
+			{ "Cape Town", "South Africa" },
+			{ "Singapore", "Singapore" },
+			{ "Islamabad", "Pakistan" },
+			{ "Bogota", "Colombia" },
+			{ "Cairo", "Egypt" },
+		}; 
 	}
 }

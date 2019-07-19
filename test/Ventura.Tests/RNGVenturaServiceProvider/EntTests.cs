@@ -9,7 +9,7 @@ namespace Ventura.Tests.Prng
 {
 	/*
 	 * Uses John Walker's ent program (https://www.fourmilab.ch/random/), to find the chi-square distribution
-	 * of a 10mb test file containing a sequence of bytes. The chi-square test is the most commonly used
+	 * of a 100mb test file containing a sequence of bytes. The chi-square test is the most commonly used
 	 * test for the randomness of data and is extremely sensitive to errors in pseudo-number sequence 
 	 * generators. The percentage is interpreted as the degree to which the sequence tested is suspect of being
 	 * non-random. If the percentage is greater than 99% or less than 1% the sequence is almost certainly not random. 
@@ -45,7 +45,7 @@ namespace Ventura.Tests.Prng
 		{
 			byte[] array = new byte[100_048_576];
 
-			using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+			using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream(), Cipher.Aes, ReseedEntropySourceGroup.Full))
 			{
 				prng.GetBytes(array);
 			}

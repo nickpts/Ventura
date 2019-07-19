@@ -13,7 +13,7 @@ namespace Ventura.Accumulator.EntropyExtractors
         {
         }
 
-        public override string SourceName { get; protected set; } = ".NET CLR Garbage Collector";
+        public override string SourceName { get; protected set; } = nameof(GarbageCollectorExtractor);
 
         protected override Func<byte[]> ExtractEntropicData()
         {

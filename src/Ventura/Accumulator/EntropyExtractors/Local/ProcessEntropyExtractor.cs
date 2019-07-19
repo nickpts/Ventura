@@ -15,11 +15,9 @@ namespace Ventura.Accumulator.EntropyExtractors
 
 		public ProcessEntropyExtractor(IEventEmitter eventEmitter) : base(eventEmitter)
 		{
-
 		}
 
-
-		public override string SourceName { get; protected set; } = ".NET current process entropy extractor";
+		public override string SourceName { get; protected set; } = nameof(ProcessEntropyExtractor);
 
 		protected override Func<byte[]> ExtractEntropicData()
 		{

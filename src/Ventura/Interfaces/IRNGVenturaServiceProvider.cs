@@ -9,12 +9,12 @@ namespace Ventura.Interfaces
 	    void Initialise();
 	    void GetBytes(byte[] input);
 
-	    int GetRandomNumber(int min, int max);
+	    int Next(int min, int max);
 
-	    int[] GetRandomNumbers(int min, int max, int length);
+	    int[] NextArray(int min, int max, int length);
 
-	    double GetRandomNumber(int roundToDecimals);
+	    double NextDouble(int roundToDecimals);
 
-	    double[] GetRandomNumbers(int roundToDecimals, int length);
+	    double[] NextDoubleArray(int roundToDecimals, int length);
     }
 }

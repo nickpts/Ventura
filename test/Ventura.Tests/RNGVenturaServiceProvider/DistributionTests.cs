@@ -64,7 +64,7 @@ namespace Ventura.Tests.Prng
 
 			using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
 			{
-				array = prng.GetRandomNumbers(2, 1000);
+				array = prng.NextDoubleArray(2, 1000);
 			}
 
 			return array;

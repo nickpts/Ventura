@@ -78,6 +78,8 @@ namespace Ventura
 			}
 		}
 
+		public override void GetNonZeroBytes(byte[] data) => throw new NotImplementedException();
+
 		/// <summary>
 		/// Uses the generator to get 64 bytes of random data
 		/// and turns them to a positive integer
@@ -85,7 +87,7 @@ namespace Ventura
 		/// <param name="min">minimum possible value, equal to or greater than zero </param>
 		/// <param name="max">maximum possible value</param>
 		/// <returns>pseudo-randomly generated positive integer</returns>
-		public int GetRandomNumber(int min, int max)
+		public int Next(int min, int max)
 		{
 			if (min < 0)
 				throw new ArgumentException("Less than zero not supported");
@@ -104,7 +106,7 @@ namespace Ventura
 		/// </summary>
 		/// <param name="min">minimum possible value, equal to or greater than zero</param>
 		/// <param name="max">maximum possible value</param>
-		public int[] GetRandomNumbers(int min, int max, int length)
+		public int[] NextArray(int min, int max, int length)
 		{
 			if (min < 0)
 				throw new ArgumentException("Less than zero not supported");
@@ -116,7 +118,7 @@ namespace Ventura
 
 			for (int i = 0; i < length; i++)
 			{
-				result[i] = GetRandomNumber(min, max);
+				result[i] = Next(min, max);
 			}
 
 			return result;
@@ -126,7 +128,7 @@ namespace Ventura
 		/// Returns a 64-bit floating point value ranging from 0 to 1
 		/// </summary>
 		/// <param name="roundToDecimals">decimal place to round to</param>
-		public double GetRandomNumber(int roundToDecimals = 0)
+		public double NextDouble(int roundToDecimals = 0)
 		{
 			if (roundToDecimals < 0)
 				throw new ArgumentException(nameof(roundToDecimals));
@@ -138,11 +140,11 @@ namespace Ventura
 		}
 
 		/// <summary>
-		/// Returns an array of 64-bit floating point values ranging from 0 to 1
+		/// Returns an array of 64-bit floating point values ranging from 0.0 to 1.0
 		/// </summary>
 		/// <param name="roundToDecimals">decimal place to round to</param>
 		/// <param name="length">array length</param>
-		public double[] GetRandomNumbers(int roundToDecimals, int length)
+		public double[] NextDoubleArray(int roundToDecimals, int length)
 		{
 			if (roundToDecimals < 0)
 				throw new ArgumentException(nameof(roundToDecimals));
@@ -154,7 +156,7 @@ namespace Ventura
 
 			for (int i = 0; i < length; i++)
 			{
-				result[i] = GetRandomNumber(roundToDecimals);
+				result[i] = NextDouble(roundToDecimals);
 			}
 
 			return result;
