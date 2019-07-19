@@ -57,7 +57,7 @@ namespace Ventura.Accumulator
 					continue; // TODO: investigate if this cna be changed to break for performance
 
 				var data = Pools[i].ReadData();
-				Pools[i].Clear();
+				EmptyPools(i);
 
 				data.CopyTo(randomData, tempIndex);
 				tempIndex += data.Length;
@@ -67,6 +67,16 @@ namespace Ventura.Accumulator
         }
 
 		#region Private implementation
+
+		private void EmptyPools(int i)
+		{
+			var poolsToEmpty = Pools.Where(p => p.PoolNumber <= i);
+
+			foreach (var pool in poolsToEmpty)
+			{
+				pool.Clear();
+			}
+		}
 
 		private void InitializePools()
 		{

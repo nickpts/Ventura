@@ -18,15 +18,16 @@ namespace Ventura.Accumulator
 	{
 		private byte[] hash = new byte[MinimumPoolSize];
 		private readonly object syncRoot;
-		private readonly int poolNumber;
 		private int eventsStored = 0;
 		private long runningSize;
 
 		public EntropyPool(int poolNumber)
 		{
-			this.poolNumber = poolNumber;
+			PoolNumber = poolNumber;
 			syncRoot = new object();
 		}
+
+		public int PoolNumber { get; }
 
 		public void AddEventData(int sourceNumber, byte[] data)
 		{
@@ -48,8 +49,8 @@ namespace Ventura.Accumulator
 				Interlocked.Add(ref runningSize, concatenatedData.Length);
 				Interlocked.Increment(ref eventsStored);
 
-				if (poolNumber == 0 && eventsStored % 10000 == 0)
-					Debug.WriteLine($"Pool {poolNumber} contains entropy of {eventsStored} events");
+				if (PoolNumber == 0 && eventsStored % 10000 == 0)
+					Debug.WriteLine($"Pool {PoolNumber} contains entropy of {eventsStored} events");
 			}
 		}
 
