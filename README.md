@@ -22,7 +22,7 @@ For more info on the above as well as performance, testing and limitations, plea
 ## Example
 ```C#
 // seed stream
-var stream = new FileStream("seed.bin", FileMode.OpenOrCreate);
+var stream = new FileStream("seed", FileMode.OpenOrCreate);
 
 // instantiate and read seed 
 using (var prng = RNGVenturaServiceProviderFactory.Create(stream))
