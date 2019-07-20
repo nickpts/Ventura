@@ -28,13 +28,15 @@ var stream = new FileStream("seed.bin", FileMode.OpenOrCreate);
 using (var prng = RNGVenturaServiceProviderFactory.Create(stream))
 {
     var data = new byte[128];
+    
+    //fill array with random data
     prng.GetBytes(data); 
     
     // get a random number from 0 to 10
-    int randomNumber = prng.GetRandomNumber(0, 10); 
+    int randomNumber = prng.Next(0, 10); 
     
     // get an array with 100 random numbers from 0 to 10
-    int[] randomNumbers = prng.GetRandomNumbers(0, 10, 100); 
+    int[] randomNumbers = prng.NextArray(0, 10, 100); 
 } // new seed will be written to stream.
 
 // optional parameters
