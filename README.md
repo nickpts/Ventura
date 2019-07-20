@@ -22,28 +22,14 @@ For more info on the above as well as performance, testing and limitations, plea
 ## Example
 ```C#
 // seed stream
-var stream = new FileStream("seed.bin", FileMode.OpenOrCreate);
+var stream = new FileStream("seed", FileMode.OpenOrCreate);
 
 // instantiate and read seed 
 using (var prng = RNGVenturaServiceProviderFactory.Create(stream))
 {
-    var data = new byte[128];
-    
-    //fill array with random data
-    prng.GetBytes(data); 
-    
     // get a random number from 0 to 10
     int randomNumber = prng.Next(0, 10); 
-    
-    // get an array with 100 random numbers from 0 to 10
-    int[] randomNumbers = prng.NextArray(0, 10, 100); 
 } // new seed will be written to stream.
-
-// optional parameters
-var prng = RNGVenturaServiceProviderFactory.Create(
-  Stream stream, // stream to read/write seed from/to
-  Cipher.TwoFish, // different block ciphers supported
-  ReseedEntropySourceGroup.Full); // local, remote or both types of entropy sources
 ```
 ## How to run
 Prints a random number from 1 to 10, reads/writes seed to seed.bin
