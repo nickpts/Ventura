@@ -68,6 +68,12 @@ namespace Ventura.Accumulator
 
 		#region Private implementation
 
+		/// <summary>
+		/// Instead of emptying only pool i as described in Fortuna, pool j with
+		/// j <= i is emptied instead. This potentially leads
+		/// to improved results in the face of adversarial starting times between
+		/// the emptying of pools (Dodis et al)
+		/// </summary>
 		private void EmptyPools(int i)
 		{
 			var poolsToEmpty = Pools.Where(p => p.PoolNumber <= i);
