@@ -4,6 +4,7 @@ using System.IO;
 using System.Security.Cryptography;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
+using Ventura.Accumulator.EntropyExtractors.Local;
 using Ventura.Accumulator.EntropyExtractors.Remote;
 using Ventura.Generator;
 using Ventura.Interfaces;
@@ -26,17 +27,24 @@ namespace Ventura
                     extractors.Add(new GarbageCollectorExtractor(new EventEmitter(0)));
                     extractors.Add(new AppDomainExtractor(new EventEmitter(1)));
                     extractors.Add(new ProcessEntropyExtractor(new EventEmitter(2)));
-                    break;
+                    extractors.Add(new SystemUtcExtractor(new EventEmitter(3)));
+
+					break;
                 case ReseedEntropySourceGroup.Remote:
 	                extractors.Add(new RandomOrgExtractor(new EventEmitter(0)));
                     extractors.Add(new HotBitsExtractor(new EventEmitter(1)));
+	                extractors.Add(new WeatherEntropyExtractor(new EventEmitter(2)));
+
 					break;
                 case ReseedEntropySourceGroup.Full:
                     extractors.Add(new GarbageCollectorExtractor(new EventEmitter(0)));
                     extractors.Add(new AppDomainExtractor(new EventEmitter(1)));
                     extractors.Add(new ProcessEntropyExtractor(new EventEmitter(2)));
-                    extractors.Add(new RandomOrgExtractor(new EventEmitter(3)));
-                    extractors.Add(new HotBitsExtractor(new EventEmitter(4)));
+                    extractors.Add(new SystemUtcExtractor(new EventEmitter(3)));
+					extractors.Add(new RandomOrgExtractor(new EventEmitter(4)));
+                    extractors.Add(new HotBitsExtractor(new EventEmitter(5)));
+                    extractors.Add(new WeatherEntropyExtractor(new EventEmitter(6)));
+
 					break;
                 default:
 	                throw new ArgumentOutOfRangeException(nameof(sourceGroup), sourceGroup, null);
