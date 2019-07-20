@@ -12,9 +12,10 @@ A .NET Standard library implementing the [Fortuna PRNG](https://en.wikipedia.org
 
 ## Description
 How does this differ from existing Fortuna implementations?
-  1. Reseeding is pseudo-random rather than cyclical (Dodis et al)
-  2. Support for TwoFish, Serpent and BlowFish in addition to AES (default).
-  3. Remote entropy sources included apart from local. 
+  1. Reseeding is pseudo-random rather than cyclical (Dodis et al).
+  2. Reading an entropy pool empties multiple pools (Dodis et al).
+  3. Support for TwoFish, Serpent and BlowFish in addition to AES (default).
+  4. Remote entropy sources ([weather](https://rapidapi.com/community/api/open-weather-map), [radioactive decay](https://www.fourmilab.ch/hotbits/), [atmospheric noise](https://www.random.org/bytes/)) included apart from local.
   
 For more info on the above as well as performance, testing and limitations, please see the [wiki](https://github.com/nickpts/Ventura/wiki).
   
@@ -59,4 +60,5 @@ docker run -ti 147dbbbb24da rns -s seed.bin -i 1 -x 10 -n 100
 ```
 
 ## Acknowledgements
-[Bouncy Castle](https://www.bouncycastle.org/) is used for the ciphers.
+[Bouncy Castle](https://www.bouncycastle.org/) for ciphers.
+[John Walker](https://www.fourmilab.ch/random/) for ENT testing and HotBits radioactive decay entropy
