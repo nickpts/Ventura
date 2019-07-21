@@ -78,6 +78,9 @@ namespace Ventura
 			}
 		}
 
+		/// <summary>
+		/// Not implemented
+		/// </summary>
 		public override void GetNonZeroBytes(byte[] data) => throw new NotImplementedException();
 
 		/// <summary>
