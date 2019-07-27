@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace Ventura.Accumulator
 	internal class VenturaAccumulator : IAccumulator
     {
         private readonly IEnumerable<IEntropyExtractor> entropyExtractors;
+        private readonly Random randomPoolPicker;
 
 		/// <summary>
 		/// 
@@ -26,6 +28,7 @@ namespace Ventura.Accumulator
                 throw new ArgumentException($"Cannot use more than {MaximumNumberOfSources} sources");
 
             this.entropyExtractors = entropyExtractors;
+            this.randomPoolPicker = new Random();
 
             InitializePools();
 			RegisterExtractorEvents();
@@ -122,14 +125,23 @@ namespace Ventura.Accumulator
 	        }
         }
 
+		/// <summary>
+		/// The pool to be filled is chosen pseudorandomly as recommended by Dodis et al, as
+		/// opposed to the round-robin fashion Fortuna uses. In theory, this provides slightly
+		/// better performance against constant sequence samplers than against arbitrary adversaries.
+		/// While better than round-robin, ideally as pseudorandom permutation of all P pools every P steps
+		/// should be generated and a pool filled via a modulo operation as recommended in Dodis et al 6.3
+		/// </summary>
 		private void DistributeEvent(Event successfulExtraction)
-		{ 
-	        foreach (var pool in Pools)
-	        {
-		        pool.AddEventData(successfulExtraction.SourceNumber, successfulExtraction.Data);
-				//Debug.WriteLine($"Event from source { successfulExtraction.SourceNumber } added from thread: { Thread.CurrentThread.ManagedThreadId }");
-	        }
-        }
+		{
+			var poolToFill = Pools[randomPoolPicker.Next(0, MaximumNumberOfPools - 1)];
+
+		    poolToFill.AddEventData(successfulExtraction.SourceNumber, successfulExtraction.Data);
+
+			Debug.WriteLine($"Event from source { successfulExtraction.SourceNumber } " +
+			                $"added from thread: { Thread.CurrentThread.ManagedThreadId } " +
+			                $"to pool { poolToFill.PoolNumber }");
+		}
 
 		#endregion
 
