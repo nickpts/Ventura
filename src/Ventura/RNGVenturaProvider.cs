@@ -10,7 +10,7 @@ using static Ventura.Constants;
 
 namespace Ventura
 {
-	internal class RNGVenturaServiceProvider : RandomNumberGenerator, IRNGVenturaServiceProvider
+	internal class RNGVenturaProvider : RandomNumberGenerator, Interfaces.IRNGVenturaProvider
 	{
 		private readonly IAccumulator accumulator;
 		private readonly IGenerator generator;
@@ -23,7 +23,7 @@ namespace Ventura
 		private DateTimeOffset lastReseedTime = DateTimeOffset.MinValue;
 		private Timer reseedTimer;
 
-		public RNGVenturaServiceProvider(IAccumulator accumulator, IGenerator generator, Stream stream)
+		public RNGVenturaProvider(IAccumulator accumulator, IGenerator generator, Stream stream)
 		{
 			this.accumulator = accumulator ?? throw new ArgumentNullException();
 			this.generator = generator ?? throw new ArgumentNullException();

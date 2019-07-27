@@ -20,7 +20,7 @@ namespace Ventura.Tests.Visualisation
 
         private static void TestMethod()
         {
-	        using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+	        using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
 	        {
 		        for (int i = 0; i <= 10; i++)
 		        {
@@ -34,7 +34,7 @@ namespace Ventura.Tests.Visualisation
 
         public static void OutputRandomNumbers()
         {
-	        using (var prng = RNGVenturaServiceProviderFactory.Create(new FileStream("seed.bin", FileMode.OpenOrCreate), Cipher.Aes, ReseedEntropySourceGroup.Remote))
+	        using (var prng = RNGVenturaProviderFactory.Create(new FileStream("seed.bin", FileMode.OpenOrCreate), Cipher.Aes, ReseedEntropySourceGroup.Remote))
 	        {
 		        var result = prng.GetRandomNumbers(1000000, 1000000000, 10000);
 
@@ -49,7 +49,7 @@ namespace Ventura.Tests.Visualisation
 
         public static void OutputRandomNumberArray()
         {
-	        using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+	        using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
 	        {
 		        var result = prng.GetRandomNumbers(0, 1000, 10000);
 			    Console.WriteLine($"Data generated: {result}");
@@ -85,7 +85,7 @@ namespace Ventura.Tests.Visualisation
 
         private static void DrawImage(int width, int height, string path)
         {
-	        using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+	        using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
 	        {
 		        int length = width * height;
 

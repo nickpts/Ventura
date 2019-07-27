@@ -2,7 +2,7 @@
 
 using Ventura.Interfaces;
 
-namespace Ventura.Accumulator.EntropyExtractors
+namespace Ventura.Accumulator.EntropyExtractors.Local
 {
 	/// <summary>
 	/// Concatenates and returns information from the .NET garbage collector

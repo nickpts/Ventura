@@ -16,7 +16,7 @@ namespace Ventura.Cli
 						using (var prng =
 							RNGVenturaServiceProviderFactory.Create(stream, opts.Cipher, opts.EntropyGroup))
 						{
-							var rn = prng.GetRandomNumber(opts.Min, opts.Max);
+							var rn = prng.Next(opts.Min, opts.Max);
 							Console.WriteLine(rn);
 						}
 
@@ -31,7 +31,7 @@ namespace Ventura.Cli
 						using (var prng =
 							RNGVenturaServiceProviderFactory.Create(stream, opts.Cipher, opts.EntropyGroup))
 						{
-							array = prng.GetRandomNumbers(opts.Min, opts.Max, opts.ArrayLength);
+							array = prng.NextArray(opts.Min, opts.Max, opts.ArrayLength);
 						}
 
 						for (int i = 0; i < array.Length; i++)

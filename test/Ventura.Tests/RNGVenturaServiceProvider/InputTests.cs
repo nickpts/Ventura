@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
+using Ventura.Accumulator.EntropyExtractors.Local;
 using Ventura.Generator;
 using Ventura.Interfaces;
 
@@ -25,7 +26,7 @@ namespace Ventura.Tests.Prng
 		[Test]
 		public void RNGVentura_Throws_ArgumentNullException_If_Accumulator_Null()
 		{
-			Assert.Throws(typeof(ArgumentNullException), () => new RNGVenturaServiceProvider(null, new VenturaGenerator(), stream.Object));
+			Assert.Throws(typeof(ArgumentNullException), () => new RNGVenturaProvider(null, new VenturaGenerator(), stream.Object));
 		}
 
 		[Test]
@@ -33,7 +34,7 @@ namespace Ventura.Tests.Prng
 		{
 			void Test()
 			{
-				var ventura = new RNGVenturaServiceProvider(
+				var ventura = new RNGVenturaProvider(
 					new VenturaAccumulator(
 						new List<IEntropyExtractor>
 						{
@@ -49,7 +50,7 @@ namespace Ventura.Tests.Prng
 		{
 			void Test()
 			{
-				var ventura = new RNGVenturaServiceProvider(
+				var ventura = new RNGVenturaProvider(
 					new VenturaAccumulator(
 						new List<IEntropyExtractor>
 						{
@@ -67,7 +68,7 @@ namespace Ventura.Tests.Prng
 			{
 				var nonWritablestream = new MemoryStream(new byte[1], false);
 
-				var ventura = new RNGVenturaServiceProvider(
+				var ventura = new RNGVenturaProvider(
 					new VenturaAccumulator(
 						new List<IEntropyExtractor>
 						{
@@ -83,7 +84,7 @@ namespace Ventura.Tests.Prng
 		{
 			void Test()
 			{
-				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
 				{
 					var result = prng.Next(-1, 10);
 				}
@@ -97,7 +98,7 @@ namespace Ventura.Tests.Prng
 		{
 			void Test()
 			{
-				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
 				{
 					var result = prng.NextArray(-1, 10, 1000);
 				}
@@ -111,7 +112,7 @@ namespace Ventura.Tests.Prng
 		{
 			void ZeroTest()
 			{
-				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
 				{
 					var result = prng.NextArray(1, 10, -1);
 				}
@@ -119,7 +120,7 @@ namespace Ventura.Tests.Prng
 
 			void NegativeTest()
 			{
-				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
 				{
 					var result = prng.NextArray(1, 10, 0);
 				}
@@ -134,7 +135,7 @@ namespace Ventura.Tests.Prng
 		{
 			void NegativeTest()
 			{
-				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
 				{
 					var result = prng.NextDouble(-1);
 				}
@@ -148,7 +149,7 @@ namespace Ventura.Tests.Prng
 		{
 			void NegativeTest()
 			{
-				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
 				{
 					var result = prng.NextDoubleArray(-1, 10);
 				}
@@ -162,7 +163,7 @@ namespace Ventura.Tests.Prng
 		{
 			void ZeroTest()
 			{
-				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
 				{
 					var result = prng.NextDoubleArray(2, 0);
 				}
@@ -170,7 +171,7 @@ namespace Ventura.Tests.Prng
 
 			void NegativeTest()
 			{
-				using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream()))
+				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
 				{
 					var result = prng.NextDoubleArray(2, -1);
 				}

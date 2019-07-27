@@ -11,6 +11,7 @@ using NUnit.Framework;
 
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
+using Ventura.Accumulator.EntropyExtractors.Local;
 using Ventura.Interfaces;
 
 using static Ventura.Constants;
