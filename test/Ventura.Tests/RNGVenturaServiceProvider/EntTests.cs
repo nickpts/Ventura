@@ -20,10 +20,10 @@ namespace Ventura.Tests.Prng
 	[TestFixture]
 	public class EntTests
 	{
-		private static string TestFilePath = Directory.GetCurrentDirectory() + @"\ent\testfile";
-		private static string WorkingDirectory = Directory.GetCurrentDirectory() + @"\ent\";
-		private static string EntExePath = WorkingDirectory + @"ent.exe";
-		private static string Arguments = "-b testfile";
+		private static readonly string TestFilePath = Directory.GetCurrentDirectory() + @"\ent\testfile";
+		private static readonly string WorkingDirectory = Directory.GetCurrentDirectory() + @"\ent\";
+		private static readonly string EntExePath = WorkingDirectory + @"ent.exe";
+		private static readonly string Arguments = "-b testfile";
 		private static string ChiSquareDistribution;
 
 		[Test, Explicit]
@@ -55,17 +55,19 @@ namespace Ventura.Tests.Prng
 
 		public void RunEntTest()
 		{
-			var process = new Process();
-			process.StartInfo = new ProcessStartInfo()
-			{
-				Arguments = Arguments,
-				RedirectStandardOutput = true,
-				RedirectStandardError = true,
-				WorkingDirectory = WorkingDirectory,
-				FileName = EntExePath
-			};
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    Arguments = Arguments,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    WorkingDirectory = WorkingDirectory,
+                    FileName = EntExePath
+                }
+            };
 
-			process.Start();
+            process.Start();
 
 			bool found = false;
 			int consoleLineCounter = 0;
@@ -91,6 +93,7 @@ namespace Ventura.Tests.Prng
 
 			found.Should().BeTrue("If no chi square distribution in stdout, ent.exe not working properly");
 			process.WaitForExit();
+            process.Dispose();
 		}
 
 		private void AssertChiSquare()

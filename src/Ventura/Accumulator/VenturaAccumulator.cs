@@ -55,9 +55,9 @@ namespace Ventura.Accumulator
 			var tempIndex = 0;
 
 			for (int i = 0; i < Pools.Count; i++)
-			{
-				if (reseedCounter % Math.Pow(2, i) != 0)
-					continue; // TODO: investigate if this cna be changed to break for performance
+            {
+                if (reseedCounter % Math.Pow(2, i) != 0)
+                    break;
 
 				var data = Pools[i].ReadData();
 				EmptyPools(i);

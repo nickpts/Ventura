@@ -2,47 +2,49 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
+using System.Threading;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Accumulator.EntropyExtractors.Local;
 using Ventura.Accumulator.EntropyExtractors.Remote;
 using Ventura.Generator;
 using Ventura.Interfaces;
-using Ventura.Seed;
 
 namespace Ventura
 {
     public class RNGVenturaProviderFactory
 	{
         /// <summary>
-        /// Initializes an instance of the PRNG with and waits for 
-        /// r. Cipher is AES,
-        /// All entropy source groups (local remote used by default).
+        /// Initializes an instance of the PRNG with and waits for 100 ms, by
+        /// which time a seeding and a reseeding will have occurred. Cipher is AES,
+        /// All entropy source groups (local remote used by default). A MemoryStream is used
+        /// to store the seed and discarded when the PRNG exits.
         /// </summary>
         /// <returns>initialised PRNG</returns>
         public static IRNGVenturaProvider CreateSeeded() => CreateSeeded(Cipher.Aes, ReseedEntropySourceGroup.Full);
 
         /// <summary>
-        /// Initializes an instance of the PRNG with a seed consisting taken from
-        /// a pseudo-randomly chosen remote entropy extractor. All entropy source groups
-        /// (local and remote) used by default.
+        /// Initializes an instance of the PRNG with and waits for 100 ms, by
+        /// which time a seeding and a reseeding will have occurred.  All entropy source groups
+        /// (local and remote) used by default. A MemoryStream is used
+        /// to store the seed and discarded when the PRNG exits.
         /// </summary>
         /// <returns>initialised PRNG</returns>
         public static IRNGVenturaProvider CreateSeeded(Cipher cipher) => CreateSeeded(cipher, ReseedEntropySourceGroup.Full);
 
         /// <summary>
-        /// Initializes an instance of the PRNG with a seed consisting taken from
-        /// a pseudo-randomly chosen remote entropy extractor.
+        /// Initializes an instance of the PRNG with and waits for 100 ms, by
+        /// which time a seeding and a reseeding will have occurred. A MemoryStream is used
+        /// to store the seed and discarded when the PRNG exits.
         /// </summary>
         /// <param name="cipher">cipher to use</param>
         /// <param name="sourceGroup">local or remote</param>
         /// <returns>initialised PRNG</returns>
         public static IRNGVenturaProvider CreateSeeded(Cipher cipher, ReseedEntropySourceGroup sourceGroup)
-		{
-			byte[] seed = ExtractEntropy();
-			var seedStream = Convert(seed);
+        {
+            Thread.Sleep(100);
 
-			return Create(seedStream, cipher, sourceGroup);
+            return Create(new MemoryStream(), cipher, sourceGroup);
 		}
 
 		/// <summary>
@@ -102,24 +104,5 @@ namespace Ventura
         {
 	        return (RandomNumberGenerator) Create(seedStream, cipher, sourceGroup);
         }
-
-		#region Private implementation
-
-		private static byte[] ExtractEntropy()
-		{
-            IRemoteSeedProvider provider = new RemoteSeedProvider();
-
-			throw new NotImplementedException();
-		}
-
-		private static Stream Convert(byte[] seed)
-		{
-			var stream = new MemoryStream();
-			stream.Write(seed, 0, seed.Length);
-
-			return stream;
-		}
-
-		#endregion
-	}
+    }
 } 
