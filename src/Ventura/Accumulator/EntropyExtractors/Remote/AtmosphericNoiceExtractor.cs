@@ -11,9 +11,9 @@ namespace Ventura.Accumulator.EntropyExtractors
 	/// Makes a REST call to an API provided by Random.org (https://www.random.org/bytes/)
 	/// The entropy comes from atmospheric noise.
 	/// </summary>
-	public class RandomOrgExtractor: EntropyExtractorBase, IEntropyExtractor
+	public class AtmosphericNoiceExtractor: EntropyExtractorBase, IEntropyExtractor
 	{
-		public RandomOrgExtractor(IEventEmitter eventEmitter) : base(eventEmitter)
+		public AtmosphericNoiceExtractor(IEventEmitter eventEmitter) : base(eventEmitter)
 		{
 		}
 		protected override Func<byte[]> ExtractEntropicData()

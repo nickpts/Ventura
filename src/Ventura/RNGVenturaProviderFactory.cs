@@ -8,32 +8,36 @@ using Ventura.Accumulator.EntropyExtractors.Local;
 using Ventura.Accumulator.EntropyExtractors.Remote;
 using Ventura.Generator;
 using Ventura.Interfaces;
+using Ventura.Seed;
 
 namespace Ventura
 {
     public class RNGVenturaProviderFactory
 	{
-		/// <summary>
-		/// Initializes an instance of the PRNG with a seed consisting taken from
-		/// a pseudo-randomly chosen remote entropy extractor. Cipher is AES,
-		/// full entropy source groups (local remote used by default).
-		/// </summary>
-		public static IRNGVenturaProvider CreateSeeded() => CreateSeeded(Cipher.Aes, ReseedEntropySourceGroup.Full);
+        /// <summary>
+        /// Initializes an instance of the PRNG with and waits for 
+        /// r. Cipher is AES,
+        /// All entropy source groups (local remote used by default).
+        /// </summary>
+        /// <returns>initialised PRNG</returns>
+        public static IRNGVenturaProvider CreateSeeded() => CreateSeeded(Cipher.Aes, ReseedEntropySourceGroup.Full);
 
-		/// <summary>
-		/// Initializes an instance of the PRNG with a seed consisting taken from
-		/// a pseudo-randomly chosen remote entropy extractor. Full entropy source groups
-		/// (local and remote) used by default.
-		/// </summary>
-		public static IRNGVenturaProvider CreateSeeded(Cipher cipher) => CreateSeeded(cipher, ReseedEntropySourceGroup.Full);
+        /// <summary>
+        /// Initializes an instance of the PRNG with a seed consisting taken from
+        /// a pseudo-randomly chosen remote entropy extractor. All entropy source groups
+        /// (local and remote) used by default.
+        /// </summary>
+        /// <returns>initialised PRNG</returns>
+        public static IRNGVenturaProvider CreateSeeded(Cipher cipher) => CreateSeeded(cipher, ReseedEntropySourceGroup.Full);
 
-		/// <summary>
-		/// Initializes an instance of the PRNG with a seed consisting taken from
-		/// a pseudo-randomly chosen remote entropy extractor.
-		/// </summary>
-		/// <param name="cipher">cipher to use</param>
-		/// <param name="sourceGroup">local or remote</param>
-		public static IRNGVenturaProvider CreateSeeded(Cipher cipher, ReseedEntropySourceGroup sourceGroup)
+        /// <summary>
+        /// Initializes an instance of the PRNG with a seed consisting taken from
+        /// a pseudo-randomly chosen remote entropy extractor.
+        /// </summary>
+        /// <param name="cipher">cipher to use</param>
+        /// <param name="sourceGroup">local or remote</param>
+        /// <returns>initialised PRNG</returns>
+        public static IRNGVenturaProvider CreateSeeded(Cipher cipher, ReseedEntropySourceGroup sourceGroup)
 		{
 			byte[] seed = ExtractEntropy();
 			var seedStream = Convert(seed);
@@ -67,14 +71,14 @@ namespace Ventura
                     extractors.Add(new ProcessEntropyExtractor(new EventEmitter(2)));
                     break;
                 case ReseedEntropySourceGroup.Remote:
-	                extractors.Add(new RandomOrgExtractor(new EventEmitter(0)));
+	                extractors.Add(new AtmosphericNoiceExtractor(new EventEmitter(0)));
                     extractors.Add(new HotBitsExtractor(new EventEmitter(1)));
 					break;
                 case ReseedEntropySourceGroup.Full:
                     extractors.Add(new GarbageCollectorExtractor(new EventEmitter(0)));
                     extractors.Add(new AppDomainExtractor(new EventEmitter(1)));
                     extractors.Add(new ProcessEntropyExtractor(new EventEmitter(2)));
-                    extractors.Add(new RandomOrgExtractor(new EventEmitter(3)));
+                    extractors.Add(new AtmosphericNoiceExtractor(new EventEmitter(3)));
                     extractors.Add(new HotBitsExtractor(new EventEmitter(4)));
 					break;
                 default:
@@ -103,6 +107,8 @@ namespace Ventura
 
 		private static byte[] ExtractEntropy()
 		{
+            IRemoteSeedProvider provider = new RemoteSeedProvider();
+
 			throw new NotImplementedException();
 		}
 

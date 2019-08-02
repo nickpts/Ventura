@@ -47,7 +47,6 @@ namespace Ventura.Accumulator
                 return Task.FromResult(@event);
             }
         }
-        
     }
 
     public class Event
