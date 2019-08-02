@@ -7,53 +7,52 @@ using System.Threading;
 
 namespace Ventura.Tests.Visualisation
 {
-	class Program
+    class Program
     {
         private static void Main(string[] args)
         {
-	        VisualiseRandomness();
-	        //TestMethod();
-			//OutputRandomNumbers();
-			//OutputRandomNumberArray();
-			Console.ReadLine();
+            VisualiseRandomness();
+            //TestMethod();
+            //OutputRandomNumbers();
+            //OutputRandomNumberArray();
+            Console.ReadLine();
         }
 
         private static void TestMethod()
         {
-	        using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
-	        {
-		        for (int i = 0; i <= 10; i++)
-		        {
-			        Thread.Sleep(100);
-			        var data = new byte[1024000];
-			        prng.GetBytes(data);
-			        Debug.WriteLine($"Data generated: {i}");
-		        }
-	        }
+            using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
+            {
+                for (int i = 0; i <= 10; i++)
+                {
+                    Thread.Sleep(100);
+                    var data = new byte[1024000];
+                    prng.GetBytes(data);
+                    Debug.WriteLine($"Data generated: {i}");
+                }
+            }
         }
 
         public static void OutputRandomNumbers()
         {
-	        using (var prng = RNGVenturaProviderFactory.Create(new FileStream("seed.bin", FileMode.OpenOrCreate), Cipher.Aes, ReseedEntropySourceGroup.Remote))
-	        {
-		        var result = prng.NextArray(1000000, 1000000000, 10000);
-		        for (int i = 0; i < result.Length; i++)
-				{
-					Console.WriteLine($"Data generated: {result[i]}");
-				}
-	        }
+            using (var prng = RNGVenturaProviderFactory.Create(new FileStream("seed.bin", FileMode.OpenOrCreate), Cipher.Aes, ReseedEntropySourceGroup.Remote))
+            {
+                var result = prng.NextArray(1000000, 1000000000, 10000);
+                for (int i = 0; i < result.Length; i++)
+                {
+                    Console.WriteLine($"Data generated: {result[i]}");
+                }
+            }
         }
 
         public static void OutputRandomNumberArray()
         {
-	        using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
-	        {
-		        var result = prng.NextArray(0, 1000, 10000);
-			    Console.WriteLine($"Data generated: {result}");
-	        }
+            using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
+            {
+                var result = prng.NextArray(0, 1000, 10000);
+                Console.WriteLine($"Data generated: {result}");
+            }
         }
-
-		private static void VisualiseRandomness()
+        private static void VisualiseRandomness()
         {
             Console.Write("Enter width:");
             int width = Convert.ToInt32(Console.ReadLine());
@@ -81,37 +80,33 @@ namespace Ventura.Tests.Visualisation
 
         private static void DrawImage(int width, int height, string path)
         {
-<<<<<<< HEAD
-	        using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
-=======
-	        using (var prng = RNGVenturaServiceProviderFactory.Create(new MemoryStream(), Cipher.Aes, ReseedEntropySourceGroup.Full))
->>>>>>> 1206ce367c92783f19d5f83e7c064e87dd10b099
-	        {
-		        int length = width * height;
+            using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
+            {
+                int length = width * height;
 
-		        var data = new byte[length];
-		        prng.GetBytes(data);
+                var data = new byte[length];
+                prng.GetBytes(data);
 
-		        Color colour;
-		        int temp = 0;
+                Color colour;
+                int temp = 0;
 
-		        using (Bitmap map = new Bitmap(width, height))
-		        {
-			        for (int i = 0; i < map.Width; i++)
-			        {
-				        for (int j = 0; j < map.Height; j++)
-				        {
-					        int rn = data[temp];
-					        colour = Color.FromArgb(rn, rn, rn);
-					        map.SetPixel(i, j, colour);
+                using (Bitmap map = new Bitmap(width, height))
+                {
+                    for (int i = 0; i < map.Width; i++)
+                    {
+                        for (int j = 0; j < map.Height; j++)
+                        {
+                            int rn = data[temp];
+                            colour = Color.FromArgb(rn, rn, rn);
+                            map.SetPixel(i, j, colour);
 
-					        temp++;
-				        }
-			        }
+                            temp++;
+                        }
+                    }
 
-			        map.Save(path, ImageFormat.Png);
-		        }
-	        }
+                    map.Save(path, ImageFormat.Png);
+                }
+            }
         }
     }
 }

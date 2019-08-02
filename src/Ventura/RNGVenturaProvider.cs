@@ -70,11 +70,9 @@ namespace Ventura
 				}
 
 				if (reseedCounter == 0)
-				{
-					throw new GeneratorSeedException("Generator not seeded yet!");
-				}
+                    throw new GeneratorSeedException("Generator not seeded yet!");
 
-				generator.GenerateData(data);
+                generator.GenerateData(data);
 			}
 		}
 
