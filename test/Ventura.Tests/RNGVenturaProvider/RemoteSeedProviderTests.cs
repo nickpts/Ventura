@@ -9,11 +9,13 @@ namespace Ventura.Tests.Prng
 {
     public class RemoteSeedProviderTests
     {
+        [Test]
         public void SeedProvider_Throws_ArgumentNullException_If_Extractors_Null() =>
-            Assert.Throws<ArgumentNullException>(() => new RemoteSeedProvider(null));
+            Assert.Throws<ArgumentNullException>(() => new SeedProvider(null));
 
+        []
         public void SeedProvider_Throws_ArgumentException_If_Extractors_Emptyl() =>
-            Assert.Throws<ArgumentNullException>(() => new RemoteSeedProvider(new List<IEntropyExtractor>()));
+            Assert.Throws<ArgumentNullException>(() => new SeedProvider(new List<IEntropyExtractor>()));
 
         [Test]
         public void GetBytes_Throws_InvalidOperation_Exception_If_All_Attempts_Unsuccessful()
@@ -30,7 +32,7 @@ namespace Ventura.Tests.Prng
                 mockExtractorTwo.Object,
             };
 
-            var provider = new RemoteSeedProvider(extractors);
+            var provider = new SeedProvider(extractors);
 
             Assert.Throws<InvalidOperationException>(() => provider.GetBytes());
         }
