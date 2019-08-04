@@ -66,13 +66,13 @@ namespace Ventura.Tests.Accumulator
         }
     }
 
-    public class TestEntropyExtractor : EntropyExtractorBase, IEntropyExtractor
+    internal class TestEntropyExtractor : EntropyExtractorBase, IEntropyExtractor
     {
         private Func<byte[]> extractionLogic;
 
         public TestEntropyExtractor(Func<byte[]> extractionLogic, IEventEmitter eventEmitter) : base(eventEmitter) =>
             this.extractionLogic = extractionLogic;
 
-        protected override Func<byte[]> ExtractEntropicData() => extractionLogic;
+        public override Func<byte[]> GetEntropicData() => extractionLogic;
     }
 }

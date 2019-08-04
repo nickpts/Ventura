@@ -9,7 +9,7 @@ namespace Ventura.Accumulator.EntropyExtractors.Local
 	/// <summary>
 	/// Collects statistics from the current process and turns them into a byte array
 	/// </summary>
-	public class ProcessEntropyExtractor : EntropyExtractorBase, IEntropyExtractor
+	internal class ProcessEntropyExtractor : EntropyExtractorBase, IEntropyExtractor
 	{
 		private readonly Process process = Process.GetCurrentProcess();
 
@@ -19,7 +19,7 @@ namespace Ventura.Accumulator.EntropyExtractors.Local
 
 		public override string SourceName { get; protected set; } = nameof(ProcessEntropyExtractor);
 
-		protected override Func<byte[]> ExtractEntropicData()
+        public override Func<byte[]> GetEntropicData()
 		{
 			return () =>
 			{

@@ -8,7 +8,7 @@ namespace Ventura.Accumulator.EntropyExtractors.Local
 	/// Concatenates and returns information regarding the current .NET
 	/// application domain's memory and processor metrics.
 	/// </summary>
-	public class AppDomainExtractor : EntropyExtractorBase, IEntropyExtractor
+	internal class AppDomainExtractor : EntropyExtractorBase, IEntropyExtractor
 	{
 		public AppDomainExtractor(IEventEmitter eventEmitter) : base(eventEmitter)
 		{
@@ -16,7 +16,7 @@ namespace Ventura.Accumulator.EntropyExtractors.Local
 
 		public override string SourceName { get; protected set; } = nameof(AppDomainExtractor);
 
-		protected override Func<byte[]> ExtractEntropicData()
+		public override Func<byte[]> GetEntropicData()
 		{
 			return () =>
 			{

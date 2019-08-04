@@ -7,13 +7,13 @@ using Ventura.Interfaces;
 
 namespace Ventura.Accumulator.EntropyExtractors.Remote
 {
-	public class WeatherEntropyExtractor: EntropyExtractorBase, IEntropyExtractor
+	internal class WeatherEntropyExtractor: EntropyExtractorBase, IEntropyExtractor
 	{
 		public WeatherEntropyExtractor(IEventEmitter eventEmitter) : base(eventEmitter)
 		{
 		}
-		
-		protected override Func<byte[]> ExtractEntropicData()
+
+        public override Func<byte[]> GetEntropicData()
 		{
 			return () =>
 			{

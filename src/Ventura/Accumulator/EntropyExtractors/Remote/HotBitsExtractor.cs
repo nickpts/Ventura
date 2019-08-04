@@ -11,7 +11,7 @@ namespace Ventura.Accumulator.EntropyExtractors.Remote
 	/// Makes a REST call to an API provided by John Walker (https://fourmilab.ch/hotbits/)
 	/// The entropy comes from radioactive decay.
 	/// </summary>
-	public class HotBitsExtractor: EntropyExtractorBase, IEntropyExtractor
+	internal class HotBitsExtractor: EntropyExtractorBase, IEntropyExtractor
 	{
 		private const string apiLink =
 			"https://www.fourmilab.ch/cgi-bin/Hotbits.api?nbytes=30&fmt=json&npass=1&lpass=8&pwtype=3&apikey=HB1njZ69vSUYaLRkxNHPpjNWFnJ";
@@ -20,7 +20,7 @@ namespace Ventura.Accumulator.EntropyExtractors.Remote
 		{
 		}
 
-		protected override Func<byte[]> ExtractEntropicData()
+		public override Func<byte[]> GetEntropicData()
 		{
 			return () =>
 			{

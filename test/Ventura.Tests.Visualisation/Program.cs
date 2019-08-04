@@ -80,7 +80,7 @@ namespace Ventura.Tests.Visualisation
 
         private static void DrawImage(int width, int height, string path)
         {
-            using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
+            using (var prng = RNGVenturaProviderFactory.CreateSeeded())
             {
                 int length = width * height;
 

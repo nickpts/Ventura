@@ -30,7 +30,7 @@ namespace Ventura.Tests.Accumulator
 
         [Test]
 		public void RemoteRandomOrgExtract_Returns_Data() =>
-			Test(new AtmosphericNoiceExtractor(new EventEmitter(0)));
+			Test(new AtmosphericNoiseExtractor(new EventEmitter(0)));
 
 		[Test]
 		public void RemoteHotBitsExtractor_Returns_Data() =>

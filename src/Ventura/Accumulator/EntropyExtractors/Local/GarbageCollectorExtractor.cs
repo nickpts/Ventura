@@ -7,7 +7,7 @@ namespace Ventura.Accumulator.EntropyExtractors.Local
 	/// <summary>
 	/// Concatenates and returns information from the .NET garbage collector
 	/// </summary>
-	public class GarbageCollectorExtractor : EntropyExtractorBase, IEntropyExtractor
+	internal class GarbageCollectorExtractor : EntropyExtractorBase, IEntropyExtractor
     {
         public GarbageCollectorExtractor(IEventEmitter eventEmitter) : base(eventEmitter)
         {
@@ -15,7 +15,7 @@ namespace Ventura.Accumulator.EntropyExtractors.Local
 
         public override string SourceName { get; protected set; } = nameof(GarbageCollectorExtractor);
 
-        protected override Func<byte[]> ExtractEntropicData()
+        public override Func<byte[]> GetEntropicData()
         {
 	        return () =>
 	        {

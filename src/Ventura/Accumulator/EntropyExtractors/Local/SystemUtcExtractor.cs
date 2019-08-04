@@ -7,7 +7,7 @@ namespace Ventura.Accumulator.EntropyExtractors.Local
 	/// <summary>
 	/// Converts the system's coordinated universal time to a byte array
 	/// </summary>
-	public class SystemUtcExtractor: EntropyExtractorBase, IEntropyExtractor
+	internal class SystemUtcExtractor: EntropyExtractorBase, IEntropyExtractor
 	{
 		public SystemUtcExtractor(IEventEmitter eventEmitter) : base(eventEmitter)
 		{
@@ -15,7 +15,7 @@ namespace Ventura.Accumulator.EntropyExtractors.Local
 
 		public override string SourceName { get; protected set; } = nameof(SystemUtcExtractor);
 
-		protected override Func<byte[]> ExtractEntropicData() => 
+        public override Func<byte[]> GetEntropicData() => 
 			() => BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
 	}
 }

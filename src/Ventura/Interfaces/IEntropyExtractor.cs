@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
 using Ventura.Accumulator;
-using Ventura.Accumulator.EntropyExtractors;
 
 namespace Ventura.Interfaces
 {
@@ -12,10 +11,12 @@ namespace Ventura.Interfaces
 		string SourceName { get; }
 		bool IsHealthy { get; }
 
-		/// <summary>
+        /// <summary>
 		/// Triggered when entropic data is available
 		/// </summary>
 		event EntropyAvailabilityHandler OnEntropyAvailable;
+
+        Func<byte[]> GetEntropicData();
     }
 
     public delegate void EntropyAvailabilityHandler(Event successfulExtraction);

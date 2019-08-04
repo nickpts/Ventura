@@ -15,36 +15,43 @@ namespace Ventura
     public class RNGVenturaProviderFactory
 	{
         /// <summary>
-        /// Initializes an instance of the PRNG with and waits for 100 ms, by
-        /// which time a seeding and a reseeding will have occurred. Cipher is AES,
-        /// All entropy source groups (local remote used by default). A MemoryStream is used
-        /// to store the seed and discarded when the PRNG exits.
+        /// Initializes an instance of the PRNG and seeds it with a pseudorandomly
+        /// picked remote entropy source. Cipher is AES, all entropy source groups
+        /// (local and remote used by default). A MemoryStream is used to store
+        /// the seed which is discarded on exit.
         /// </summary>
         /// <returns>initialised PRNG</returns>
         public static IRNGVenturaProvider CreateSeeded() => CreateSeeded(Cipher.Aes, ReseedEntropySourceGroup.Full);
 
         /// <summary>
-        /// Initializes an instance of the PRNG with and waits for 100 ms, by
-        /// which time a seeding and a reseeding will have occurred.  All entropy source groups
-        /// (local and remote) used by default. A MemoryStream is used
-        /// to store the seed and discarded when the PRNG exits.
+        /// Initializes an instance of the PRNG and seeds it with a pseudorandomly
+        /// picked remote entropy source. All entropy source groups
+        /// (local and remote used by default). A MemoryStream is used to store
+        /// the seed which is discarded on exit.
         /// </summary>
         /// <returns>initialised PRNG</returns>
         public static IRNGVenturaProvider CreateSeeded(Cipher cipher) => CreateSeeded(cipher, ReseedEntropySourceGroup.Full);
 
         /// <summary>
-        /// Initializes an instance of the PRNG with and waits for 100 ms, by
-        /// which time a seeding and a reseeding will have occurred. A MemoryStream is used
-        /// to store the seed and discarded when the PRNG exits.
+        /// Initializes an instance of the PRNG and seeds it with a pseudorandomly
+        /// picked remote entropy source. A MemoryStream is used to store
+        /// the seed which is discarded on exit.
         /// </summary>
         /// <param name="cipher">cipher to use</param>
         /// <param name="sourceGroup">local or remote</param>
         /// <returns>initialised PRNG</returns>
         public static IRNGVenturaProvider CreateSeeded(Cipher cipher, ReseedEntropySourceGroup sourceGroup)
         {
-            Thread.Sleep(100);
+            var extractors = new List<IEntropyExtractor>()
+            {
+                new WeatherEntropyExtractor(new EventEmitter(0)),
+                new AtmosphericNoiseExtractor(new EventEmitter(1)),
+                new HotBitsExtractor(new EventEmitter(2))
+            };
 
-            return Create(new MemoryStream(), cipher, sourceGroup);
+            byte[] seed = new RemoteSeedProvider(extractors).GetBytes();
+
+            return Create(Convert(seed), cipher, sourceGroup);
 		}
 
 		/// <summary>
@@ -71,18 +78,22 @@ namespace Ventura
                     extractors.Add(new GarbageCollectorExtractor(new EventEmitter(0)));
                     extractors.Add(new AppDomainExtractor(new EventEmitter(1)));
                     extractors.Add(new ProcessEntropyExtractor(new EventEmitter(2)));
+                    extractors.Add(new SystemUtcExtractor(new EventEmitter(3)));
                     break;
                 case ReseedEntropySourceGroup.Remote:
-	                extractors.Add(new AtmosphericNoiceExtractor(new EventEmitter(0)));
+	                extractors.Add(new AtmosphericNoiseExtractor(new EventEmitter(0)));
                     extractors.Add(new HotBitsExtractor(new EventEmitter(1)));
-					break;
+                    extractors.Add(new WeatherEntropyExtractor(new EventEmitter(2)));
+                    break;
                 case ReseedEntropySourceGroup.Full:
                     extractors.Add(new GarbageCollectorExtractor(new EventEmitter(0)));
                     extractors.Add(new AppDomainExtractor(new EventEmitter(1)));
                     extractors.Add(new ProcessEntropyExtractor(new EventEmitter(2)));
-                    extractors.Add(new AtmosphericNoiceExtractor(new EventEmitter(3)));
-                    extractors.Add(new HotBitsExtractor(new EventEmitter(4)));
-					break;
+                    extractors.Add(new SystemUtcExtractor(new EventEmitter(3)));
+                    extractors.Add(new AtmosphericNoiseExtractor(new EventEmitter(4)));
+                    extractors.Add(new HotBitsExtractor(new EventEmitter(5)));
+                    extractors.Add(new WeatherEntropyExtractor(new EventEmitter(6)));
+                    break;
                 default:
 	                throw new ArgumentOutOfRangeException(nameof(sourceGroup), sourceGroup, null);
             }
@@ -104,5 +115,17 @@ namespace Ventura
         {
 	        return (RandomNumberGenerator) Create(seedStream, cipher, sourceGroup);
         }
+
+        #region Private implementation
+
+        private static MemoryStream Convert(byte[] array)
+        {
+            MemoryStream stream = new MemoryStream();
+            stream.Write(array, 0, array.Length);
+
+            return stream;
+        }
+
+        #endregion
     }
 } 

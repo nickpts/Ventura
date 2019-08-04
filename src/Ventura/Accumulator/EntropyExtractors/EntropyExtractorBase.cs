@@ -42,7 +42,7 @@ namespace Ventura.Accumulator.EntropyExtractors
 
 		public virtual Task Run()
 		{
-			var result = eventEmitter.Execute(ExtractEntropicData()).Result;
+			var result = eventEmitter.Execute(GetEntropicData()).Result;
 
 			if (result.ExtractionSuccessful)
 				OnEntropyAvailable?.Invoke(result);
@@ -57,6 +57,6 @@ namespace Ventura.Accumulator.EntropyExtractors
 			return Task.CompletedTask;
 		}
 
-		protected abstract Func<byte[]> ExtractEntropicData();
+		public abstract Func<byte[]> GetEntropicData();
 	}
 }
