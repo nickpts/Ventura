@@ -13,11 +13,11 @@ namespace Ventura
     /// Pseudorandomly picks a an entropy source and runs it once. If an
     /// exception occurs (e.g. the source is down) another source is picked.
     /// </summary>
-    public class RemoteSeedProvider: ISeedProvider
+    public class SeedProvider: ISeedProvider
     {
         private readonly List<IEntropyExtractor> extractors;
 
-        public RemoteSeedProvider(List<IEntropyExtractor> extractors)
+        public SeedProvider(List<IEntropyExtractor> extractors)
         {
             if (extractors == null)
                 throw new ArgumentNullException(nameof(extractors));

@@ -14,7 +14,7 @@ namespace Ventura.Cli
 					{
 						var stream = new FileStream(opts.SeedPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
 						using (var prng =
-							RNGVenturaServiceProviderFactory.Create(stream, opts.Cipher, opts.EntropyGroup))
+							RNGVenturaProviderFactory.Create(stream, opts.Cipher, opts.EntropyGroup))
 						{
 							var rn = prng.Next(opts.Min, opts.Max);
 							Console.WriteLine(rn);
@@ -29,7 +29,7 @@ namespace Ventura.Cli
 						var array = new int[opts.ArrayLength];
 
 						using (var prng =
-							RNGVenturaServiceProviderFactory.Create(stream, opts.Cipher, opts.EntropyGroup))
+                            RNGVenturaProviderFactory.Create(stream, opts.Cipher, opts.EntropyGroup))
 						{
 							array = prng.NextArray(opts.Min, opts.Max, opts.ArrayLength);
 						}

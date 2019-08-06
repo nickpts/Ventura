@@ -49,7 +49,7 @@ namespace Ventura
                 new HotBitsExtractor(new EventEmitter(2))
             };
 
-            byte[] seed = new RemoteSeedProvider(extractors).GetBytes();
+            byte[] seed = new SeedProvider(extractors).GetBytes();
 
             return Create(Convert(seed), cipher, sourceGroup);
 		}

@@ -13,9 +13,9 @@ namespace Ventura.Tests.Prng
         public void SeedProvider_Throws_ArgumentNullException_If_Extractors_Null() =>
             Assert.Throws<ArgumentNullException>(() => new SeedProvider(null));
 
-        []
+        [Test]
         public void SeedProvider_Throws_ArgumentException_If_Extractors_Emptyl() =>
-            Assert.Throws<ArgumentNullException>(() => new SeedProvider(new List<IEntropyExtractor>()));
+            Assert.Throws<ArgumentException>(() => new SeedProvider(new List<IEntropyExtractor>()));
 
         [Test]
         public void GetBytes_Throws_InvalidOperation_Exception_If_All_Attempts_Unsuccessful()
