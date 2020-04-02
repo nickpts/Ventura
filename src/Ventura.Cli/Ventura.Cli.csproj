@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <StartupObject></StartupObject>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
@@ -11,7 +11,7 @@
     <Copyright>Copyright Nick Patsaris</Copyright>
     <PackageProjectUrl>https://github.com/nickpts/Ventura</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nickpts/Ventura.git</RepositoryUrl>
-    <Version>1.0.0-alpha</Version>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
