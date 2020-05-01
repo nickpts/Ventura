@@ -25,7 +25,7 @@ For more info on the above as well as performance, testing and limitations, plea
 var stream = new FileStream("seed", FileMode.OpenOrCreate);
 
 // instantiate rng and reads seed
-using var prng = RNGVenturaServiceProviderFactory.Create(stream);
+using var prng = RNGVenturaProviderFactory.Create(stream);
 
 // get a random number from 0 to 
 int randomNumber = prng.Next(0, 10); 
