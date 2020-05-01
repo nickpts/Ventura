@@ -48,7 +48,7 @@ docker run -ti 147dbbbb24da rns -s seed.bin -i 1 -x 10 -n 100
 ```
 ## Performance
 Time taken to generate 10 random numbers between 1 and 10. MemoryStream, AES cipher, full entropy reseed
-![!Alt_Text](https://live.staticflickr.com/65535/49843352616_56886ba827_q_d.jpg)
+![!Alt_Text](https://live.staticflickr.com/65535/49843352616_56886ba827_w_d.jpg)
 
 ## Acknowledgements
 [Bouncy Castle](https://www.bouncycastle.org/) for ciphers.
