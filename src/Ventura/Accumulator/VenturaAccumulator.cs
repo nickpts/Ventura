@@ -32,7 +32,7 @@ namespace Ventura.Accumulator
 
             InitializePools();
 			RegisterExtractorEvents();
-			AccumulateEntropy(token);
+			StartExtractors(token);
         }
 
         protected List<EntropyPool> Pools { get; private set; }
@@ -109,7 +109,7 @@ namespace Ventura.Accumulator
 		/// <summary>
 		/// Starts each entropy extractor on its own thread.
 		/// </summary>
-        private void AccumulateEntropy(CancellationToken token = default)
+        private void StartExtractors(CancellationToken token = default)
         {
 	        foreach (var extractor in entropyExtractors)
 	        {
@@ -138,9 +138,11 @@ namespace Ventura.Accumulator
 
 		    poolToFill.AddEventData(successfulExtraction.SourceNumber, successfulExtraction.Data);
 
+#if DEBUG
 			Debug.WriteLine($"Event from source { successfulExtraction.SourceNumber } " +
-			                $"added from thread: { Thread.CurrentThread.ManagedThreadId } " +
-			                $"to pool { poolToFill.PoolNumber }");
+		                    $"added from thread: { Thread.CurrentThread.ManagedThreadId } " +
+		                    $"to pool { poolToFill.PoolNumber }");
+#endif
 		}
 
 		#endregion
