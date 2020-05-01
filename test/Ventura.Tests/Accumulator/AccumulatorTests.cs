@@ -18,34 +18,33 @@ using static Ventura.Constants;
 
 namespace Ventura.Tests.Accumulator
 {
-    [TestFixture]
-    public class AccumulatorTests
-    {
-	    private Mock<IEventEmitter> mockEmitter;
+	[TestFixture]
+	public class AccumulatorTests
+	{
+		private Mock<IEventEmitter> mockEmitter;
 
 		[SetUp]
-	    public void Setup()
-	    {
+		public void Setup()
+		{
 			mockEmitter = new Mock<IEventEmitter>(0);
 			mockEmitter.SetupAllProperties();
-	    }
+		}
 
-	    [Test]
-	    public void Accumulator_ThrowsException_If_Passed_More_Than_MaxAmount_Of_Sources()
-        {
-            var extractors = new IEntropyExtractor[256];
+		[Test]
+		public void Accumulator_ThrowsException_If_Passed_More_Than_MaxAmount_Of_Sources()
+		{
+			var extractors = new IEntropyExtractor[256];
 
-            Assert.Throws(typeof(ArgumentException), () => new VenturaAccumulator(extractors.ToList()));
-        }
+			Assert.Throws(typeof(ArgumentException), () => new VenturaAccumulator(extractors.ToList()));
+		}
 
-        [Test]
+		[Test]
 		public void Accumulator_Initializes_Pools_On_Construction()
 		{
-			using (var accumulator = new TestAccumulator(new List<IEntropyExtractor>
-				{new GarbageCollectorExtractor(new EventEmitter(1))}, default))
-			{
-				accumulator.EntropyPools.Count.Should().Be(MaximumNumberOfPools);
-			}
+			using var accumulator = new TestAccumulator(new List<IEntropyExtractor>
+				{new GarbageCollectorExtractor(new EventEmitter(1))}, default);
+
+			accumulator.EntropyPools.Count.Should().Be(MaximumNumberOfPools);
 		}
 
 		[Test, Description("Test that pool zero is used and cleared on even and odd reseeds")]
@@ -55,19 +54,19 @@ namespace Ventura.Tests.Accumulator
 		[TestCase(10, 0)]
 		public void Accumulator_Uses_Pool_Zero_On_Even_Reseed(int reseedNumber, int poolNumber) =>
 			RunPoolTest(reseedNumber, poolNumber).Should().BeTrue();
-		
+
 
 		[Test, Description("Test that first pool is not used on odd reseeds (first, third) ")]
 		[TestCase(1, 1)]
 		[TestCase(3, 1)]
 		public void Accumulator_Does_Not_Use_First_Pool_On_Odd_Reseeds(int reseedNumber, int poolNumber) =>
 			RunPoolTest(reseedNumber, poolNumber).Should().BeFalse();
-		
+
 
 		[TestCase(2, 1)]
 		[TestCase(4, 1)]
 		[Test, Description("Test that first pool is not used on even reseeds (second, fourth) ")]
-		public void Accumulator_Uses_First_Pool_On_Even_Reseeds(int reseedNumber, int poolNumber) => 
+		public void Accumulator_Uses_First_Pool_On_Even_Reseeds(int reseedNumber, int poolNumber) =>
 			RunPoolTest(reseedNumber, poolNumber).Should().BeTrue();
 
 		[Test, Explicit]
@@ -93,29 +92,27 @@ namespace Ventura.Tests.Accumulator
 		{
 			var tokenSource = new CancellationTokenSource();
 
-			using (var accumulator = new TestAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(new EventEmitter(0)) },
-				tokenSource.Token))
-			{
-				while (!accumulator.HasEnoughEntropy)
-				{
-					Thread.Sleep(100);
-				}
+			using var accumulator = new TestAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(new EventEmitter(0)) }, tokenSource.Token);
 
-				tokenSource.Cancel(); // stop accumulation so that pool is not populated
-				accumulator.GetRandomDataFromPools(reseedNumber); // start with reseed
-				return accumulator.EntropyPools.ElementAt(poolNumber).ReadData().All(b => b == 0);
+			while (!accumulator.HasEnoughEntropy)
+			{
+				Thread.Sleep(100);
 			}
+
+			tokenSource.Cancel(); // stop accumulation so that pool is not populated
+			accumulator.GetRandomDataFromPools(reseedNumber); // start with reseed
+			return accumulator.EntropyPools.ElementAt(poolNumber).ReadData().All(b => b == 0);
 		}
 	}
 
-    internal class TestAccumulator : VenturaAccumulator
-    {
-	    public TestAccumulator(IEnumerable<IEntropyExtractor> extractors, CancellationToken token)  :
-		    base(extractors, token)
-	    {
+	internal class TestAccumulator : VenturaAccumulator
+	{
+		public TestAccumulator(IEnumerable<IEntropyExtractor> extractors, CancellationToken token) :
+			base(extractors, token)
+		{
 
-	    }
+		}
 
-	    public List<EntropyPool> EntropyPools => Pools;
-    }
+		public List<EntropyPool> EntropyPools => Pools;
+	}
 }

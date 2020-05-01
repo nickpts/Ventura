@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
-using System.Threading;
 using Ventura.Accumulator;
 using Ventura.Accumulator.EntropyExtractors;
 using Ventura.Accumulator.EntropyExtractors.Local;
@@ -105,12 +104,12 @@ namespace Ventura
 		}
 
 		/// <summary>
-		/// 
+		/// For compatibility purposes with .NET RandomNumberGenerator class
 		/// </summary>
 		/// <param name="seedStream"></param>
 		/// <param name="cipher"></param>
 		/// <param name="sourceGroup"></param>
-		/// <returns></returns>
+		/// <returns>RandomNu</returns>
         public static RandomNumberGenerator CreateRng(Stream seedStream, Cipher cipher, ReseedEntropySourceGroup sourceGroup)
         {
 	        return (RandomNumberGenerator) Create(seedStream, cipher, sourceGroup);

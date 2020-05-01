@@ -24,12 +24,12 @@ For more info on the above as well as performance, testing and limitations, plea
 // seed stream
 var stream = new FileStream("seed", FileMode.OpenOrCreate);
 
-// instantiate and read seed 
-using (var prng = RNGVenturaServiceProviderFactory.Create(stream))
-{
-    // get a random number from 0 to 10
-    int randomNumber = prng.Next(0, 10); 
-} // new seed will be written to stream.
+// instantiate rng and reads seed
+using var prng = RNGVenturaServiceProviderFactory.Create(stream);
+
+// get a random number from 0 to 
+int randomNumber = prng.Next(0, 10); 
+// new seed will be written to stream at end of using scope
 ```
 ## How to run
 Prints a random number from 1 to 10, reads/writes seed to seed.bin

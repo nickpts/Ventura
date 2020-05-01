@@ -20,13 +20,12 @@ namespace Ventura.Accumulator.EntropyExtractors
 		{
 			return () =>
 			{
-				using (WebClient wc = new WebClient())
-				{
-					var response = wc.DownloadString("https://www.random.org/cgi-bin/randbyte?nbytes=30&format=d");
+				using var wc = new WebClient();
+				
+				var response = wc.DownloadString("https://www.random.org/cgi-bin/randbyte?nbytes=30&format=d");
+				response = Regex.Replace(response, @"\n", " ");
 
-					response = Regex.Replace(response, @"\n", " ");
-					return response.Split(' ').Where(n => !string.IsNullOrEmpty(n)).Select(byte.Parse).ToArray();
-				}
+				return response.Split(' ').Where(n => !string.IsNullOrEmpty(n)).Select(byte.Parse).ToArray();
 			};
 		}
 	}
