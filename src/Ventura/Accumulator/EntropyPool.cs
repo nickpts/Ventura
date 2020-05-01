@@ -48,8 +48,10 @@ namespace Ventura.Accumulator
 				Interlocked.Add(ref runningSize, concatenatedData.Length);
 				Interlocked.Increment(ref eventsStored);
 
+#if DEBUG
 				if (PoolNumber == 0 && eventsStored % 10000 == 0)
 					Debug.WriteLine($"Pool {PoolNumber} contains entropy of {eventsStored} events");
+#endif
 			}
 		}
 
