@@ -62,10 +62,9 @@ namespace Ventura.Tests.Prng
 		{
 			double[] array;
 
-			using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
-			{
-				array = prng.NextDoubleArray(2, 1000);
-			}
+			using var prng = RNGVenturaProviderFactory.Create(new MemoryStream());
+
+			array = prng.NextDoubleArray(2, 1000);
 
 			return array;
 		}

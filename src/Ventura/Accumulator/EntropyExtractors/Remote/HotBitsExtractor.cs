@@ -11,7 +11,7 @@ namespace Ventura.Accumulator.EntropyExtractors.Remote
 	/// Makes a REST call to an API provided by John Walker (https://fourmilab.ch/hotbits/)
 	/// The entropy comes from radioactive decay.
 	/// </summary>
-	internal class HotBitsExtractor: EntropyExtractorBase, IEntropyExtractor
+	internal class HotBitsExtractor : EntropyExtractorBase, IEntropyExtractor
 	{
 		private const string apiLink =
 			"https://www.fourmilab.ch/cgi-bin/Hotbits.api?nbytes=30&fmt=json&npass=1&lpass=8&pwtype=3&apikey=HB1njZ69vSUYaLRkxNHPpjNWFnJ";
@@ -24,22 +24,21 @@ namespace Ventura.Accumulator.EntropyExtractors.Remote
 		{
 			return () =>
 			{
-				using (WebClient wc = new WebClient())
-				{
-					var jsonResponse = wc.DownloadString(apiLink);
+				using var wc = new WebClient();
 
-					string toBeSearched = "\"data\": ";
-					jsonResponse = jsonResponse.Substring(jsonResponse.IndexOf(toBeSearched) + toBeSearched.Length);
-					jsonResponse = Regex.Replace(jsonResponse, @"\n", " ");
-					jsonResponse = jsonResponse.Replace('[', ' ');
-					jsonResponse = jsonResponse.Replace(']', ' ');
-					jsonResponse = jsonResponse.Replace('}', ' ');
-					jsonResponse = jsonResponse.Replace(',', ' '); //TODO: replace these with regex
+				var jsonResponse = wc.DownloadString(apiLink);
 
-					var result = jsonResponse.Split(' ').Where(n => !string.IsNullOrEmpty(n)).Select(byte.Parse).ToArray();
+				string toBeSearched = "\"data\": ";
+				jsonResponse = jsonResponse.Substring(jsonResponse.IndexOf(toBeSearched) + toBeSearched.Length);
+				jsonResponse = Regex.Replace(jsonResponse, @"\n", " ");
+				jsonResponse = jsonResponse.Replace('[', ' ');
+				jsonResponse = jsonResponse.Replace(']', ' ');
+				jsonResponse = jsonResponse.Replace('}', ' ');
+				jsonResponse = jsonResponse.Replace(',', ' '); //TODO: replace these with regex
 
-					return result;
-				}
+				var result = jsonResponse.Split(' ').Where(n => !string.IsNullOrEmpty(n)).Select(byte.Parse).ToArray();
+
+				return result;
 			};
 		}
 	}

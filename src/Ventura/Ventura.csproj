@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <Authors>Nick Patsaris</Authors>
     <Description>A .NET Standard library implementing the Fortuna PRNG as devised by Bruce Schneier and Niels Ferguson in 2003. Also implemented are reseeding improvements suggested by Dodis et al in "How to Eat Your Entropy and Have it Too".</Description>
     <Copyright>Copyright Nick Patsaris</Copyright>

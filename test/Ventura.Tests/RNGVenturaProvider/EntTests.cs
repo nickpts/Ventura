@@ -45,11 +45,10 @@ namespace Ventura.Tests.Prng
 		{
 			byte[] array = new byte[100_048_576];
 
-			using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream(), Cipher.Aes, ReseedEntropySourceGroup.Full))
-			{
-				prng.GetBytes(array);
-			}
+			using var prng = RNGVenturaProviderFactory.Create(new MemoryStream(), Cipher.Aes, ReseedEntropySourceGroup.Full);
 
+			prng.GetBytes(array);
+			
 			File.WriteAllBytes(TestFilePath, array);
 		}
 

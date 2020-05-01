@@ -40,11 +40,10 @@ namespace Ventura.Accumulator
 			{
 				var concatenatedData = hash.Concat(data).ToArray();
 
-				using (var algorithm = SHA256.Create())
-				{
-					hash = algorithm.ComputeHash(concatenatedData); 
-				}
-				
+				using var algorithm = SHA256.Create();
+
+				hash = algorithm.ComputeHash(concatenatedData);
+
 				Interlocked.Add(ref runningSize, concatenatedData.Length);
 				Interlocked.Increment(ref eventsStored);
 

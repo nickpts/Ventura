@@ -13,13 +13,11 @@ namespace Ventura.Cli
 					(RandomNumberOptions opts) =>
 					{
 						var stream = new FileStream(opts.SeedPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-						using (var prng =
-							RNGVenturaProviderFactory.Create(stream, opts.Cipher, opts.EntropyGroup))
-						{
-							var rn = prng.Next(opts.Min, opts.Max);
-							Console.WriteLine(rn);
-						}
+						using var prng = RNGVenturaProviderFactory.Create(stream, opts.Cipher, opts.EntropyGroup);
 
+						var rn = prng.Next(opts.Min, opts.Max);
+						Console.WriteLine(rn);
+						
 						return 0;
 					},
 
@@ -28,11 +26,9 @@ namespace Ventura.Cli
 						var stream = new FileStream(opts.SeedPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
 						var array = new int[opts.ArrayLength];
 
-						using (var prng =
-                            RNGVenturaProviderFactory.Create(stream, opts.Cipher, opts.EntropyGroup))
-						{
-							array = prng.NextArray(opts.Min, opts.Max, opts.ArrayLength);
-						}
+						using var prng = RNGVenturaProviderFactory.Create(stream, opts.Cipher, opts.EntropyGroup);
+
+						array = prng.NextArray(opts.Min, opts.Max, opts.ArrayLength);
 
 						for (int i = 0; i < array.Length; i++)
 						{

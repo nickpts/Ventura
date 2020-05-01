@@ -84,10 +84,9 @@ namespace Ventura.Tests.Prng
 		{
 			void Test()
 			{
-				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
-				{
-					var result = prng.Next(-1, 10);
-				}
+				using var prng = RNGVenturaProviderFactory.Create(new MemoryStream());
+
+				var result = prng.Next(-1, 10);
 			}
 
 			Assert.Throws<ArgumentException>(Test);
@@ -98,10 +97,9 @@ namespace Ventura.Tests.Prng
 		{
 			void Test()
 			{
-				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
-				{
-					var result = prng.NextArray(-1, 10, 1000);
-				}
+				using var prng = RNGVenturaProviderFactory.Create(new MemoryStream());
+				
+				var result = prng.NextArray(-1, 10, 1000);
 			}
 
 			Assert.Throws<ArgumentException>(Test);
@@ -112,18 +110,16 @@ namespace Ventura.Tests.Prng
 		{
 			void ZeroTest()
 			{
-				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
-				{
-					var result = prng.NextArray(1, 10, -1);
-				}
+				using var prng = RNGVenturaProviderFactory.Create(new MemoryStream());
+				
+				var result = prng.NextArray(1, 10, -1);
 			}
 
 			void NegativeTest()
 			{
-				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
-				{
-					var result = prng.NextArray(1, 10, 0);
-				}
+				using var prng = RNGVenturaProviderFactory.Create(new MemoryStream());
+
+				var result = prng.NextArray(1, 10, 0);
 			}
 
 			Assert.Throws<ArgumentException>(ZeroTest);
@@ -135,10 +131,9 @@ namespace Ventura.Tests.Prng
 		{
 			void NegativeTest()
 			{
-				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
-				{
-					var result = prng.NextDouble(-1);
-				}
+				using var prng = RNGVenturaProviderFactory.Create(new MemoryStream());
+
+				var result = prng.NextDouble(-1);
 			}
 
 			Assert.Throws<ArgumentException>(NegativeTest);
@@ -149,10 +144,9 @@ namespace Ventura.Tests.Prng
 		{
 			void NegativeTest()
 			{
-				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
-				{
-					var result = prng.NextDoubleArray(-1, 10);
-				}
+				using var prng = RNGVenturaProviderFactory.Create(new MemoryStream());
+
+				var result = prng.NextDoubleArray(-1, 10);
 			}
 
 			Assert.Throws<ArgumentException>(NegativeTest);
@@ -163,18 +157,17 @@ namespace Ventura.Tests.Prng
 		{
 			void ZeroTest()
 			{
-				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
-				{
-					var result = prng.NextDoubleArray(2, 0);
-				}
+				using var prng = RNGVenturaProviderFactory.Create(new MemoryStream());
+
+				var result = prng.NextDoubleArray(2, 0);
+				
 			}
 
 			void NegativeTest()
 			{
-				using (var prng = RNGVenturaProviderFactory.Create(new MemoryStream()))
-				{
-					var result = prng.NextDoubleArray(2, -1);
-				}
+				using var prng = RNGVenturaProviderFactory.Create(new MemoryStream());
+
+				var result = prng.NextDoubleArray(2, -1);
 			}
 
 			Assert.Throws<ArgumentException>(ZeroTest);
