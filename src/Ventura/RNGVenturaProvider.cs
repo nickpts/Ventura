@@ -31,25 +31,8 @@ namespace Ventura
 
 			if (!stream.CanRead || !stream.CanSeek || !stream.CanWrite)
 					throw new ArgumentException("Stream must be readable/writable/seekable");
-		}
 
-		/// <summary>
-		/// Waits for accumulator to generate enough entropy then
-		/// reads the first 64 bytes from the seed stream and uses it to reseed the generator.
-		/// Runs a task on regular intervals to update the seed. 
-		/// </summary>
-		public void Initialise()
-		{
-			var seed = new byte[SeedFileSize];
-			stream.ReadAsync(seed, 0, SeedFileSize);
-
-			while (!accumulator.HasEnoughEntropy)
-			{
-				Thread.Sleep(1);
-			}
-
-			generator.Reseed(seed);
-			reseedTimer = new Timer(UpdateSeed, false, 0, SeedUpdateInterval.Milliseconds);
+			Initialise();
 		}
 
 		/// <summary>
@@ -164,6 +147,25 @@ namespace Ventura
 		}
 
 		#region Private implementation
+
+		/// <summary>
+		/// Waits for accumulator to generate enough entropy then
+		/// reads the first 64 bytes from the seed stream and uses it to reseed the generator.
+		/// Runs a task on regular intervals to update the seed. 
+		/// </summary>
+		private void Initialise()
+		{
+			var seed = new byte[SeedFileSize];
+			stream.ReadAsync(seed, 0, SeedFileSize);
+
+			while (!accumulator.HasEnoughEntropy)
+			{
+				Thread.Sleep(1);
+			}
+
+			generator.Reseed(seed);
+			reseedTimer = new Timer(UpdateSeed, false, 0, SeedUpdateInterval.Milliseconds);
+		}
 
 		/// <summary>
 		/// Updates the seed one final time,

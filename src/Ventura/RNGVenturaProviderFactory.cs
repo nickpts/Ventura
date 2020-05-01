@@ -60,13 +60,13 @@ namespace Ventura
 		/// <returns>initialised PRNG</returns>
 		public static IRNGVenturaProvider Create(Stream seedStream) => Create(seedStream, Cipher.Aes, ReseedEntropySourceGroup.Full);
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="seedStream"></param>
-		/// <param name="cipher"></param>
-		/// <param name="sourceGroup"></param>
-		/// <returns>initialised PRNG</returns>
+        /// <summary>
+        /// Initializes an instance of the PRNG using the seed provided and cipher and entropy source groups chosen
+        /// </summary>
+        /// <param name="seedStream">stream containing seed information</param>
+        /// <param name="cipher">cipher to use</param>
+        /// <param name="sourceGroup">local, remote or both</param>
+        /// <returns>initialised PRNG</returns>
         public static IRNGVenturaProvider Create(Stream seedStream, Cipher cipher, ReseedEntropySourceGroup sourceGroup)
 		{ 
 	        var extractors = new List<IEntropyExtractor>();
@@ -97,19 +97,12 @@ namespace Ventura
 	                throw new ArgumentOutOfRangeException(nameof(sourceGroup), sourceGroup, null);
             }
 
-            var prng = new RNGVenturaProvider(new VenturaAccumulator(extractors), new VenturaGenerator(cipher), seedStream);
-			prng.Initialise();
-
-			return prng;
+            return new RNGVenturaProvider(new VenturaAccumulator(extractors), new VenturaGenerator(cipher), seedStream);
 		}
 
 		/// <summary>
-		/// For compatibility purposes with .NET RandomNumberGenerator class
+		/// For compatibility purposes with code that has dependencies on .NET RandomNumberGenerator
 		/// </summary>
-		/// <param name="seedStream"></param>
-		/// <param name="cipher"></param>
-		/// <param name="sourceGroup"></param>
-		/// <returns>RandomNu</returns>
         public static RandomNumberGenerator CreateRng(Stream seedStream, Cipher cipher, ReseedEntropySourceGroup sourceGroup)
         {
 	        return (RandomNumberGenerator) Create(seedStream, cipher, sourceGroup);
