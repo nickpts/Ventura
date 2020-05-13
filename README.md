@@ -46,6 +46,9 @@ docker pull nickpatsaris/ventura.cli
 docker run -ti 147dbbbb24da rn -s seed.bin -i 1 -x 10
 docker run -ti 147dbbbb24da rns -s seed.bin -i 1 -x 10 -n 100
 ```
+## Performance
+Time taken to generate 10 random numbers between 1 and 10 using MemoryStream, AES and full entropy reseed.
+![!Alt_Text](https://live.staticflickr.com/65535/49843352616_56886ba827_c_d.jpg)
 
 ## Acknowledgements
 [Bouncy Castle](https://www.bouncycastle.org/) for ciphers.
