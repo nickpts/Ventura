@@ -138,11 +138,9 @@ namespace Ventura.Accumulator
 
 		    poolToFill.AddEventData(successfulExtraction.SourceNumber, successfulExtraction.Data);
 
-#if DEBUG
 			Debug.WriteLine($"Event from source { successfulExtraction.SourceNumber } " +
-		                    $"added from thread: { Thread.CurrentThread.ManagedThreadId } " +
-		                    $"to pool { poolToFill.PoolNumber }");
-#endif
+							$"added from thread: { Thread.CurrentThread.ManagedThreadId } " +
+							$"to pool { poolToFill.PoolNumber }");
 		}
 
 		#endregion

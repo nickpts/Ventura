@@ -25,10 +25,13 @@ namespace Ventura.Generator
 
         public VenturaGenerator(Cipher option = Cipher.Aes, byte[] seed = null)
         {
-            if (seed == null)
-                seed = Guid.NewGuid().ToByteArray();
+	        if (seed == null)
+	        {
+                seed = new byte[SeedFileSize];
+		        GetFromRNGCryptoServiceProvider(seed);
+	        }
 
-            this.option = option;
+	        this.option = option;
 
             InitialiseGenerator(seed);
             InitialiseCipher();
@@ -81,7 +84,7 @@ namespace Ventura.Generator
 
         #region Private implementation
 
-        protected virtual void InitialiseGenerator(byte[] seed)
+        protected void InitialiseGenerator(byte[] seed)
         {
             state = new GeneratorState
             {
@@ -122,14 +125,13 @@ namespace Ventura.Generator
                 throw new GeneratorInputException($"cannot generate array bigger than { MaximumRequestSizeForStateKey } bytes for state key");
 
             var roundedUpwards = (int)Math.Ceiling((double)input.Length / CipherBlockSize);
-            var pseudorandom = GenerateBlocks(roundedUpwards);
+			var pseudorandom = GenerateBlocks(roundedUpwards);
 
-            Array.Clear(state.Key, 0, state.Key.Length);
-            state.Key = GenerateBlocks(NumberOfBlocksForNewKey);
+			state.Key = GenerateBlocks(NumberOfBlocksForNewKey);
 
-            Array.Copy(pseudorandom, 0, input, 0, input.Length);
+			Array.Copy(pseudorandom, 0, input, 0, input.Length);
 			Array.Clear(pseudorandom, 0, pseudorandom.Length);
-        }
+		}
 
         /// <summary>
         /// Fills each block with pseudorandom data and appends it to the result.
@@ -137,27 +139,35 @@ namespace Ventura.Generator
         /// </summary>
         protected virtual byte[] GenerateBlocks(int numberOfBlocks)
         {
-            if (!state.Seeded)
-                throw new GeneratorSeedException("Generator not seeded");
+	        if (!state.Seeded)
+		        throw new GeneratorSeedException("Generator not seeded");
 
-            var result = new byte[numberOfBlocks * CipherBlockSize];
-            int destArrayLength = 0;
+	        var result = new byte[numberOfBlocks * CipherBlockSize];
+	        int destArrayLength = 0;
 
-            var encryptor = new BufferedBlockCipher(cipher);
-            encryptor.Init(true, new KeyParameter(state.Key));
+	        var encryptor = new BufferedBlockCipher(cipher);
+	        encryptor.Init(true, new KeyParameter(state.Key));
 
-            for (int i = 0; i < numberOfBlocks; i++)
-            {
-                var plainText = state.TransformCounterToByteArray();
-                encryptor.ProcessBytes(plainText, 0, plainText.Length, result, destArrayLength);
+	        for (int i = 0; i < numberOfBlocks; i++)
+	        {
+		        var plainText = state.TransformCounterToByteArray();
+		        encryptor.ProcessBytes(plainText, 0, plainText.Length, result, destArrayLength);
 
-                destArrayLength += plainText.Length;
-                state.Counter++;
-            }
+		        destArrayLength += plainText.Length;
+		        state.Counter++;
+	        }
 
-            return result;
+            encryptor.Reset();
+
+	        return result;
         }
 
-        #endregion
+        private void GetFromRNGCryptoServiceProvider(byte[] input)
+        {
+	        using var provider = new RNGCryptoServiceProvider();
+	        provider.GetBytes(input);
+        }
+
+		#endregion
     }
 }
