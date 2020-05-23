@@ -172,6 +172,7 @@ namespace Ventura
 			}
 
 			generator.Reseed(seed);
+			Debug.WriteLine("Seeded with provided seed");
 			reseedTimer = new Timer(UpdateSeed, false, 0, SeedUpdateInterval.Milliseconds);
 		}
 
@@ -182,11 +183,11 @@ namespace Ventura
 		protected override void Dispose(bool disposing)
 		{
 			if (isDisposed) return;
-
-			UpdateSeed(closeStream: true);
-
+			
 			accumulator.Dispose();
 			reseedTimer.Dispose();
+
+			UpdateSeed(closeStream: true);
 
 			base.Dispose(disposing);
 			isDisposed = true;

@@ -204,9 +204,34 @@
             Collects real random data from various sources and uses it to reseed the generator
             </summary>
         </member>
+        <member name="M:Ventura.Interfaces.IEntropyExtractor.Run">
+            <summary>
+            Start extractor 
+            </summary>
+        </member>
+        <member name="P:Ventura.Interfaces.IEntropyExtractor.SourceNumber">
+            <summary>
+            Sources are numbered according to spec
+            </summary>
+        </member>
+        <member name="P:Ventura.Interfaces.IEntropyExtractor.SourceName">
+            <summary>
+            Source name
+            </summary>
+        </member>
+        <member name="P:Ventura.Interfaces.IEntropyExtractor.IsHealthy">
+            <summary>
+            Indicates if extractor has been successfully producing entropic data
+            </summary>
+        </member>
         <member name="E:Ventura.Interfaces.IEntropyExtractor.OnEntropyAvailable">
             <summary>
             Triggered when entropic data is available
+            </summary>
+        </member>
+        <member name="M:Ventura.Interfaces.IEntropyExtractor.GetEntropicData">
+            <summary>
+            Main functionality for extracting entropic data
             </summary>
         </member>
         <member name="M:Ventura.RNGVenturaProvider.GetBytes(System.Byte[])">
