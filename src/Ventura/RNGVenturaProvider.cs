@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
+using System.Threading.Tasks;
 using Ventura.Exceptions;
 using Ventura.Interfaces;
 
@@ -95,7 +100,7 @@ namespace Ventura
 			if (min < 0)
 				throw new ArgumentException("Less than zero not supported");
 
-			if (length <= 0) 
+			if (length <= 0)
 				throw new ArgumentException(nameof(length));
 
 			var result = new int[length];
@@ -107,6 +112,7 @@ namespace Ventura
 
 			return result;
 		}
+
 
 		/// <summary>
 		/// Returns a 64-bit floating point value ranging from 0 to 1
@@ -156,9 +162,11 @@ namespace Ventura
 		private void Initialise()
 		{
 			var seed = new byte[SeedFileSize];
-			stream.ReadAsync(seed, 0, SeedFileSize);
+			using var memStream = new MemoryStream();
+			stream.CopyTo(memStream);
+			seed = memStream.ToArray();
 
-			while (!accumulator.HasEnoughEntropy)
+			while (!accumulator.HasEnoughEntropy )
 			{
 				Thread.Sleep(1);
 			}
