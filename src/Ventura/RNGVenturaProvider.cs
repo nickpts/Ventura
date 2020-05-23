@@ -15,7 +15,7 @@ using static Ventura.Constants;
 
 namespace Ventura
 {
-	internal class RNGVenturaProvider : RandomNumberGenerator, Interfaces.IRNGVenturaProvider
+	internal sealed class RNGVenturaProvider : RandomNumberGenerator, Interfaces.IRNGVenturaProvider
 	{
 		private readonly IAccumulator accumulator;
 		private readonly IGenerator generator;
