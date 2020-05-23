@@ -69,7 +69,7 @@ namespace Ventura.Tests.Accumulator
 		public void Accumulator_Uses_First_Pool_On_Even_Reseeds(int reseedNumber, int poolNumber) =>
 			RunPoolTest(reseedNumber, poolNumber).Should().BeTrue();
 
-		[Test, Explicit]
+		[Test, Ignore("Run only locally, fails on server")]
 		public void Accumulator_Stops_Running_Extractor_If_Not_Healthy()
 		{
 			Func<byte[]> test = () => new byte[30];
