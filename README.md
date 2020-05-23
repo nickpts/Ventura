@@ -27,8 +27,8 @@ var stream = new FileStream("seed", FileMode.OpenOrCreate);
 // instantiate rng and reads seed
 using var prng = RNGVenturaProviderFactory.Create(stream);
 
-// get a random number from 0 to 
-int randomNumber = prng.Next(0, 10); 
+// get a random number from 1 to 
+int randomNumber = prng.Next(1, 10); 
 // new seed will be written to stream at end of using scope
 ```
 ## How to run
