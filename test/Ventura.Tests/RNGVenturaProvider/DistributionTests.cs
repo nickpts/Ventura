@@ -77,7 +77,7 @@ namespace Ventura.Tests.Prng
 
 			System.Diagnostics.Debug.WriteLine("");
 
-			using var prng2 = RNGVenturaProviderFactory.CreateSeeded(Cipher.Aes, ReseedEntropySourceGroup.Full)
+			using var prng2 = RNGVenturaProviderFactory.CreateSeeded(Cipher.Aes, ReseedEntropySourceGroup.Full);
 			prng2.GetBytes(array2);
 
 			foreach (var b in array2)
