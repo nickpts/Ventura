@@ -63,66 +63,66 @@ namespace Ventura
         public const int MaximumNumberOfPools = 32;
         public const int MaximumSeedSize = MaximumNumberOfPools * MinimumPoolSize;
 
-		/// <summary>
-		/// The amount of failed entropy event extraction operations before
-		/// a circuit breaker on the extractor is triggered
-		/// </summary>
+        /// <summary>
+        /// The amount of failed entropy event extraction operations before
+        /// a circuit breaker on the extractor is triggered
+        /// </summary>
         public const int FailedEventThreshold = 10;
 
-		/// <summary>
-		/// Accoding to the spec, a minimum number of blocks is neede 
-		/// to generate a new key
-		/// </summary>
-		public const int NumberOfBlocksForNewKey = 2;
+        /// <summary>
+        /// Accoding to the spec, a minimum number of blocks is neede 
+        /// to generate a new key
+        /// </summary>
+        public const int NumberOfBlocksForNewKey = 2;
 
-		/// <summary>
-		/// Used to limit the rate of reseeds according to spec (ten per second)
-		/// </summary>
-		public static readonly TimeSpan MaximumTimeSpanBetweenReseeds = TimeSpan.FromMilliseconds(100);
+        /// <summary>
+        /// Used to limit the rate of reseeds according to spec (ten per second)
+        /// </summary>
+        public static readonly TimeSpan MaximumTimeSpanBetweenReseeds = TimeSpan.FromMilliseconds(100);
 
-		public static readonly TimeSpan SeedUpdateInterval = TimeSpan.FromMinutes(10);
+        public static readonly TimeSpan SeedUpdateInterval = TimeSpan.FromMinutes(10);
 
-		/// <summary>
-		/// A list of cities/countries for use by the weather entropy extractor
-		/// </summary>
-		public static Dictionary<string, string> citiesCountries = new Dictionary<string, string>()
-		{
-			{ "London", "UK"},
-			{ "Paris", "France" },
-			{ "Berlin", "Germany"},
-			{ "Rome", "Italy"},
-			{ "Stockholm", "Sweden"},
-			{ "New York", "USA"},
-			{ "Los Angeles", "USA"},
-			{ "Tokyo", "Japan"},
-			{ "Beijing", "China"},
-			{ "Moscow", "Russia"},
-			{ "Delhi", "India"},
-			{ "Brasilia", "Brazil"},
-			{ "Seoul", "South Korea"},
-			{ "Madrid", "Spain"},
-			{ "Sydney", "Australia"},
-			{ "Jakarta", "Indonesia"},
-			{ "Ankara", "Turkey"},
-			{ "Amsterdam", "Netherlands" },
-			{ "Riyadh", "Saudi Arabia" },
-			{ "Berne", "Switzerland" },
-			{ "Taipei", "Taiwan" },
-			{ "Warsaw", "Poland" },
-			{ "Brussels", "Belgium" },
-			{ "Buenos Aires", "Argentina" },
-			{ "Bangkok", "Thailand" },
-			{ "Vienna", "Austria" },
-			{ "Tehran", "Iran" },
-			{ "Oslo", "Norway" },
-			{ "Lagos", "Nigeria" },
-			{ "Dublin", "Ireland" },
-			{ "Tel Aviv", "Israel" },
-			{ "Cape Town", "South Africa" },
-			{ "Singapore", "Singapore" },
-			{ "Islamabad", "Pakistan" },
-			{ "Bogota", "Colombia" },
-			{ "Cairo", "Egypt" },
-		}; 
-	}
+        /// <summary>
+        /// A list of cities/countries for use by the weather entropy extractor
+        /// </summary>
+        public static Dictionary<string, string> citiesCountries = new Dictionary<string, string>()
+        {
+            { "London", "UK"},
+            { "Paris", "France" },
+            { "Berlin", "Germany"},
+            { "Rome", "Italy"},
+            { "Stockholm", "Sweden"},
+            { "New York", "USA"},
+            { "Los Angeles", "USA"},
+            { "Tokyo", "Japan"},
+            { "Beijing", "China"},
+            { "Moscow", "Russia"},
+            { "Delhi", "India"},
+            { "Brasilia", "Brazil"},
+            { "Seoul", "South Korea"},
+            { "Madrid", "Spain"},
+            { "Sydney", "Australia"},
+            { "Jakarta", "Indonesia"},
+            { "Ankara", "Turkey"},
+            { "Amsterdam", "Netherlands" },
+            { "Riyadh", "Saudi Arabia" },
+            { "Berne", "Switzerland" },
+            { "Taipei", "Taiwan" },
+            { "Warsaw", "Poland" },
+            { "Brussels", "Belgium" },
+            { "Buenos Aires", "Argentina" },
+            { "Bangkok", "Thailand" },
+            { "Vienna", "Austria" },
+            { "Tehran", "Iran" },
+            { "Oslo", "Norway" },
+            { "Lagos", "Nigeria" },
+            { "Dublin", "Ireland" },
+            { "Tel Aviv", "Israel" },
+            { "Cape Town", "South Africa" },
+            { "Singapore", "Singapore" },
+            { "Islamabad", "Pakistan" },
+            { "Bogota", "Colombia" },
+            { "Cairo", "Egypt" },
+        }; 
+    }
 }

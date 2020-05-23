@@ -18,101 +18,101 @@ using static Ventura.Constants;
 
 namespace Ventura.Tests.Accumulator
 {
-	[TestFixture]
-	public class AccumulatorTests
-	{
-		private Mock<IEventEmitter> mockEmitter;
+    [TestFixture]
+    public class AccumulatorTests
+    {
+        private Mock<IEventEmitter> mockEmitter;
 
-		[SetUp]
-		public void Setup()
-		{
-			mockEmitter = new Mock<IEventEmitter>(0);
-			mockEmitter.SetupAllProperties();
-		}
+        [SetUp]
+        public void Setup()
+        {
+            mockEmitter = new Mock<IEventEmitter>(0);
+            mockEmitter.SetupAllProperties();
+        }
 
-		[Test]
-		public void Accumulator_ThrowsException_If_Passed_More_Than_MaxAmount_Of_Sources()
-		{
-			var extractors = new IEntropyExtractor[256];
+        [Test]
+        public void Accumulator_ThrowsException_If_Passed_More_Than_MaxAmount_Of_Sources()
+        {
+            var extractors = new IEntropyExtractor[256];
 
-			Assert.Throws(typeof(ArgumentException), () => new VenturaAccumulator(extractors.ToList()));
-		}
+            Assert.Throws(typeof(ArgumentException), () => new VenturaAccumulator(extractors.ToList()));
+        }
 
-		[Test]
-		public void Accumulator_Initializes_Pools_On_Construction()
-		{
-			using var accumulator = new TestAccumulator(new List<IEntropyExtractor>
-				{new GarbageCollectorExtractor(new EventEmitter(1))}, default);
+        [Test]
+        public void Accumulator_Initializes_Pools_On_Construction()
+        {
+            using var accumulator = new TestAccumulator(new List<IEntropyExtractor>
+                {new GarbageCollectorExtractor(new EventEmitter(1))}, default);
 
-			accumulator.EntropyPools.Count.Should().Be(MaximumNumberOfPools);
-		}
+            accumulator.EntropyPools.Count.Should().Be(MaximumNumberOfPools);
+        }
 
-		[Test, Description("Test that pool zero is used and cleared on even and odd reseeds")]
-		[TestCase(1, 0)]
-		[TestCase(2, 0)]
-		[TestCase(5, 0)]
-		[TestCase(10, 0)]
-		public void Accumulator_Uses_Pool_Zero_On_Even_Reseed(int reseedNumber, int poolNumber) =>
-			RunPoolTest(reseedNumber, poolNumber).Should().BeTrue();
-
-
-		[Test, Description("Test that first pool is not used on odd reseeds (first, third) ")]
-		[TestCase(1, 1)]
-		[TestCase(3, 1)]
-		public void Accumulator_Does_Not_Use_First_Pool_On_Odd_Reseeds(int reseedNumber, int poolNumber) =>
-			RunPoolTest(reseedNumber, poolNumber).Should().BeFalse();
+        [Test, Description("Test that pool zero is used and cleared on even and odd reseeds")]
+        [TestCase(1, 0)]
+        [TestCase(2, 0)]
+        [TestCase(5, 0)]
+        [TestCase(10, 0)]
+        public void Accumulator_Uses_Pool_Zero_On_Even_Reseed(int reseedNumber, int poolNumber) =>
+            RunPoolTest(reseedNumber, poolNumber).Should().BeTrue();
 
 
-		[TestCase(2, 1)]
-		[TestCase(4, 1)]
-		[Test, Description("Test that first pool is not used on even reseeds (second, fourth) ")]
-		public void Accumulator_Uses_First_Pool_On_Even_Reseeds(int reseedNumber, int poolNumber) =>
-			RunPoolTest(reseedNumber, poolNumber).Should().BeTrue();
+        [Test, Description("Test that first pool is not used on odd reseeds (first, third) ")]
+        [TestCase(1, 1)]
+        [TestCase(3, 1)]
+        public void Accumulator_Does_Not_Use_First_Pool_On_Odd_Reseeds(int reseedNumber, int poolNumber) =>
+            RunPoolTest(reseedNumber, poolNumber).Should().BeFalse();
 
-		[Test, Ignore("Run only locally, fails on server")]
-		public void Accumulator_Stops_Running_Extractor_If_Not_Healthy()
-		{
-			Func<byte[]> test = () => new byte[30];
 
-			var failedEvent = new Event()
-			{
-				ExtractionSuccessful = false
-			};
+        [TestCase(2, 1)]
+        [TestCase(4, 1)]
+        [Test, Description("Test that first pool is not used on even reseeds (second, fourth) ")]
+        public void Accumulator_Uses_First_Pool_On_Even_Reseeds(int reseedNumber, int poolNumber) =>
+            RunPoolTest(reseedNumber, poolNumber).Should().BeTrue();
 
-			Task<Event> extraction = Task.FromResult<Event>(failedEvent);
-			mockEmitter.Setup(e => e.Execute(test)).Returns(extraction);
+        [Test, Ignore("Run only locally, fails on server")]
+        public void Accumulator_Stops_Running_Extractor_If_Not_Healthy()
+        {
+            Func<byte[]> test = () => new byte[30];
 
-			var extractor = new TestEntropyExtractor(test, mockEmitter.Object);
-			var accumulator = new TestAccumulator(new List<IEntropyExtractor> { extractor }, default);
+            var failedEvent = new Event()
+            {
+                ExtractionSuccessful = false
+            };
 
-			mockEmitter.Verify(e => e.Execute(test), Times.Exactly(FailedEventThreshold));
-		}
+            Task<Event> extraction = Task.FromResult<Event>(failedEvent);
+            mockEmitter.Setup(e => e.Execute(test)).Returns(extraction);
 
-		public bool RunPoolTest(int reseedNumber, int poolNumber)
-		{
-			var tokenSource = new CancellationTokenSource();
+            var extractor = new TestEntropyExtractor(test, mockEmitter.Object);
+            var accumulator = new TestAccumulator(new List<IEntropyExtractor> { extractor }, default);
 
-			using var accumulator = new TestAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(new EventEmitter(0)) }, tokenSource.Token);
+            mockEmitter.Verify(e => e.Execute(test), Times.Exactly(FailedEventThreshold));
+        }
 
-			while (!accumulator.HasEnoughEntropy)
-			{
-				Thread.Sleep(100);
-			}
+        public bool RunPoolTest(int reseedNumber, int poolNumber)
+        {
+            var tokenSource = new CancellationTokenSource();
 
-			tokenSource.Cancel(); // stop accumulation so that pool is not populated
-			accumulator.GetRandomDataFromPools(reseedNumber); // start with reseed
-			return accumulator.EntropyPools.ElementAt(poolNumber).ReadData().All(b => b == 0);
-		}
-	}
+            using var accumulator = new TestAccumulator(new List<IEntropyExtractor> { new GarbageCollectorExtractor(new EventEmitter(0)) }, tokenSource.Token);
 
-	internal class TestAccumulator : VenturaAccumulator
-	{
-		public TestAccumulator(IEnumerable<IEntropyExtractor> extractors, CancellationToken token) :
-			base(extractors, token)
-		{
+            while (!accumulator.HasEnoughEntropy)
+            {
+                Thread.Sleep(100);
+            }
 
-		}
+            tokenSource.Cancel(); // stop accumulation so that pool is not populated
+            accumulator.GetRandomDataFromPools(reseedNumber); // start with reseed
+            return accumulator.EntropyPools.ElementAt(poolNumber).ReadData().All(b => b == 0);
+        }
+    }
 
-		public List<EntropyPool> EntropyPools => Pools;
-	}
+    internal class TestAccumulator : VenturaAccumulator
+    {
+        public TestAccumulator(IEnumerable<IEntropyExtractor> extractors, CancellationToken token) :
+            base(extractors, token)
+        {
+
+        }
+
+        public List<EntropyPool> EntropyPools => Pools;
+    }
 }

@@ -14,40 +14,40 @@ namespace Ventura.Tests.Accumulator
     [TestFixture]
     public class EntropyExtractorTests
     {
-		private readonly List<Event> receivedEvents = new List<Event>();
+        private readonly List<Event> receivedEvents = new List<Event>();
 
         [Test]
         public void GarbageCollectorExtractor_Returns_Data() => 
-	        Test(new GarbageCollectorExtractor(new EventEmitter(0)));
+            Test(new GarbageCollectorExtractor(new EventEmitter(0)));
 
         [Test]
         public void ProcessExtractor_Returns_Data() => 
-	        Test(new ProcessEntropyExtractor(new EventEmitter(0)));
+            Test(new ProcessEntropyExtractor(new EventEmitter(0)));
 
         [Test]
         public void SystemUtcExtractor_Returns_Data() => 
-	        Test(new SystemUtcExtractor(new EventEmitter(0)));
+            Test(new SystemUtcExtractor(new EventEmitter(0)));
 
         [Test]
-		public void RemoteRandomOrgExtract_Returns_Data() =>
-			Test(new AtmosphericNoiseExtractor(new EventEmitter(0)));
+        public void RemoteRandomOrgExtract_Returns_Data() =>
+            Test(new AtmosphericNoiseExtractor(new EventEmitter(0)));
 
-		[Test]
-		public void RemoteHotBitsExtractor_Returns_Data() =>
-			Test(new HotBitsExtractor(new EventEmitter(0)));
+        [Test]
+        public void RemoteHotBitsExtractor_Returns_Data() =>
+            Test(new HotBitsExtractor(new EventEmitter(0)));
 
-		[Test]
-		public void RemoteWeatherEntropyExtractor_Returns_Data() =>
-			Test(new WeatherEntropyExtractor(new EventEmitter(0)));
+        [Test]
+        public void RemoteWeatherEntropyExtractor_Returns_Data() =>
+            Test(new WeatherEntropyExtractor(new EventEmitter(0)));
 
-		public void Test(EntropyExtractorBase extractor)
+        public void Test(EntropyExtractorBase extractor)
         {
-	        extractor.OnEntropyAvailable += Extractor_EntropyAvailable;
-	        extractor.Run();
+            extractor.OnEntropyAvailable += Extractor_EntropyAvailable;
+            extractor.Run();
 
-	        receivedEvents.Should().NotBeEmpty();
+            receivedEvents.Should().NotBeEmpty();
         }
 
-		private void Extractor_EntropyAvailable(Event successfulExtraction) => receivedEvents.Add(successfulExtraction);
+        private void Extractor_EntropyAvailable(Event successfulExtraction) => receivedEvents.Add(successfulExtraction);
     }
 }
