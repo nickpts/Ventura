@@ -45,7 +45,6 @@ namespace Ventura
             {
                 new WeatherEntropyExtractor(new EventEmitter(0)),
                 new AtmosphericNoiseExtractor(new EventEmitter(1)),
-                new HotBitsExtractor(new EventEmitter(2))
             };
 
             byte[] seed = new SeedProvider(extractors).GetBytes();

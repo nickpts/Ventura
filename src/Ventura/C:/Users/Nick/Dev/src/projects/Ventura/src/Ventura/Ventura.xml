@@ -1,0 +1,347 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Ventura</name>
+    </assembly>
+    <members>
+        <member name="T:Ventura.Accumulator.EntropyExtractors.EntropyExtractorBase">
+            <summary>
+            Base class for entropy extractors, collects real random data from sources.
+            </summary>
+        </member>
+        <member name="F:Ventura.Accumulator.EntropyExtractors.EntropyExtractorBase.eventEmitter">
+            <summary>
+            Runs extraction logic
+            </summary>
+        </member>
+        <member name="E:Ventura.Accumulator.EntropyExtractors.EntropyExtractorBase.OnEntropyAvailable">
+            <summary>
+            Event handler for successful entropy events
+            </summary>
+        </member>
+        <member name="P:Ventura.Accumulator.EntropyExtractors.EntropyExtractorBase.FailedEventCount">
+            <summary>
+            Running total of failed event operations
+            </summary>
+        </member>
+        <member name="P:Ventura.Accumulator.EntropyExtractors.EntropyExtractorBase.IsHealthy">
+            <summary>
+            Indicates if an extractor has been consistently producing successful events
+            </summary>
+        </member>
+        <member name="T:Ventura.Accumulator.EntropyExtractors.Local.AppDomainExtractor">
+            <summary>
+            Concatenates and returns information regarding the current .NET
+            application domain's memory and processor metrics.
+            </summary>
+        </member>
+        <member name="T:Ventura.Accumulator.EntropyExtractors.Local.GarbageCollectorExtractor">
+            <summary>
+            Concatenates and returns information from the .NET garbage collector
+            </summary>
+        </member>
+        <member name="T:Ventura.Accumulator.EntropyExtractors.Local.ProcessEntropyExtractor">
+            <summary>
+            Collects statistics from the current process and turns them into a byte array
+            </summary>
+        </member>
+        <member name="T:Ventura.Accumulator.EntropyExtractors.Local.SystemUtcExtractor">
+            <summary>
+            Converts the system's coordinated universal time to a byte array
+            </summary>
+        </member>
+        <member name="T:Ventura.Accumulator.EntropyExtractors.AtmosphericNoiseExtractor">
+            <summary>
+            Makes a REST call to an API provided by Random.org (https://www.random.org/bytes/)
+            The entropy comes from atmospheric noise.
+            </summary>
+        </member>
+        <member name="T:Ventura.Accumulator.EntropyExtractors.Remote.HotBitsExtractor">
+            <summary>
+            Makes a REST call to an API provided by John Walker (https://fourmilab.ch/hotbits/)
+            The entropy comes from radioactive decay.
+            </summary>
+        </member>
+        <member name="T:Ventura.Accumulator.EntropyPool">
+            <summary>
+            Holds events large enough that an attacker can no longer enumerate possible values for events
+            Each random event is appended to the existing hashed event and a new hash is computed. This is
+            an explicit design decision to avoid having a pool hold too much event data- the spec itself does
+            not specify the size of the pool.
+            </summary>
+        </member>
+        <member name="T:Ventura.Accumulator.EventEmitter">
+            <summary>
+            Runs extraction logic and emits an event. In accordance to spec the first byte
+            in the random data contains the source number, the second the number of additional bytes of data
+            and the third the actual data. If an exception occurs it is encapsulated and added to the event.
+            </summary>
+        </member>
+        <member name="M:Ventura.Accumulator.VenturaAccumulator.#ctor(System.Collections.Generic.IEnumerable{Ventura.Interfaces.IEntropyExtractor},System.Threading.CancellationToken)">
+            <summary>
+            
+            </summary>
+            <param name="entropyExtractors"></param>
+            <param name="token"></param>
+        </member>
+        <member name="P:Ventura.Accumulator.VenturaAccumulator.HasEnoughEntropy">
+            <summary>
+            The accumulator has enough collected entropy as soon as first pool is full
+            </summary>
+        </member>
+        <member name="M:Ventura.Accumulator.VenturaAccumulator.GetRandomDataFromPools(System.Int32)">
+            <summary>
+            Retrieves entropic data from pools, each pool
+            is used according to the divisor test 2i % ressed counter.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Ventura.Accumulator.VenturaAccumulator.EmptyPools(System.Int32)" -->
+        <member name="M:Ventura.Accumulator.VenturaAccumulator.StartExtractors(System.Threading.CancellationToken)">
+            <summary>
+            Starts each entropy extractor on its own thread.
+            </summary>
+        </member>
+        <member name="M:Ventura.Accumulator.VenturaAccumulator.DistributeEvent(Ventura.Accumulator.Event)">
+            <summary>
+            The pool to be filled is chosen pseudorandomly as recommended by Dodis et al, as
+            opposed to the round-robin fashion Fortuna uses. In theory, this provides slightly
+            better performance against constant sequence samplers than against arbitrary adversaries.
+            While better than round-robin, ideally as pseudorandom permutation of all P pools every P steps
+            should be generated and a pool filled via a modulo operation as recommended in Dodis et al 6.3
+            </summary>
+        </member>
+        <member name="T:Ventura.ReseedEntropySourceGroup">
+            <summary>
+            Indicates type of entropy sources used to 
+            reseed the generator. 
+            Local: only sources from the local system used
+            Remote: only remote sources (e.g RemoteQUantumRngExtractor) used. 
+            Full: both types used
+            </summary>
+        </member>
+        <member name="F:Ventura.Constants.KeyBlockSize">
+            <summary>
+            256-bit key size
+            </summary>
+        </member>
+        <member name="F:Ventura.Constants.CipherBlockSize">
+            <summary>
+            Size of each cipher block generated by the encryptor
+            128 bits according to spec
+            </summary>
+        </member>
+        <member name="F:Ventura.Constants.MaximumRequestSizeForStateKey">
+            <summary>
+            Maximum amount of pseudorandom data generated
+            before the state key changes
+            </summary>
+        </member>
+        <member name="F:Ventura.Constants.MaximumEventSize">
+            <summary>
+            Maximum amount of entropy data in bytes
+            </summary>
+        </member>
+        <member name="F:Ventura.Constants.MinimumPoolSize">
+            <summary>
+            The spec suggests a minimum of 128 bits of entropic data
+            is needed for an attacker to lose track of the generator state.
+            We set it to 256 bits (32 bytes) which means each pool should contain the concatenated hash
+            of a minimum of two events before a reseed is triggered.
+            </summary>
+        </member>
+        <member name="F:Ventura.Constants.FailedEventThreshold">
+            <summary>
+            The amount of failed entropy event extraction operations before
+            a circuit breaker on the extractor is triggered
+            </summary>
+        </member>
+        <member name="F:Ventura.Constants.NumberOfBlocksForNewKey">
+            <summary>
+            Accoding to the spec, a minimum number of blocks is neede 
+            to generate a new key
+            </summary>
+        </member>
+        <member name="F:Ventura.Constants.MaximumTimeSpanBetweenReseeds">
+            <summary>
+            Used to limit the rate of reseeds according to spec (ten per second)
+            </summary>
+        </member>
+        <member name="F:Ventura.Constants.citiesCountries">
+            <summary>
+            A list of cities/countries for use by the weather entropy extractor
+            </summary>
+        </member>
+        <member name="T:Ventura.Generator.VenturaGenerator">
+            <summary>
+            Converts a fixed sized state to arbitrarily long, pseudorandom outputs. 
+            Cipher implementation is provided by BouncyCastle, currently available ciphers are
+            Aes, Twofish, Blowfish, Serpent
+            </summary>
+        </member>
+        <member name="M:Ventura.Generator.VenturaGenerator.GenerateData(System.Byte[])">
+            <summary>
+            Breaks down a byte array to maximum request size blocks with a final block consisting 
+            of the remainder. Each block is transformed with a different state key.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Ventura.Generator.VenturaGenerator.GenerateDataPerStateKey(System.Byte[])">
+            <summary>
+            Generates up to 2^20 (1mb) worth of random data and then changes the key
+            in order to reduce the statistical deviation from perfectly random outputs. 
+            </summary>
+            <param name="input">data to encrypt</param>
+            <returns>pseudorandomly encrypted data</returns>
+        </member>
+        <member name="M:Ventura.Generator.VenturaGenerator.GenerateBlocks(System.Int32)">
+            <summary>
+            Fills each block with pseudorandom data and appends it to the result.
+            Data used for the transformation is the counter changed into a byte array. 
+            </summary>
+        </member>
+        <member name="T:Ventura.Interfaces.IAccumulator">
+            <summary>
+            Collects real random data from various sources and uses it to reseed the generator
+            </summary>
+        </member>
+        <member name="M:Ventura.Interfaces.IEntropyExtractor.Run">
+            <summary>
+            Start extractor 
+            </summary>
+        </member>
+        <member name="P:Ventura.Interfaces.IEntropyExtractor.SourceNumber">
+            <summary>
+            Sources are numbered according to spec
+            </summary>
+        </member>
+        <member name="P:Ventura.Interfaces.IEntropyExtractor.SourceName">
+            <summary>
+            Source name
+            </summary>
+        </member>
+        <member name="P:Ventura.Interfaces.IEntropyExtractor.IsHealthy">
+            <summary>
+            Indicates if extractor has been successfully producing entropic data
+            </summary>
+        </member>
+        <member name="E:Ventura.Interfaces.IEntropyExtractor.OnEntropyAvailable">
+            <summary>
+            Triggered when entropic data is available
+            </summary>
+        </member>
+        <member name="M:Ventura.Interfaces.IEntropyExtractor.GetEntropicData">
+            <summary>
+            Main functionality for extracting entropic data
+            </summary>
+        </member>
+        <member name="M:Ventura.RNGVenturaProvider.GetBytes(System.Byte[])">
+            <summary>
+            Returns data from generator, reseeds every time pool 0 has enough entropy or
+            a set amount of time (100ms according to spec) has passed between reseeds
+            </summary>
+        </member>
+        <member name="M:Ventura.RNGVenturaProvider.GetNonZeroBytes(System.Byte[])">
+            <summary>
+            Not implemented
+            </summary>
+        </member>
+        <member name="M:Ventura.RNGVenturaProvider.Next(System.Int32,System.Int32)">
+            <summary>
+            Uses the generator to get 64 bytes of random data
+            and turns them to a positive integer
+            </summary>
+            <param name="min">minimum possible value, equal to or greater than zero </param>
+            <param name="max">maximum possible value</param>
+            <returns>pseudo-randomly generated positive integer</returns>
+        </member>
+        <member name="M:Ventura.RNGVenturaProvider.NextArray(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Returns an array of the specified length with
+            pseudo-randomly generated positive integers
+            </summary>
+            <param name="min">minimum possible value, equal to or greater than zero</param>
+            <param name="max">maximum possible value</param>
+        </member>
+        <member name="M:Ventura.RNGVenturaProvider.NextDouble(System.Int32)">
+            <summary>
+            Returns a 64-bit floating point value ranging from 0 to 1
+            </summary>
+            <param name="roundToDecimals">decimal place to round to</param>
+        </member>
+        <member name="M:Ventura.RNGVenturaProvider.NextDoubleArray(System.Int32,System.Int32)">
+            <summary>
+            Returns an array of 64-bit floating point values ranging from 0.0 to 1.0
+            </summary>
+            <param name="roundToDecimals">decimal place to round to</param>
+            <param name="length">array length</param>
+        </member>
+        <member name="M:Ventura.RNGVenturaProvider.Initialise">
+            <summary>
+            Waits for accumulator to generate enough entropy then
+            reads the first 64 bytes from the seed stream and uses it to reseed the generator.
+            Runs a task on regular intervals to update the seed. 
+            </summary>
+        </member>
+        <member name="M:Ventura.RNGVenturaProvider.Dispose(System.Boolean)">
+            <summary>
+            Updates the seed one final time,
+            closes the stream, un-registers events and stops the timer
+            </summary>
+        </member>
+        <member name="M:Ventura.RNGVenturaProviderFactory.CreateSeeded">
+            <summary>
+            Initializes an instance of the PRNG and seeds it with a pseudorandomly
+            picked remote entropy source. Cipher is AES, all entropy source groups
+            (local and remote used by default). A MemoryStream is used to store
+            the seed which is discarded on exit.
+            </summary>
+            <returns>initialised PRNG</returns>
+        </member>
+        <member name="M:Ventura.RNGVenturaProviderFactory.CreateSeeded(Ventura.Cipher)">
+            <summary>
+            Initializes an instance of the PRNG and seeds it with a pseudorandomly
+            picked remote entropy source. All entropy source groups
+            (local and remote used by default). A MemoryStream is used to store
+            the seed which is discarded on exit.
+            </summary>
+            <returns>initialised PRNG</returns>
+        </member>
+        <member name="M:Ventura.RNGVenturaProviderFactory.CreateSeeded(Ventura.Cipher,Ventura.ReseedEntropySourceGroup)">
+            <summary>
+            Initializes an instance of the PRNG and seeds it with a pseudorandomly
+            picked remote entropy source. A MemoryStream is used to store
+            the seed which is discarded on exit.
+            </summary>
+            <param name="cipher">cipher to use</param>
+            <param name="sourceGroup">local or remote</param>
+            <returns>initialised PRNG</returns>
+        </member>
+        <member name="M:Ventura.RNGVenturaProviderFactory.Create(System.IO.Stream)">
+            <summary>
+            Initializes an instance of the PRNG, using AES and full entropy source groups by default.
+            </summary>
+            <param name="seedStream">stream containing seed information</param>
+            <returns>initialised PRNG</returns>
+        </member>
+        <member name="M:Ventura.RNGVenturaProviderFactory.Create(System.IO.Stream,Ventura.Cipher,Ventura.ReseedEntropySourceGroup)">
+            <summary>
+            Initializes an instance of the PRNG using the seed provided and cipher and entropy source groups chosen
+            </summary>
+            <param name="seedStream">stream containing seed information</param>
+            <param name="cipher">cipher to use</param>
+            <param name="sourceGroup">local, remote or both</param>
+            <returns>initialised PRNG</returns>
+        </member>
+        <member name="M:Ventura.RNGVenturaProviderFactory.CreateRng(System.IO.Stream,Ventura.Cipher,Ventura.ReseedEntropySourceGroup)">
+            <summary>
+            For compatibility purposes with code that has dependencies on .NET RandomNumberGenerator
+            </summary>
+        </member>
+        <member name="T:Ventura.SeedProvider">
+            <summary>
+            Pseudorandomly picks a an entropy source and runs it once. If an
+            exception occurs (e.g. the source is down) another source is picked.
+            </summary>
+        </member>
+    </members>
+</doc>
