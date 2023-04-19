@@ -41,9 +41,7 @@ dotnet Ventura.Cli.dll rns -s seed.bin -i 1 -x 10 -n 100
 ```
 Docker
 ```docker
-docker pull nickpatsaris/ventura.cli
-docker run -ti 147dbbbb24da rn -s seed.bin -i 1 -x 10
-docker run -ti 147dbbbb24da rns -s seed.bin -i 1 -x 10 -n 100
+No longer supported due to subscription limitations.
 ```
 ## Performance
 Time taken to generate 10 random numbers between 1 and 10 using MemoryStream, AES and full entropy reseed.
