@@ -1,5 +1,5 @@
 # Ventura 
-![!Alt_Text](https://live.staticflickr.com/65535/48260901146_95a33faff0_q_d.jpg)
+![!Alt_Text](https://i.ibb.co/Ks8Dm46/48260901146-64b8dbb557-o.png)
 
 A .NET Standard library implementing the [Fortuna PRNG](https://en.wikipedia.org/wiki/Fortuna_(PRNG)) as devised by Bruce Schneier and Niels Ferguson in 2003. Also implemented are reseeding improvements suggested by Dodis et al in ["How to Eat Your Entropy and Have it Too"](https://eprint.iacr.org/2014/167).
 
@@ -48,7 +48,7 @@ docker run -ti 147dbbbb24da rns -s seed.bin -i 1 -x 10 -n 100
 ```
 ## Performance
 Time taken to generate 10 random numbers between 1 and 10 using MemoryStream, AES and full entropy reseed.
-![!Alt_Text](https://live.staticflickr.com/65535/49843352616_56886ba827_c_d.jpg)
+![!Alt_Text](https://i.ibb.co/GtxnSTZ/49843352616-f06ee80d02-o.png)
 
 ## Acknowledgements
 [Bouncy Castle](https://www.bouncycastle.org/) for ciphers.
